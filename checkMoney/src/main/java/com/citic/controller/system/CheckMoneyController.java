@@ -142,16 +142,14 @@ public class CheckMoneyController extends BaseController {
 		String channel_name = (String) channelManagementFormMap.get("channel_name");
 		channelManagementFormMap.put("where", "where channel_name = '"+channel_name+"'");
 		List<ChannelManagementFormMap> list = channelManagementMapper.findByWhere(channelManagementFormMap);
-		Integer data_type = (Integer) list.get(0).get("data_type");
 		String dataType = "";
-		if(1==data_type){
-			dataType="CSV文件";
-		}
-		if(2==data_type){
-			dataType="DB";
-		}
-		if(3==data_type){
-			dataType="Excel";
+		if(list.size()!=0){
+			Integer data_type = (Integer) list.get(0).get("data_type");
+			switch (data_type) {
+				case 1: return dataType="CSV文件";
+				case 2: return dataType="DB";
+				case 3: return dataType="Excel";
+			}
 		}
 		return dataType;
 	}
