@@ -355,11 +355,11 @@ public class CheckMoneyController extends BaseController {
 	}
 	
 	/**
-	 * 支付文件自动下载导入
+	 * 支付文件下载自动导入
 	 */
 	@ResponseBody
 	@RequestMapping("/payFileAutoImport")
-	@SystemLog(module="财务对账业务",methods="支付文件自动下载导入")//记录操作日志
+	@SystemLog(module="财务对账业务",methods="支付文件下载自动导入")//记录操作日志
 	public synchronized Map<String,Object> payFileAutoImport(@RequestParam(value ="payWay") String payWay
 			,@RequestParam(value ="startTime") String startTime
 			,@RequestParam(value ="endTime") String endTime) {
