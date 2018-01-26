@@ -365,7 +365,7 @@ $("#DBimp").click(function(e){
 	}
 })
 
-//支付文件自动下载导入
+//支付文件下载自动导入
 $("#payFileAutoImportBtn").click(function (){
 	var startTime = $("#payFileAutoStartTime").val();
 	var endTime = $("#payFileAutoEndTime").val();
