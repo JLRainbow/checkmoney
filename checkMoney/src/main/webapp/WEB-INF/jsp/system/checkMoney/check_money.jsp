@@ -57,15 +57,15 @@
 					            <p class="form-control-static">支付平台：</p>
 					       	</div>
 					        <div class="col-md-6">
-						      	<label for=""></label>
-								<select id="" class="selectpicker bla bla bli" multiple data-live-search="true">
-								    <option value="wx">微信</option>
-								    <option value="wx_pub_qr">微信扫码</option>
-								    <option value="alipay">支付宝</option>
-								  </select>
+								<select class="form-control" id="payWayAuto">
+	                            	<option value="">-----------请选择----------</option>
+	                                <c:forEach items="${payList}" var="list">
+									<option value="${list.channel_name}">${list.channel_name}</option>
+									</c:forEach>
+	                            </select>
 							  </div>
 					        <div class="col-md-3">
-	                            <button type="button" id="" class="btn btn-info" >导入</button>
+	                            <button type="button" id="payFileAutoImportBtn" class="btn btn-info" >导入</button>
 	                        </div>
 					     </div>
                       	<div class="row file-team ">
@@ -74,13 +74,13 @@
 					        </div>
 					        <div class="col-md-4">
 					            <div class="input-append date form_datetime datetime_c" id="datetimepicker1" data-date="" data-date-format="yyyy-mm-dd">
-					                <input  id="startTime" name="startTime" type="text" value="" readonly="" class="form-control" style="float:left;">
+					                <input  id="payFileAutoStartTime" name="startTime" type="text" value="" readonly="" class="form-control" style="float:left;">
 					                <span class="add-on "><i class="icon-th glyphicon glyphicon-th-large"></i></span>
 					            </div>
 					      	</div>
 					        <div class="col-md-4">
 					            <div class="input-append date form_datetime datetime_c" id="datetimepicker2" data-date="" data-date-format="yyyy-mm-dd">
-					                <input id="endTime" name="endTime" type="text" value="" readonly="" class="form-control" style="float:left;">
+					                <input id="payFileAutoEndTime" name="endTime" type="text" value="" readonly="" class="form-control" style="float:left;">
 					                <span class="add-on "><i class="icon-th glyphicon glyphicon-th-large"></i></span>
 					            </div>
 					        </div>
@@ -309,7 +309,6 @@
 
  <script type="text/javascript" src="${pageContext.request.contextPath}/js/common/bootstrap/bootstrap-select.js"></script>
   <script type="text/javascript">
-//   $('#endTime').die().live('change',function(){
 	  $("#endTime").unbind('change').change(function(){
 		// 新的绑定事件
 		var startTime = $('#startTime').val();
@@ -341,6 +340,26 @@
   $("#startTime").change(function(){
 	  $('#endTime').val("");
 	});
+  
+  $("#payFileAutoEndTime").unbind('change').change(function(){
+		// 新的绑定事件
+		var payFileAutoStartTime = $('#payFileAutoStartTime').val();
+		var payFileAutoEndTime = $('#payFileAutoEndTime').val();
+		var sta_date = new Date(payFileAutoStartTime);  
+		var end_date = new Date(payFileAutoEndTime);// 将字符串转化为时间
+		var num = (end_date-sta_date)/(1000*3600*24);// 求出两个时间的时间差
+		var days = parseInt(Math.ceil(num)+1);//转化为整天（小于零的话剧不用转了）
+		if(days<0){
+			alert('结束日期不能小于开始日期!');
+			$('#payFileAutoEndTime').val("");
+		}else if(days>7){
+			alert('最多只能选择7天');
+			$('#payFileAutoEndTime').val("");
+		}
+	});
+$("#payFileAutoStartTime").change(function(){
+	  $('#payFileAutoEndTime').val("");
+});
 	//日历控件_月份
 $(".datetime_a").datetimepicker({
 	format: 'yyyy-mm',
@@ -388,14 +407,23 @@ $('.datetime_c').change(function(){
 	time= vYear + '-' + (vMon<10 ? "0" + vMon : vMon) + '-' + (vDay<10 ? "0"+ vDay : vDay);
 	var startTime = $('#startTime').val();
 	var endTime = $('#endTime').val();
+	var payFileAutoStartTime = $('#payFileAutoStartTime').val();
+	var payFileAutoEndTime = $('#payFileAutoEndTime').val();
 	if(time <= startTime){
 		alert('所选日期不能等于或大于当前日期')
 		$('#startTime').val('');
-		
 	}
 	if(time <= endTime){
 		alert('所选日期不能等于或大于当前日期')
 		$('#endTime').val('');
+	}
+	if(time <= payFileAutoStartTime){
+		alert('所选日期不能等于或大于当前日期')
+		$('#payFileAutoStartTime').val('');
+	}
+	if(time <= payFileAutoEndTime){
+		alert('所选日期不能等于或大于当前日期')
+		$('#payFileAutoEndTime').val('');
 		
 	}
 })

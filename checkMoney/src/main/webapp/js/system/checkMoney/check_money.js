@@ -365,6 +365,23 @@ $("#DBimp").click(function(e){
 	}
 })
 
+//支付文件自动下载导入
+$("#payFileAutoImportBtn").click(function (){
+	var startTime = $("#payFileAutoStartTime").val();
+	var endTime = $("#payFileAutoEndTime").val();
+	var payWayAuto = $("#payWayAuto").val();
+	
+	if($("#payWayAuto").val()==""){
+		alert("请选择支付平台!")
+	}else{
+		if(startTime==""||endTime==""){
+			alert("日期不能为空!")
+		}else{
+			alert("ok")
+		}
+	}
+})
+
 $('#monthPay').change(function(){
 	$("#confirm1").css('display','block');
 	var monthPay = $("#monthPay").val();
