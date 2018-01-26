@@ -1,5 +1,7 @@
 package com.citic.service.Impl;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -13,6 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
+import com.citic.bill.BillFatory;
+import com.citic.bill.IBillDown;
+import com.citic.bill.util.FileUtil;
 import com.citic.entity.AccountPaymentChkFormMap;
 import com.citic.entity.AccountReceiptChkFormMap;
 import com.citic.entity.ChannelManagementFormMap;
@@ -44,7 +49,6 @@ public class CheckMoneyServiceImpl implements CheckMoneyService {
 	public HashMap<String, Object> importFileLoadData(HttpServletResponse response, InputStream inputStream,
 			String payWay) throws Exception {
 		ChannelManagementFormMap channelManagementFormMap = new ChannelManagementFormMap();
-		HashMap<String, Object> map = new HashMap<String, Object>();
 		// 通过支付方式找到对应配置信息，将json信息转换成对象
 		channelManagementFormMap.put("where", "where channel_name = '" + payWay + "'");
 		List<ChannelManagementFormMap> channelManagementList = channelManagementMapper
@@ -65,6 +69,7 @@ public class CheckMoneyServiceImpl implements CheckMoneyService {
 		int x =DataLoadDB.load(csvUtil, dataList, "/temp.csv", sql);
 		
 
+		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("impDataNum", x);
 		map.put("success", "导入成功");
 		return map;
@@ -460,5 +465,57 @@ public class CheckMoneyServiceImpl implements CheckMoneyService {
 		map.put("receiptWCNum", receiptWCNumList.size());
 		map.put("receiptGapayNum", receiptGapayNumList.size());
 		return map;
+	}
+
+	@Override
+	public Map<String, Object> payFileAutoImport(String payWay, String startTime, String endTime) {
+		IBillDown billDownloadImp = BillFatory.getBillDownloadImp(payWay);
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			billDownloadImp.billDownload();
+			String filePath = FileUtil.getBillPath();
+            File[] fs = new File(filePath).listFiles();
+            for (File file : fs) {
+            	String str = file.getAbsolutePath();
+            	str = str.substring(str.lastIndexOf("_")+1,str.lastIndexOf("."));
+                if (str.equals("账务明细")) {
+                	//读取csv文件
+                	
+                	InputStream inputStream = new FileInputStream(file.getAbsolutePath());
+                	
+                	ChannelManagementFormMap channelManagementFormMap = new ChannelManagementFormMap();
+            		// 通过支付方式找到对应配置信息，将json信息转换成对象
+            		channelManagementFormMap.put("where", "where channel_name = '" + payWay + "'");
+            		List<ChannelManagementFormMap> channelManagementList = channelManagementMapper
+            				.findByWhere(channelManagementFormMap);
+            		ChannelManagementFormMap channelManagement = channelManagementList.get(0);
+            		String config_inf = (String) channelManagement.get("config_inf");
+            		ConfigInf configInf = JSON.parseObject(config_inf, ConfigInf.class);
+            		System.out.println(configInf.toString());
+
+            		CsvUtil csvUtil = new CsvUtil(inputStream);
+            		int rowNum = csvUtil.getRowNum();// 获取行数
+                	System.out.println("==========行数" + rowNum);
+                	
+            		//获取处理后数据
+            		IPayFileHandle payFileHandleImpl = PayFileHandleFactory.getPayFileHandleImpl(configInf.getChannel_name());
+            		List<Object> dataList = payFileHandleImpl.getPayFileHandle(configInf, csvUtil);
+            		
+            		String sql = "LOAD DATA LOCAL INFILE 'xx.csv' " + "INTO TABLE t_account_payment_chk "
+            				+ "CHARACTER SET GBK " + "FIELDS TERMINATED by ',' " + "LINES TERMINATED by '\r\n' "
+            				+ "(check_order,pay_date,fund_type,pay_amount,check_result,channel_name,comment)";
+            		int x =DataLoadDB.load(csvUtil, dataList, "/temp.csv", sql);
+            		inputStream.close();
+            		resultMap.put("impDataNum", x);
+            		resultMap.put("success", "导入成功");
+                }
+            }
+		} catch (IOException e) {
+			resultMap.put("error", "导入失败");
+			throw new RuntimeException("下载对账单失败"+e);
+		}
+		
+		
+		return resultMap;
 	}
 }

@@ -369,7 +369,7 @@ $("#DBimp").click(function(e){
 $("#payFileAutoImportBtn").click(function (){
 	var startTime = $("#payFileAutoStartTime").val();
 	var endTime = $("#payFileAutoEndTime").val();
-	var payWayAuto = $("#payWayAuto").val();
+	var payWay = $("#payWayAuto").val();
 	
 	if($("#payWayAuto").val()==""){
 		alert("请选择支付平台!")
@@ -377,7 +377,18 @@ $("#payFileAutoImportBtn").click(function (){
 		if(startTime==""||endTime==""){
 			alert("日期不能为空!")
 		}else{
-			alert("ok")
+			var $btn = $("#payImpButton").button('loading');
+			$.post(rootPath +'/check_money/payFileAutoImport.do',
+					{'startTime':startTime,
+					 'endTime':endTime,
+					 'payWay':payWay},
+					function(data){
+						 $btn.button('reset');
+							if(data.success!=undefined){
+								alert(data.success+data.impDataNum+"条数据");
+							}
+						 
+					},"json")
 		}
 	}
 })

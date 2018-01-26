@@ -1,5 +1,13 @@
 eclipse.preferences.version=1
 encoding//src/main/java=UTF-8
+encoding//src/main/java/com/citic/bill/alipay/AlipayBillDownload.java=UTF-8
+encoding//src/main/java/com/citic/bill/util/CommonUtil.java=UTF-8
+encoding//src/main/java/com/citic/bill/util/ConfigUtil.java=UTF-8
+encoding//src/main/java/com/citic/bill/util/MD5Util.java=UTF-8
+encoding//src/main/java/com/citic/bill/util/MyX509TrustManager.java=UTF-8
+encoding//src/main/java/com/citic/bill/util/WXPayCommonUtil.java=UTF-8
+encoding//src/main/java/com/citic/bill/util/XMLUtil.java=UTF-8
+encoding//src/main/java/com/citic/bill/wx/WXBillDownload.java=GBK
 encoding//src/main/java/com/citic/util/ExcelUtil1.java=UTF-8
 encoding//src/main/resources=UTF-8
 encoding//src/main/webapp/WEB-INF/jsp/system/checkMoney/addChannelManagement.jsp=UTF-8

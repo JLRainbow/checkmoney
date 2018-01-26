@@ -1,9 +1,5 @@
 package com.citic.controller.system;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -358,5 +354,16 @@ public class CheckMoneyController extends BaseController {
 		return receiptChkNumMap;
 	}
 	
-	 
+	/**
+	 * 支付文件自动下载导入
+	 */
+	@ResponseBody
+	@RequestMapping("/payFileAutoImport")
+	@SystemLog(module="财务对账业务",methods="支付文件自动下载导入")//记录操作日志
+	public synchronized Map<String,Object> payFileAutoImport(@RequestParam(value ="payWay") String payWay
+			,@RequestParam(value ="startTime") String startTime
+			,@RequestParam(value ="endTime") String endTime) {
+		Map<String, Object> resultMap = checkMoneyService.payFileAutoImport(payWay,startTime,endTime);
+		return resultMap;
+	}
 }
