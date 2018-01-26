@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.citic.mapper.BudgettypeMapper">
+
+	<sql id="selectId">
+		id,
+		name,
+		budgettypekey,
+		status,
+		description,
+		createtime
+	</sql>
+	
+	<select id="findBudgettypePage" resultType="com.citic.entity.BudgettypeFormMap">
+		select
+		<include refid="selectId" />
+		from t_budgettype
+		<where>
+			<if test="name != null and name != ''">
+			and name like '%${name}%'
+			</if>
+			<if test="budgettypekey != null and budgettypekey != ''">
+				and budgettypekey = #{budgettypekey}
+			</if>
+			<if test="column != null">
+				order by ${column} ${sort}
+			</if>
+        </where>
+	</select>
+	
+</mapper>

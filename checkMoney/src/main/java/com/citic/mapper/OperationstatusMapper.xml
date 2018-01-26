@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.citic.mapper.OperationstatusMapper">
+
+	<!-- 以下与实体类的中字段一致 -->
+	<sql id="selectId">
+		id,
+		batchcode,
+		companykey,
+		budgettypekey,
+		trandate,
+		accountname,
+		originalfilename,
+		status,
+		description,
+		modifytime,
+		createtime,
+		version
+	</sql>
+	
+	<!-- 以下与实体类的中字段一致 -->
+	<sql id="tellerListSelectId">
+		id,
+		batchcode,
+		(select name from t_company c
+		where c.companykey
+		= t_operationstatus.companykey) companykey,
+		(select name from t_budgettype b
+		where b.budgettypekey
+		= t_operationstatus.budgettypekey) budgettypekey,
+		trandate,
+		accountname,
+		originalfilename,
+		status,
+		description,
+		modifytime,
+		createtime,
+		version
+	</sql>
+	
+	
+
+	
+	<select id="findOperstatusList" parameterType="com.citic.bean.po.Operationstatus" resultType="com.citic.bean.po.Operationstatus">
+		select 
+		<include refid="tellerListSelectId" /> 
+		from t_operationstatus
+		<where>
+			<if test="batchcode != null and batchcode != ''">
+				and batchcode = #{batchcode}
+			</if>
+			<if test="createtime != null and createtime != ''">
+				and date_format(createtime,'%Y-%m')=date_format(now(),'%Y-%m') 
+			</if>
+			<if test="originalfilename != null and originalfilename != ''">
+				and originalfilename = #{originalfilename}
+			</if>
+			<if test="accountname != null and accountname != ''">
+				and accountname = #{accountname}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+		</where> 
+		order by createtime desc
+	</select>
+	
+	
+	<select id="findOperstatusByAccnameAndBatchcode" parameterType="com.citic.bean.po.Operationstatus" resultType="Byte">
+		select status from t_operationstatus
+		<where>
+			<if test="batchcode != null and batchcode != ''">
+				and batchcode = #{batchcode}
+			</if>
+			<if test="accountname != null and accountname != ''">
+				and accountname = #{accountname}
+			</if>
+		</where> 
+	</select>
+	
+	<insert id="insertOperstatus" parameterType="com.citic.bean.po.Operationstatus">
+		insert into t_operationstatus(batchcode, companykey, budgettypekey, originalfilename, trandate, accountname) values(#{batchcode}, #{companykey}, #{budgettypekey}, #{originalfilename}, #{trandate}, #{accountname} ); 
+	</insert>
+	
+	<update id="updateOperstatusByTrandateAndBatchcode" parameterType="com.citic.bean.po.Operationstatus">
+		update t_operationstatus set status = #{status} where trandate = #{trandate} and batchcode = #{batchcode};
+	</update>
+	
+</mapper>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.citic.mapper.ResourcesMapper">
+	<!--mybatis ehcache缓存配置 -->
+	<!-- 以下两个<cache>标签二选一,第一个可以输出日志,第二个不输出日志 <cache type="org.mybatis.caches.ehcache.LoggingEhcache" 
+		/> -->
+	<!-- <cache type="org.mybatis.caches.ehcache.EhcacheCache"/> -->
+
+	<sql id="selectId">
+		id,
+		name,
+		parentid,
+		(select r.name from t_resources r where r.id = t_resources.parentid )
+		parentname,
+		reskey,
+		ishide,
+		type,
+		resurl,
+		level,
+		icon,
+		description
+	</sql>
+	<select id="findChildlists" resultType="com.citic.entity.ResFormMap">
+		SELECT
+		<include refid="selectId" />
+		from t_resources
+		where parentid = #{id}
+	</select>
+	<!-- 获取该用户的权限 -->
+	<select id="findRes" parameterType="String" resultType="com.citic.entity.ResFormMap">
+		SELECT
+		<include refid="selectId" />
+		from t_resources where id in(
+		select resid from
+		t_res_user where 1=1
+		<if test="userid != null and userid != '' and userid != 0">
+		and userid = #{userid}
+		</if>
+		<if test="roleid != null and roleid != '' and roleid != 0">
+		and userid in (
+		      SELECT userid from t_user_role where roleid = #{roleid}
+		   )
+		</if>
+		)
+		<if test="parentid != null and parentid != '' and parentid != 0">
+			and parentid = #{parentid}
+		</if>
+		and ishide = 0
+		order by level asc
+	</select>
+
+	<!-- 根据账号Id获取该用户的权限 -->
+	<select id="findUserResourcess" parameterType="String"
+		resultType="com.citic.entity.ResFormMap">
+		SELECT
+		<include refid="selectId" />
+		from t_resources where id in(
+		select resid from t_res_user
+		where userid=#{userid})
+	</select>
+	<update id="updateSortOrder" parameterType="java.util.List">
+          <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+                update t_resources
+                <set>
+                  level = #{item.level}
+                </set>
+                where id = #{item.id}
+         </foreach>
+	</update>
+	<!-- 删 -->
+	<delete id="deleteResourcesRole" parameterType="String">
+		delete from
+		t_res_roles
+		where role_id=#{id}
+	</delete>
+
+	<insert id="addRoleRes">
+		insert into t_res_roles (role_id,resc_id) value (#{roleid},#{resid})
+	</insert>
+
+</mapper>

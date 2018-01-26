@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.citic.mapper.BankDetailMapper">
+
+	<sql id="selectId">
+		DATE_FORMAT(MAX(trade_date),'%Y年%m月%d日') trade_date
+	</sql>
+
+	<update id="updateMatchData" >
+	UPDATE  t_bank_detail bd
+	INNER JOIN t_wallet_account wa  ON (
+		bd.purpose = wa.bank_order
+	)
+	SET bd.wallet_amount = wa.amount
+	WHERE
+		bd.check_result = 0
+	</update>
+	
+	<update id="updateEntityToEntityData" >
+	UPDATE  t_bank_detail bd
+	INNER JOIN t_bank_collect bc  ON (
+		bd.check_order = bc.check_order
+	)
+	SET bd.collect_amount = bc.borrow_amount
+	WHERE
+		bd.check_result = 0
+	</update>
+	
+	<update id="updateEmptyToEntityChkResult">
+		UPDATE t_bank_detail bd
+		SET bd.check_result =
+		IF (
+				bd.wallet_amount IS NULL,
+			0,
+			CASE
+		WHEN bd.borrow_amount - bd.wallet_amount = 0 THEN
+			1
+		ELSE
+			2
+		END
+		)
+		WHERE
+			bd.check_result = 0
+	</update>
+	
+	<update id="updateEntityToEntityChkResult">
+		UPDATE t_bank_detail bd
+		SET bd.check_result =
+		IF (
+				bd.collect_amount IS NULL,
+			0,
+			CASE
+		WHEN bd.loan_amount - bd.collect_amount = 0 THEN
+			1
+		ELSE
+			2
+		END
+		)
+		WHERE
+			bd.check_result = 0
+	</update>
+	
+	<select id="getCashClosingDate"  resultType="com.citic.entity.BankDetailFromMap">
+		SELECT <include refid="selectId" /> FROM `t_bank_detail` WHERE borrow_amount is NOT NULL
+	</select>
+	
+	<select id="getCollectClosingDate"  resultType="com.citic.entity.BankDetailFromMap">
+		SELECT <include refid="selectId" /> FROM `t_bank_detail` WHERE loan_amount is NOT NULL
+	</select>
+</mapper>

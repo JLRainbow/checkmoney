@@ -1,0 +1,190 @@
+﻿@charset "utf-8";
+#theme_head.bg-dark{
+	
+}
+/* 登录 *************************************************************/
+/* 清除默认颜色 */
+#loginbox form ,
+.logotitle ,
+.form-actions {
+     background: transparent; 
+}
+/* 整体颜色 */
+#loginbox form{
+	background: #fff; 
+	border-color:#cc9999;
+}
+/* 上下颜色 */
+.logotitle {
+	background: #666; 
+}
+.form-actions {
+	border-color:#cc9999;
+}
+/* 文字颜色 */
+.logotitle h1 {
+	color: #fff;
+}
+.main_input_box .add-on {
+	background:  #fff; 
+	border-color:#ccc;
+}
+#loginbox .main_input_box input{
+	border-color:#ccc;
+}
+/*按钮*/
+.btn-success{
+	color: #666 !important;
+   	border-color:#cc9999;
+}
+/*鼠标划过*/
+.btn-success:hover, 
+.btn-success:focus, 
+.btn-success:active, 
+.btn-success.active, 
+.btn-success.disabled, 
+.btn-success[disabled]{
+	border: 1px solid #cc9999;
+}
+/* 首页*********************************************************** */
+body{
+	background:  url(../../images/texture.png); 
+}
+.nav-primary {
+    width: 215px;  
+}
+/* 头部颜色 */
+.bg-dark.dk,
+/* 菜单颜色 */
+.bg-dark.lter,
+/* 二级菜单 */
+.nav-primary ul.nav ul{
+	background-color: #666;
+    border: 5px solid #cc9999;
+}
+.nav-primary ul.nav ul {
+    left: 215px;
+}
+/* 头部颜色 */
+.bg-dark.dk {
+    border-width: 0 0 5px 0;
+}
+/* 菜单颜色 */
+.bg-dark.lter{
+	border-width: 5px 5px 0 0;
+
+}
+/* logo文字的颜色 */
+.bg-dark a ,
+/* 菜单和head的文字颜色 */
+.bg-dark .nav>li>a {
+	color: #c9c9c9;
+}
+/* 密码、退出的  鼠标划过 */
+.bg-dark .nav>li>a:hover, .bg-dark .nav>li>a:focus,
+/* 菜单鼠标划过 */
+.nav-primary ul.nav>li:hover>a,
+.nav-primary ul.nav>li:focus>a,
+.nav-primary ul.nav>li>a:hover,
+.nav-primary ul.nav>li>a:focus,
+.nav-primary ul.nav>li>a:active,
+.nav-primary ul.nav>li.active>a{
+	color: #ffffcc;
+    background-color: #848484;
+}
+
+
+/* 菜单图标 */
+/* 系统 */
+.icon-system{
+	background: url(../../images/theme_b/icon.png) 0 0 no-repeat; 
+}
+/* 登录 */
+.icon-user{
+	background:  url(../../images/theme_b/icon.png) -25px 0 no-repeat; 
+}
+/* 日志 */
+.icon-log{
+	background:  url(../../images/theme_b/icon.png) -50px 0 no-repeat; 
+}
+/* 财务 */
+.icon-finance{
+	background:  url(../../images/theme_b/icon.png) -75px 0 no-repeat;  
+}
+/* 报表 */
+.icon-report{
+	background:  url(../../images/theme_b/icon.png) -100px 0 no-repeat;  
+}
+/* 系统 */
+.nav-primary ul.nav>li:focus .icon-system,
+.nav-primary ul.nav>li:hover .icon-system,
+.nav-primary ul.nav>li>a:hover .icon-system,
+.nav-primary ul.nav>li>a:focus .icon-system,
+.nav-primary ul.nav>li>a:active .icon-system,
+.nav-primary ul.nav>li.active .icon-system{
+	background:  url(../../images/theme_b/icon_hover.png) 0 0  no-repeat; 
+}
+/* 登录 */
+.nav-primary ul.nav>li:focus .icon-user,
+.nav-primary ul.nav>li:hover .icon-user,
+.nav-primary ul.nav>li>a:hover .icon-user,
+.nav-primary ul.nav>li>a:focus .icon-user,
+.nav-primary ul.nav>li>a:active .icon-user,
+.nav-primary ul.nav>li.active .icon-user{
+	background:  url(../../images/theme_b/icon_hover.png) -25px 0  no-repeat; 
+}
+/* 日志 */
+.nav-primary ul.nav>li:focus .icon-log,
+.nav-primary ul.nav>li:hover .icon-log,
+.nav-primary ul.nav>li>a:hover .icon-log,
+.nav-primary ul.nav>li>a:focus .icon-log,
+.nav-primary ul.nav>li>a:active .icon-log,
+.nav-primary ul.nav>li.active .icon-log{
+	background:  url(../../images/theme_b/icon_hover.png) -50px 0 no-repeat; 
+}
+/* 财务 */
+.nav-primary ul.nav>li:focus .icon-finance,
+.nav-primary ul.nav>li:hover .icon-finance,
+.nav-primary ul.nav>li>a:hover .icon-finance,
+.nav-primary ul.nav>li>a:focus .icon-finance,
+.nav-primary ul.nav>li>a:active .icon-finance,
+.nav-primary ul.nav>li.active .icon-finance{
+	background:  url(../../images/theme_b/icon_hover.png) -75px 0 no-repeat; 
+}
+/* 报表 */
+.nav-primary ul.nav>li:focus .icon-report,
+.nav-primary ul.nav>li:hover .icon-report,
+.nav-primary ul.nav>li>a:hover .icon-report,
+.nav-primary ul.nav>li>a:focus .icon-report,
+.nav-primary ul.nav>li>a:active .icon-report,
+.nav-primary ul.nav>li.active .icon-report{
+	background:  url(../../images/theme_b/icon_hover.png) -100px 0 no-repeat; 
+}
+/* 主题 */
+.theme {
+	background-color: #666;
+    border: 5px solid #cc9999;
+}
+.theme li{
+	color: #c9c9c9;
+}
+.theme li:hover{
+	color: #ffffcc;
+}
+/* 欢迎界面的背景 */
+.welcome{
+	background: url(../../images/theme_b/w2.png) center  no-repeat; 
+	background-size:80%;
+}
+/* 欢迎界面的文字 */
+.welcomeTile{
+	color: #666;    
+	border: 0;
+	margin-left: -280px;
+}
+/* 对账页面的显示信息 */
+.checking dl{
+	background: #fbf6f6;
+    border-color: #cc9999;
+    color: #666;
+}

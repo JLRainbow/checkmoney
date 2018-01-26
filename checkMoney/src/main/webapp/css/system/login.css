@@ -1,0 +1,162 @@
+
+html, body {    width: 100%;    height: 100%;}
+/*Bootstrap-overlay*/
+
+body {
+  font-family: 'Open Sans', sans-serif; font-size:12px; color:#666;
+}
+a{
+	color:#666;
+}
+a:hover, a:focus {
+ 	text-decoration: none;
+}
+select, 
+textarea, 
+input[type="text"], 
+input[type="password"], 
+.btn{
+	border-radius:0px;
+/*  	box-shadow:none;
+ 	background-image:none; */
+}
+body { background: url(../../images/bb11.jpg) no-repeat;background-size: cover; background-position: 50% 50%; }
+#loginbox {    
+	width: 32%;    
+	margin-left: auto;    
+	margin-right: auto;    
+	position: relative;
+	overflow: hidden !important;    
+	text-align: left;    
+	position: relative; 
+	padding-top:10%;
+}
+@media (max-width:800px){
+#loginbox{ width:80%}
+}
+@media (max-width: 480px){
+#loginbox{ width:90%}
+}
+#loginbox form{  
+	position:relative; 
+	top:0; 
+	left:0; 
+	z-index: 200; 
+	display:block;
+	background:#fff;
+	color: #FFF; 
+	bottom: 0px; 
+	right: 0px; 
+	border: 1px solid #41586e;
+	background-color: #76899c;
+}
+/*登录的标题部分*/
+.logotitle{
+	border-bottom: 1px solid #e5e5e5;
+    margin-bottom: 20px;
+    padding: 15px 10px;
+    text-align: center;
+    font-weight: bold;
+    line-height: 20px;
+    color: gray;
+    overflow:hidden;
+    font-size: 18px;
+    background-color: #41586e;
+}
+/* 登录的logo部分 */
+.logotitle img{
+	float:left;
+	display:block;
+}
+/*登录的标题部分  为了现在是居中  用首行缩进来抵消logo所占的空间*/
+.logotitle h1{
+	text-indent: -40px;
+	font-size:100%;
+	margin:0;
+	line-height:40px;
+	color: #adbece;
+}
+/*用户名和密码 之间的间距*/
+.main_input_box { 
+	margin:0 auto; 
+	padding:20px;
+	text-align:center; 
+	position: relative;
+	font-size:14px;
+	color:#666;
+	width:80%;
+}
+/*用户名和密码前面的小图标*/
+.main_input_box .add-on{  
+	position: absolute;
+	top:21px;
+	width:44px; 
+	height:32px;
+	padding:8px 9px; 
+	border-right:1px solid #e5e5e5;
+	border-left:1px solid #e5e5e5;
+	background:#f3f3f3;
+}
+.main_input_box img{
+	vertical-align:baseline;
+}
+/*用户名和密码的input输入框*/
+#loginbox .main_input_box input{ 
+	height:34px; 
+	border:0px; 
+	display:inline-block; 
+	width:100%; 
+	line-height:30px;  
+	margin-bottom:0px;
+	border: 1px solid #e5e5e5;
+	text-indent:56px;
+}
+/*按钮部分*/
+.form-actions {
+    padding: 14px 20px 15px;
+    margin-bottom: 0;
+    margin-top: 20px;
+    background: none;
+    border-top: 1px solid #e5e5e5;
+    background-color: #41586e;
+    text-align: right;
+}
+/*按钮_[忘记密码]*/
+.btn-info{
+	background: transparent;
+    color: #333;
+    border: 1px solid #ddd;
+    text-shadow: none;
+    box-shadow:none;
+}
+/*按钮_[忘记密码]_划过*/
+.btn-info:hover, 
+.btn-info:focus, 
+.btn-info:active, 
+.btn-info.active, 
+.btn-info.disabled, 
+.btn-info[disabled]{
+	color: #f6ab00;
+	background:transparent;
+	box-shadow:none;
+	border: 1px solid #f6ab00;
+}
+/*按钮_[登录]*/
+.btn-success{
+	width: 96px;
+	background: #fff;
+    width: 96px;
+    color: #41586e !important;
+    border: 1px solid #41586e;
+}
+/*按钮_[登录]_划过*/
+.btn-success:hover, 
+.btn-success:focus, 
+.btn-success:active, 
+.btn-success.active, 
+.btn-success.disabled, 
+.btn-success[disabled]{
+	background-color: #ebebeb;
+	border: 1px solid #ccc;
+	color: #3e5061;
+}

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.citic.mapper.RoleMapper">
+	<!--mybatis ehcache缓存配置 -->
+	<!-- 以下两个<cache>标签二选一,第一个可以输出日志,第二个不输出日志 <cache type="org.mybatis.caches.ehcache.LoggingEhcache" 
+		/> -->
+	<!-- <cache type="org.mybatis.caches.ehcache.EhcacheCache"/> -->
+	<!-- 以下与实体类的中字段一致 -->
+	<sql id="selectId">
+		id,
+		status,
+		name,
+		rolekey,
+		description
+	</sql>
+	<select id="seletUserRole" resultType="com.citic.entity.RoleFormMap">
+	select 
+	<include refid="selectId"/>
+	 from t_role
+		where t_role.id
+		in (SELECT roleid FROM t_user_role WHERE
+		userid=#{userid})
+	</select>
+	
+	<select id="findRolePage" resultType="com.citic.entity.RoleFormMap">
+		select
+		<include refid="selectId" />
+		from t_role
+		<where>
+		<if test="name != null and name != ''">
+		and name like '%${name}%'
+		</if>
+		<if test="column != null">
+          order by ${column} ${sort}
+        </if>
+        </where>
+	</select>
+	
+	
+</mapper>

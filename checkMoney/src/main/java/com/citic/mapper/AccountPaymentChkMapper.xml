@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.citic.mapper.AccountPaymentChkMapper">
+
+	<sql id="selectId">
+		DATE_FORMAT(MAX(pay_date),'%Y年%m月%d日') pay_date
+	</sql>
+	<sql id="selectId2">
+		DATE_FORMAT(MIN(pay_date),'%Y年%m月%d日') pay_date
+	</sql>
+	
+	<update id="updateMatchData"  parameterType="map">
+	UPDATE t_account_payment_chk ap
+	INNER JOIN t_account_receipt_chk ar
+	ON ( ar.relation_id = ap.check_order
+	AND
+	ap.fund_type = ar.fund_type
+	AND ar.check_result = 0 )
+	SET
+	ap.recipt_amount = ar.pay_amount,
+	ap.eshop_name = ar.eshop_name,
+	ap.provider_name = ar.provider_name,
+	ap.store_name = ar.store_name,
+	ap.self = ar.self,
+	ap.pay_platform = ar.pay_platform
+	where ap.check_result=0 AND ap.channel_name in
+	<foreach item="chkPayWay" collection="map.list" open="(" close=")" separator=",">
+            #{chkPayWay}
+        </foreach>
+	AND ap.fund_type=#{map.chkReceiptWay} 
+	AND ap.pay_date &gt;= #{map.startTimeChkMoney} AND ap.pay_date &lt;= #{map.endTimeChkMoney};
+	</update>
+	<update id="updateChkResult" parameterType="map">
+		UPDATE
+		t_account_payment_chk ap
+		SET ap.check_result = IF(ap.recipt_amount IS
+		NULL,0,CASE
+		WHEN ap.pay_amount - ap.recipt_amount = 0 THEN
+		1
+		ELSE
+		2
+		END)
+		where ap.check_result=0 AND ap.channel_name  in
+		<foreach item="chkPayWay" collection="map.list" open="(" close=")" separator=",">
+            #{chkPayWay}
+        </foreach>
+		AND ap.fund_type=#{map.chkReceiptWay}
+		AND ap.pay_date &gt;= #{map.startTimeChkMoney} AND ap.pay_date &lt;= #{map.endTimeChkMoney};
+	</update>
+	<select id="getClosingDate"  resultType="com.citic.entity.AccountPaymentChkFormMap">
+		SELECT <include refid="selectId" />  FROM t_account_payment_chk
+	</select>
+	<select id="getMinDate"  resultType="com.citic.entity.AccountPaymentChkFormMap">
+		SELECT <include refid="selectId2" />  FROM t_account_payment_chk
+	</select>
+	<delete id="deleteAll" parameterType="java.util.List">
+        delete from t_account_payment_chk
+        where id in 
+         <foreach item="id" collection="list" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+     </delete>
+</mapper>

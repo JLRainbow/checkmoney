@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.citic.mapper.WagesMapper">
+	<!--mybatis ehcache缓存配置 -->
+	<!-- 以下两个<cache>标签二选一,第一个可以输出日志,第二个不输出日志 <cache type="org.mybatis.caches.ehcache.LoggingEhcache" 
+		/> -->
+	<!-- <cache type="org.mybatis.caches.ehcache.EhcacheCache"/> -->
+	<!-- 以下与实体类的中字段一致 -->
+	<sql id="selectId">
+		id,
+		batchcode,
+		employeename,
+  		dept,
+  		thirdcustid ,
+  		idno,
+	  	tranamount,
+	  	trandate,
+	  	status,
+	  	remark,
+	  	createtime
+	</sql>
+	
+	<sql id="allSelectId">
+		id,
+		batchcode,
+		employeename,
+  		dept,
+  		thirdcustid ,
+  		idno,
+  		mobile,
+	  	tranamount,
+	  	trandate,
+	  	status,
+	  	remark,
+	  	modifytime,
+	  	createtime
+	</sql>
+	
+	<sql id="walletAbutmentId">
+		id,
+		employeename,
+  		dept,
+  		thirdcustid ,
+  		idno,
+  		mobile,
+	  	tranamount,
+	  	trandate
+	</sql>
+	
+	<select id="findAllWages" parameterType="com.citic.bean.vo.WagesQueryVo" resultType="com.citic.bean.po.Wages">
+		select
+		<include refid="allSelectId" />
+		from t_wages
+		<where>
+			<if test="wages.status != null and wages.status != ''">
+			status = #{wages.status}
+			</if>
+			<if test="wages.idno != null and wages.idno != ''">
+			and idno like '%${wages.idno}%'
+			</if>
+			<if test="wages.trandate != null and wages.trandate != ''">
+			and trandate = #{wages.trandate}
+			</if>
+			<if test="wages.batchcode != null and wages.batchcode != ''">
+			and batchcode = #{wages.batchcode}
+			</if>
+		</where>
+	</select>
+	
+	<update id="updateWagesStatus" parameterType="com.citic.bean.po.Wages">
+		update t_wages set status = #{status}, remark = #{remark}, modifytime = #{modifytime} where trandate = #{trandate} and thirdcustid =#{thirdcustid} and idno = #{idno} and batchcode = #{batchcode};
+	</update>
+</mapper>

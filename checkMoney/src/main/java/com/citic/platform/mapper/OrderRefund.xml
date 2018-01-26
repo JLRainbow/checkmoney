@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.citic.platform.mapper.OrderRefundMapper">
+	<resultMap type="com.citic.platform.entity.OrderRefund" id="OrderRefundMap">
+		<result property="receiptsChargeId" column="receiptsChargeId" jdbcType="CHAR"/>
+		<result property="refundChargeId" column="refundChargeId" jdbcType="CHAR"/>
+		<result property="id" column="id" jdbcType="CHAR"/>
+		<result property="receiptId" column="receiptId" jdbcType="CHAR"/>
+		<result property="price" column="price" jdbcType="CHAR"/>
+		<result property="refundPlatform" column="refundPlatform" jdbcType="CHAR"/>
+		<result property="refundOrderStatus" column="refundOrderStatus" jdbcType="CHAR"/>
+		<result property="eshopId" column="eshopId" jdbcType="CHAR"/>
+		<result property="remark" column="remark" jdbcType="CHAR"/>
+		<result property="refundTime" column="refundTime" jdbcType="CHAR"/>
+		<result property="paySource" column="paySource" jdbcType="CHAR"/>
+		
+        <association property="store" javaType="com.citic.platform.entity.Store">  
+             <id property="id" column="id"/>
+       		<result property="name" column="storeName"/>
+        </association>
+        <association property="eshop" javaType="com.citic.platform.entity.Eshop">  
+             <id property="id" column="id"/>
+        	<result property="name" column="eshopName" />
+        	<result property="self" column="self"/>
+        </association>
+       
+	</resultMap>
+
+	
+	<select id="getPlatformReceiptData"  resultMap="OrderRefundMap" parameterType="java.util.Map">
+		SELECT
+			o.receipts_charge_id AS receiptsChargeId,
+			o.refund_charge_id AS refundChargeId,
+			o.id AS id,
+			d.id AS receiptId,
+			o.price AS price,
+			(
+				CASE o.refund_platform
+				WHEN 'wx' THEN
+					'微信'
+				WHEN 'wx_pub_qr' THEN
+					'微信扫码'
+				WHEN 'wx_pub' THEN
+					'微信公众号'
+				WHEN 'alipay' THEN
+					'支付宝'
+				WHEN 'alipay_qr' THEN
+					'支付宝扫码'
+				WHEN 'gapay' THEN
+					'国安付'
+				WHEN 'union_pay' THEN
+					'银行卡支付'
+				WHEN 'pos' THEN
+					'POS'
+				WHEN 'cash' THEN
+					'现金'
+				END
+			) AS refundPlatform,
+			(
+				CASE d.pay_platform
+				WHEN 'wx' THEN
+					'微信'
+				WHEN 'wx_pub_qr' THEN
+					'微信扫码'
+				WHEN 'wx_pub' THEN
+					'微信公众号'
+				WHEN 'alipay' THEN
+					'支付宝'
+				WHEN 'alipay_qr' THEN
+					'支付宝扫码'
+				WHEN 'gapay' THEN
+					'国安付'
+				WHEN 'union_pay' THEN
+					'银行卡支付'
+				WHEN 'pos' THEN
+					'POS'
+				WHEN 'cash' THEN
+					'现金'
+				END
+			) AS payPlatform,
+			(
+				CASE o.refund_status
+				WHEN 'refunding' THEN
+					'退款中'
+				WHEN 'refunded' THEN
+					'已退款'
+				WHEN 'cancel' THEN
+					'取消'
+				WHEN 'waitrefund' THEN
+					'待退款'
+				END
+			) AS refundOrderStatus,
+			s. NAME AS storeName,
+			e. NAME AS eshopName,
+			e.id AS eshopId,
+			(
+				CASE e.self
+				WHEN 'yes' THEN
+					'是'
+				WHEN 'no' THEN
+					'否'
+				END
+			) AS self,
+			o.remark remark,
+			o.refund_time refundTime,
+			d.pay_source paySource
+		FROM
+			t_order_refund o
+		LEFT JOIN t_store s ON o.store_id = s.id
+		LEFT JOIN t_eshop e ON o.eshop_id = e.id
+		LEFT JOIN t_order ord ON ord.group_id = o.order_group_id
+		LEFT JOIN t_order_receipts d ON d.order_group_id = o.order_group_id
+		AND d. STATUS = 0
+		AND d.pay_status = 'payed'
+		AND d.type = 'order'
+		WHERE
+			d.pay_platform IN 
+		<foreach item="item" index="index" collection="DBpayPlatformArray" open="(" separator="," close=")">  
+ 			#{item}  
+		</foreach>
+		AND o.refund_status = 'refunded'
+		AND o.refund_time &gt;= #{startTime}
+		AND o.refund_time &lt;= #{endTime}
+		ORDER BY
+			o.refund_time DESC
+	</select>
+
+</mapper>

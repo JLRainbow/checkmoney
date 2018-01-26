@@ -1,0 +1,496 @@
+﻿@charset "utf-8";
+/*菜单***************************************************************/
+/*菜单***************************************************************/
+#theme_head.bg-dark{
+	
+}
+/* 头部颜色 */
+.bg-dark.dk,
+/* 菜单颜色 */
+.bg-dark.lter,
+/* 二级菜单 */
+.nav-primary ul.nav ul{
+	background-color: #fff;
+    border: 0;;
+}
+.nav-primary {
+    width:215px;
+}
+/* 一级菜单的宽度和高度 */
+.nav-primary ul.nav>li>a{
+	padding:25px 15px;
+	font-weight: normal;
+    font-size: 16px;
+}
+/* 一级菜单的小图标 */
+.nav-primary li>a>i {
+    margin: 0 15px ;
+    height:25px;
+    width:25px;
+    display:block;
+    border:0;
+}
+/* 二级菜单浮动的条件   */
+.vbox .scrollable{
+	overflow: inherit !important;
+}
+.slimScrollDiv,.slim-scroll{
+	overflow: inherit !important;
+}
+/* .menuover, */.contentover.scrollable{
+	overflow-x: hidden!important;
+    overflow-y: auto!important;
+}
+/* 二级菜单浮动*/
+.nav-primary ul.nav ul {
+    position: absolute;
+    left: 215px;
+    top: 0;
+    min-width:150px;
+    z-index:10000;
+    min-height:75px;
+    border: 5px solid #adbece;;
+    padding: 10px 0;
+     white-space: nowrap;
+}
+.nav-primary ul.nav li:first-child ul {
+	margin-top:-5px;
+}
+/* 二级菜单区别一级菜单 */
+.nav-primary ul ul.nav>li>a{
+	border:0;
+	padding:10px 25px;
+}
+/* 一二级菜单的小图标 */
+.nav-primary .pull-right,
+.nav-primary .fa-angle-right {
+	display:none;
+}
+/* 一二级菜单的小图标 选中状态下也隐藏*/
+.nav-primary ul.nav>li>a.active .text-active {
+    display:none !important;
+}
+
+/* 退出等信息的位置 */
+.head-userinfo {
+
+}
+.head-userinfo li{
+	float:left;
+	position:relative;
+}
+.head-userinfo li+li:after{
+	position:absolute;
+	content:"";
+	width:1px;
+	height:15px;
+	top:18px;
+	left:0px;
+	background:#999;
+}
+.head-userinfo a{
+	color:#333;
+}
+.head-userinfo a:hover{
+	color:#e71a21;
+}
+.head-userinfo .glyphicon{
+	margin-right: 10px;
+}
+/* 退出等信息的位置    结束*/
+/* logo */
+.bg-dark .nav>li>a,
+.bg-dark a.navbar-brand{
+    padding: 15px 42px 15px 32px;
+}
+/* 主题 */
+.theme_check .glyphicon{
+	font-size:12px;
+	margin: 0 0 0 6px;
+}
+.theme {
+	position:absolute;
+	width:124px;
+	padding: 0px;
+    text-align: center;
+    display:none;
+    background-color: #374b5e;
+    border: 5px solid #adbece;
+    padding: 10px 0;
+}
+.theme li{
+	list-style:none;
+	float:none;
+	line-height:34px;
+	cursor:pointer;
+	color: #adbece;
+}
+.theme li:hover{
+	color: #fff;
+}
+.theme li+li:after {
+    position: static;
+}
+/*内容***************************************************************/
+.page-wrapper {
+    position: relative;
+    padding: 30px 20px;
+}
+/*内容-公用***************************************************************/
+/* 欢迎页面 标题 */
+.welcome{
+	background: #fff; 
+	
+    display: block;
+    overflow: hidden;
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+}
+.welcomeTile{    
+    padding: 30px 0;
+    color: #41586e;
+    text-align: center;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    margin-top: -50px;
+    border-bottom: 3px dashed #689bca;
+    border-top: 3px dashed #689bca;
+    left: 50%;
+    margin-left: -180px;
+}
+
+/* 标题 */
+.module-title{
+	border-bottom:1px solid #e7e7e7;
+	padding-bottom:20px;
+	margin:0;
+	text-align:center;
+}
+/* 关闭按钮 */
+.module-close{
+	float:right;
+	margin-top:-40px;
+	color:#ccc;
+	border:1px solid #ccc;
+	padding: 2px 7px;
+	border-radius:50%;
+	font-size:14px;
+	font-weight:normal;
+	font-family: Arial;
+}
+.module-close:hover{
+	color:#999;
+	border:1px solid #999;
+	text-decoration:none;
+}
+/* 搜索 */
+.form-search{
+	margin-top:20px;
+	overflow:hidden;
+}
+.form-search .form-group{
+	margin-bottom:0;
+	float:left;
+}
+/* 浮动 */
+.form-search label,
+.form-search select,
+.form-search input,
+.form-search .btn,
+.form-search .form_datetime{
+	float:left;
+	margin-right:20px;
+	margin-bottom:10px;
+}
+/* 文字 */
+.form-search label{
+	line-height:34px;
+	margin-right:10px;
+	min-width:56px;
+	text-align:center;
+}
+/* 所有的条件 */
+.form-search select,
+.form-search input{
+	width:180px;
+	
+}
+/* 搜索的日期控件 */
+.form_datetime .form-control {
+    background-color: #fff;
+    margin-right:0;
+}
+.form_datetime .add-on {
+    font-size: 18px;
+    display: inline-block;
+    border-left: 1px solid #e5e5e5;
+    margin-left: -30px;
+    padding: 7px 4px 12px 5px;
+}
+.form-block{
+
+}
+/* 添加删除系列按钮 */
+.table-btn{
+	margin-bottom:30px;
+	text-align: right;
+	margin-top:-58px;
+}
+.table-btn .btn{
+	margin-left:10px;
+}
+/* 表格 */
+.table th,.table td{
+	font-size:14px;
+	word-break: break-all;
+    vertical-align: middle !important;
+}
+/*th*/
+.table th{
+	background-color: #f9f9f9;
+}
+/* 菜单的组织树 */
+td .t_tree{
+	display: inline-block;
+}
+/*斑马线*/
+.table-striped>tbody>tr:nth-child(odd)>td, .table-striped>tbody>tr:nth-child(odd)>th {
+    background-color: #fff;
+}
+.table-striped>tbody>tr:nth-child(even)>td, .table-striped>tbody>tr:nth-child(even)>th {
+    background-color: #f9f9f9;
+}
+/*th的边框宽度*/
+.table-bordered>thead>tr>th, .table-bordered>thead>tr>td {
+    border-bottom-width: 1px;
+}
+/* 操作按钮 */
+.pagclass .glyphicon {
+	margin: 0 5px;
+}
+/*分页*/
+.list-page {
+    float: right;
+}
+
+.page-info {
+    float: left;
+    margin: 20px;
+    line-height: 34px;
+}
+
+.list-page ul {
+    float: left;
+}
+
+.list-page li {
+    margin-right: 10px;
+}
+
+.list-page li a {
+    border: 1px solid #ccc;
+    padding: 6px 14px;
+    border-radius: 3px;
+    background:#fff;
+    color: #666;
+}
+.list-page li.active a {
+    border: 1px solid #ccc;
+    padding: 6px 14px;
+    border-radius: 3px;
+    background:#184a79;
+    color:#fff;
+}
+.pager li>a:hover, .pager li>a:focus{
+	border-color:#2d557b;
+	background:#fff;
+	color:#184a79;
+}
+.list-page li.disabled a,.pager li.disabled>a:hover, .pager li.disabled>a:focus{
+	color: #ccc;
+    cursor: not-allowed;
+    background-color: #fff;
+    border: 1px solid #ccc;
+}
+.page-skip {
+    margin: 20px 0;
+    float: left;
+}
+
+.page-skip input {
+    width: 70px;
+    float: left;
+    margin-right: 10px;
+}
+
+/* 弹出框 */
+form.bounced {
+    padding-bottom: 55px;
+}
+.bounced .container-fluid{
+	margin-top:20px;
+}
+.bounced .col-sm-3 {
+	width: 95px;
+	float: left;
+	text-align: right;
+}
+
+.bounced .col-sm-9 {
+	width: calc(100% - 115px);
+	float: left;
+	text-align: left;
+	margin-right:20px;
+} 
+.bounced .panel-footer {
+	position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+/* 财务对账处理  开始 */
+.checking{
+	border-bottom:1px solid #e7e7e7;
+}
+.checking>.col-md-6 {
+	padding-top:5px;
+}
+.checking .col-md-6 + .col-md-6{
+	border-left:1px solid #e7e7e7;
+}
+.checking .row{
+	margin-top:15px;
+}
+.checking .sweep{
+	margin-top:0;
+}
+.checking .form-control-static{
+	font-weight:bold;
+}
+/* 浏览路径 */
+.file-team input[readonly]{
+	background:#fff;
+}
+/* 虚虚对账 */
+.import{
+	height:190px;
+	margin: 0 15px;
+}
+/* 虚实对账 */
+.wallet{
+	height:60px;
+	border-bottom:1px solid #e7e7e7;
+}
+.checking .col-md-6 + .col-md-6{
+	border:0;
+}
+/* 导入样式 */
+.import input,
+.import select,
+.import label,
+.import button{
+	display: inline-block;
+}
+.checking dl{
+	background: #e1ecf9;
+    border: 1px solid #adbece;
+	padding:20px 40px 15px;
+	margin: 10px 15px 15px;
+}
+.checking dt{
+	font-weight:normal;
+	font-size:16px;
+	text-align:center;
+	margin-bottom:15px;
+}
+.checking dd{
+	line-height:2;
+	text-align: right;
+}
+/* 对比纬度 */
+.latitude{
+	margin-top:10px;
+	padding-top:10px;
+}
+.latitude  h5{
+	font-weight:bold;
+	position:relative;
+	padding-left: 15px;
+	margin-bottom:0;
+	width:100px;
+}
+.latitude  h5:after{
+	position:absolute;
+	content:'';
+	width:5px;
+	height:14px;
+	background:#333;
+	left:0;
+	top:1px;
+}
+.latitude .form-control-static{
+	font-weight:bold;
+}
+.latitude-list .form-group{
+	overflow: hidden;
+}
+.latitude-list label{
+	font-weight:normal;
+	line-height: 34px;
+}
+.latitude-list .btn{
+	margin-top:0;
+}
+/* 上传按钮 */
+input[type="file"] {
+    width: 80px;
+    height: 34px;
+    position: absolute;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    font-size: 100px \9;
+    z-index: 10;
+    cursor: pointer;
+    outline: medium none;
+	margin-top: -6px;
+	margin-left: -26px;
+	cursor: pointer !important;
+}
+.simulation-file {
+	width: 80px;
+    background-color: #fff; 
+    color:  #2e6da4 !important;; 
+    border: 1px solid #428bca !important;; 
+    position: absolute;
+    display: block;
+    border-radius: 4px;
+    border: none;
+    outline: medium none;
+    text-align: center;
+	cursor: pointer !important;
+}
+.simulation-file:hover{
+	cursor: pointer  !important;
+} 
+/* 财务对账处理的日期 */
+#DBDataDiv .form_datetime input{    
+    float: left;
+}
+#DBDataDiv .bootstrap-select.btn-group{    
+    margin-bottom:0;
+}
+/*弹框中的下拉模拟框的选中颜色*/
+.bounced .dropdown-menu>.active>a, 
+.bounced .dropdown-menu>.active>a:hover, 
+.bounced .dropdown-menu>.active>a:focus
+{
+	background-color: #428bca !important;
+	color: #fff ;
+}
+.bounced .dropdown-menu>li>a:hover,
+.bounced .dropdown-menu>li>a:focus {
+	color: #333 ;
+}

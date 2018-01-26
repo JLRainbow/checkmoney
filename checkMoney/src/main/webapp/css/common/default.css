@@ -1,0 +1,97 @@
+﻿@charset "utf-8";
+/*菜单***************************************************************/
+#theme_head.bg-dark{
+	
+}
+/* 头部颜色 */
+.bg-dark.dk,
+/* 菜单颜色 */
+.bg-dark.lter,
+/* 二级菜单 */
+.nav-primary ul.nav ul{
+	background-color: #374b5e;
+    border: 5px solid #adbece;
+}
+.nav-primary ul.nav ul{
+	left: 215px;
+}
+/* 头部颜色 */
+.bg-dark.dk {
+    border-width: 0 0 5px 0;
+}
+/* 菜单颜色 */
+.bg-dark.lter{
+	border-width: 5px 5px 0 0;
+
+}
+/* 菜单图标 */
+/* 系统 */
+.icon-system{
+	background: url(../../images/icon.png) 0 0 no-repeat; 
+}
+/* 登录 */
+.icon-user{
+	background:  url(../../images/icon.png) -25px 0 no-repeat; 
+}
+/* 日志 */
+.icon-log{
+	background:  url(../../images/icon.png) -50px 0 no-repeat; 
+}
+/* 财务 */
+.icon-finance{
+	background:  url(../../images/icon.png) -75px 0 no-repeat;  
+}
+/* 报表 */
+.icon-report{
+	background:  url(../../images/icon.png) -100px 0 no-repeat;  
+}
+/* 系统 */
+.nav-primary ul.nav>li:focus .icon-system,
+.nav-primary ul.nav>li:hover .icon-system,
+.nav-primary ul.nav>li>a:hover .icon-system,
+.nav-primary ul.nav>li>a:focus .icon-system,
+.nav-primary ul.nav>li>a:active .icon-system,
+.nav-primary ul.nav>li.active .icon-system{
+	background:  url(../../images/icon_hover.png) 0 0  no-repeat; 
+}
+/* 登录 */
+.nav-primary ul.nav>li:focus .icon-user,
+.nav-primary ul.nav>li:hover .icon-user,
+.nav-primary ul.nav>li>a:hover .icon-user,
+.nav-primary ul.nav>li>a:focus .icon-user,
+.nav-primary ul.nav>li>a:active .icon-user,
+.nav-primary ul.nav>li.active .icon-user{
+	background:  url(../../images/icon_hover.png) -25px 0  no-repeat; 
+}
+/* 日志 */
+.nav-primary ul.nav>li:focus .icon-log,
+.nav-primary ul.nav>li:hover .icon-log,
+.nav-primary ul.nav>li>a:hover .icon-log,
+.nav-primary ul.nav>li>a:focus .icon-log,
+.nav-primary ul.nav>li>a:active .icon-log,
+.nav-primary ul.nav>li.active .icon-log{
+	background:  url(../../images/icon_hover.png) -50px 0 no-repeat; 
+}
+/* 财务 */
+.nav-primary ul.nav>li:focus .icon-finance,
+.nav-primary ul.nav>li:hover .icon-finance,
+.nav-primary ul.nav>li>a:hover .icon-finance,
+.nav-primary ul.nav>li>a:focus .icon-finance,
+.nav-primary ul.nav>li>a:active .icon-finance,
+.nav-primary ul.nav>li.active .icon-finance{
+	background:  url(../../images/icon_hover.png) -75px 0 no-repeat; 
+}
+/* 报表 */
+.nav-primary ul.nav>li:focus .icon-report,
+.nav-primary ul.nav>li:hover .icon-report,
+.nav-primary ul.nav>li>a:hover .icon-report,
+.nav-primary ul.nav>li>a:focus .icon-report,
+.nav-primary ul.nav>li>a:active .icon-report,
+.nav-primary ul.nav>li.active .icon-report{
+	background:  url(../../images/icon_hover.png) -100px 0 no-repeat; 
+}
+/* 欢迎页面 标题 */
+.welcome{
+	background: #d6dee1 url(../../images/bg.jpg) no-repeat; 
+	background-size: cover;
+}

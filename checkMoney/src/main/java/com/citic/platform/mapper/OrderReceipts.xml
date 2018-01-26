@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.citic.platform.mapper.OrderReceiptsMapper">
+	<resultMap type="com.citic.platform.entity.OrderReceipts" id="OrderReceiptsMap">
+		<result property="id" column="id" jdbcType="CHAR"/>
+		<result property="charge_id" column="charge_id" jdbcType="CHAR"/>
+		<result property="price" column="price" jdbcType="CHAR"/>
+		<result property="pay_status" column="pay_status" jdbcType="CHAR"/>
+		<result property="pay_time" column="pay_time" jdbcType="CHAR"/>
+		<result property="pay_platform" column="pay_platform" jdbcType="CHAR"/>
+		<result property="eshop_id" column="eshop_id" jdbcType="CHAR"/>
+		<result property="paySn" column="paySn" jdbcType="CHAR"/>
+		<result property="paySource" column="paySource" jdbcType="CHAR"/>
+		
+        <association property="store" javaType="com.citic.platform.entity.Store">  
+             <id property="id" column="id"/>
+       		<result property="name" column="store_name"/>
+        </association>
+        <association property="eshop" javaType="com.citic.platform.entity.Eshop">  
+             <id property="id" column="id"/>
+        	<result property="name" column="eshop_name" />
+        	<result property="self" column="self"/>
+        </association>
+       
+	</resultMap>
+
+	
+	<select id="getPlatformPayData"  resultMap="OrderReceiptsMap" parameterType="java.util.Map">
+		SELECT
+			r.id,r.charge_id,r.price,
+		(
+			CASE r.pay_status
+			WHEN 'waitpay' THEN
+				'待支付'
+			WHEN 'payed' THEN
+				'已支付'
+			WHEN 'paying' THEN
+				'支付中'
+			WHEN 'cancel' THEN
+				'取消中'
+			END
+		) AS pay_status,
+			r.pay_time,
+		(
+			CASE r.pay_platform
+			WHEN 'wx' THEN
+				'微信'
+			WHEN 'wx_pub_qr' THEN
+				'微信扫码'
+			WHEN 'wx_pub' THEN
+					'微信公众号'
+			WHEN 'alipay' THEN
+					'支付宝'
+			WHEN 'alipay_qr' THEN
+					'支付宝扫码'
+			WHEN 'gapay' THEN
+					'国安付'
+			WHEN 'union_pay' THEN
+					'银行卡支付'
+			WHEN 'pos' THEN
+					'POS'
+			WHEN 'cash' THEN
+					'现金'
+			END
+		) AS pay_platform,
+			s. NAME AS store_name,
+			e. NAME AS eshop_name,
+			e.id AS eshop_id,
+		(
+			CASE e.self
+			WHEN 'yes' THEN
+				'是'
+			WHEN 'no' THEN
+				'否'
+			END
+		) AS self,
+		r.pay_sn AS paySn,
+		r.pay_source AS paySource
+		FROM
+			t_order_receipts AS r
+		
+		LEFT JOIN t_store s ON r.store_id = s.id
+		LEFT JOIN t_eshop e ON r.eshop_id = e.id
+		LEFT JOIN t_order ord ON ord.group_id = r.order_group_id
+		LEFT JOIN t_order_flow flow ON flow.order_id = ord.id
+		AND flow.order_status = 'signed'
+		
+		WHERE
+			r.type &lt;&gt; 'fake'
+		AND (
+			ord.is_split = 'no'
+			OR NOT EXISTS (
+				SELECT
+					id
+				FROM
+					t_order ord1
+				WHERE
+					ord1.group_id = ord.group_id
+				AND ord1.order_sn &lt; ord.order_sn
+			)
+		)
+		AND NOT EXISTS (
+			SELECT
+				id
+			FROM
+				t_order_flow subflow
+			WHERE
+				subflow.order_id = flow.order_id
+			AND subflow.order_status = 'signed'
+			AND subflow.create_time &lt; flow.create_time
+		)
+		AND r.pay_platform in
+		<foreach item="item" index="index" collection="DBpayPlatformArray" open="(" separator="," close=")">  
+ 			#{item}  
+		</foreach>
+		AND r.pay_status = 'payed'
+		AND r.pay_time &gt;= #{startTime}
+		AND r.pay_time &lt;= #{endTime}
+		ORDER BY
+			r.pay_time DESC
+	</select>
+
+	<select id="getMergePay"  resultType="com.citic.entity.AccountReceiptChkFormMap" parameterType="java.util.Map">
+		SELECT
+			relation_id,
+			SUM(pay_amount) pay_amount,
+			source,
+			fund_type,
+			`status`,
+			receipt_date,
+			store_name,
+			self,
+			pay_platform,
+			merge_flag
+		FROM
+			t_account_receipt_chk
+		WHERE
+			fund_type = 1
+		AND check_result = 3
+		AND pay_platform IN 
+		<foreach item="item" index="index" collection="DBpayPlatformArray" open="(" separator="," close=")">  
+ 			#{item}  
+		</foreach>
+		AND receipt_date &gt;= #{startTime}
+		AND receipt_date &lt;= #{endTime}
+		GROUP BY
+			relation_id
+	</select>
+</mapper>

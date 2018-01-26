@@ -1,0 +1,117 @@
+.main a:hover{
+	text-decoration:none;
+	color:#333;
+}
+
+.main {
+	width: calc(100% - 40px);
+	margin: 0 auto;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+	font-size:12px;
+}
+
+.txt_left {
+	text-align: left;
+}
+.txt_right {
+	text-align: right;
+}
+.paddRight{padding-right: 20px;}
+a{
+	color: #333;
+	text-decoration: none;
+}
+.fl {
+	float: left;
+}
+
+.fr {
+	float: right;
+}
+.ml10{margin-left:10px;}
+
+.order_container {
+	margin: 10px 0;
+}
+
+.trade_order {
+	border: 1px solid #ececec;
+	margin-bottom: 20px;
+}
+
+.bought_table_mod {
+	width: 100%;
+	border-collapse: collapse;
+	border-spacing: 0;
+	color: #3c3c3c;
+}
+
+.bought_mod_head {
+	background: #e3e4e5;
+	border-width: 1px 1px 0 0;
+	border-style: solid;
+	border-color: #ececec;
+	text-align: center;
+	color:#333;
+}
+.bold{
+	font-weight:bold;
+}
+
+.bought_mod_head td,
+.bought_mod_body td {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+.bought_mod_body td {
+	width:25%;
+	text-align:center;
+}
+.bought_mod_body tr+tr{
+	border-top:1px solid #ececec;
+}
+.bought_mod_body td.border-right{
+	border-right:1px solid #ececec;
+}
+.border-right p{
+	width: 180px;
+    margin: auto;
+    line-height: 24px;
+    overflow:hidden;
+}
+.border-right  label{
+	float:left;
+	text-align:right;
+}
+.border-right  span{
+	width:120px;
+	float:left;
+	display:block;
+	text-align:left;
+}
+.checkbox_label {
+	margin-left: 20px;
+}
+
+.bought_checkbox_mar3 {
+	margin-right: 3px;
+}
+
+.bought_create_time {
+	margin-left: 30px;
+	font-weight: 700;
+}
+
+.bought_mod_body p {
+	margin-top: 8px;
+	margin-bottom: 8px;
+}
+
+.ml_mod_production{
+	margin-left: 20px;
+	text-align: left;
+}

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.citic.mapper.AccountReceiptChkMapper">
+
+	<sql id="selectId">
+		DATE_FORMAT(MAX(receipt_date),'%Y年%m月%d日') receipt_date
+	</sql>
+	<sql id="selectId2">
+		DATE_FORMAT(MIN(receipt_date),'%Y年%m月%d日') receipt_date
+	</sql>
+	<update id="updateMatchData" parameterType="map">
+		UPDATE t_account_receipt_chk ar
+		INNER JOIN t_account_payment_chk ap
+		ON (ar.relation_id = ap.check_order
+		AND ap.fund_type = ar.fund_type )
+		SET
+		ar.recipt_amount = ap.pay_amount
+		WHERE ar.check_result=0 AND ar.pay_platform in
+			<foreach item="chkPayWay" collection="map.list" open="(" close=")" separator=",">
+	            #{chkPayWay}
+	        </foreach>
+		AND ar.fund_type=#{map.chkReceiptWay}
+		AND ar.receipt_date &gt;= #{map.startTimeChkMoney} AND ar.receipt_date &lt;= #{map.endTimeChkMoney};
+	</update>
+	<update id="updateChkResult" parameterType="map">
+		UPDATE
+		t_account_receipt_chk ar
+		SET ar.check_result = IF(ar.recipt_amount IS NULL,0,CASE
+		WHEN ar.pay_amount - ar.recipt_amount = 0 THEN
+		1
+		ELSE
+		2
+		END) WHERE ar.check_result=0 AND ar.pay_platform in
+		<foreach item="chkPayWay" collection="map.list" open="(" close=")" separator=",">
+            #{chkPayWay}
+        </foreach>
+		 AND ar.fund_type=#{map.chkReceiptWay}
+		 AND ar.receipt_date &gt;= #{map.startTimeChkMoney} AND ar.receipt_date &lt;= #{map.endTimeChkMoney};
+	</update>
+	<select id="getClosingDate"  resultType="com.citic.entity.AccountReceiptChkFormMap">
+		SELECT <include refid="selectId" />  FROM t_account_receipt_chk
+	</select>
+	<select id="getMinDate"  resultType="com.citic.entity.AccountReceiptChkFormMap">
+		SELECT <include refid="selectId2" />  FROM t_account_receipt_chk
+	</select>
+	<update id="matchProviderName" parameterType="com.citic.bean.po.TempPo">
+		UPDATE t_account_receipt_chk ar
+		INNER JOIN t_supplier_info si
+		ON ar.eshop_id = si.eshop_id
+		SET
+		ar.provider_name = si.contractor
+		WHERE ar.check_result=0  
+		AND ar.receipt_date &gt;= #{startTime} AND ar.receipt_date &lt;= #{endTime};
+		</update>
+		<update id="matchProviderName1" >
+		UPDATE t_account_receipt_chk ar
+		INNER JOIN t_supplier_info si
+		ON ar.eshop_id = si.eshop_id
+		SET
+		ar.provider_name = si.contractor
+		WHERE ar.check_result=0  
+	</update>
+    <delete id="deleteAll" parameterType="java.util.List">
+        delete from t_account_receipt_chk
+        where id in 
+         <foreach item="id" collection="list" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+     </delete>
+     <update id="updateMergePay" parameterType="map">
+		UPDATE
+		t_account_receipt_chk ar
+		SET ar.check_result = #{map.check_result},
+			ar.recipt_amount = #{map.recipt_amount}
+		WHERE ar.relation_id = #{map.relation_id}
+		and ar.check_result = 3 AND ar.pay_platform in
+		<foreach item="chkPayWay" collection="map.list" open="(" close=")" separator=",">
+            #{chkPayWay}
+        </foreach>
+		 AND ar.fund_type=#{map.chkReceiptWay}
+		 AND ar.receipt_date &gt;= #{map.startTimeChkMoney} 
+		 AND ar.receipt_date &lt;= #{map.endTimeChkMoney};
+	</update>
+</mapper>

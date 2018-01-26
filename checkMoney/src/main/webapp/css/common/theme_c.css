@@ -1,0 +1,218 @@
+﻿@charset "utf-8";
+#theme_head.bg-dark{
+	
+}
+/* 登录 *************************************************************/
+/* 清除默认颜色 */
+#loginbox form ,
+.logotitle ,
+.form-actions {
+     background: transparent; 
+}
+/* 整体颜色 */
+#loginbox form{
+	border-color:#ccc;
+	background:#fff;
+}
+/* 上下颜色 */
+.logotitle {
+	border-color:#ccc;
+}
+.form-actions {
+	border:0;
+	margin-top:0;
+	margin-bottom:20px;
+	text-align: center;
+}
+/* logo文字颜色 */
+.logotitle h1 {
+	color: #f14f45;
+	line-height:36px;
+}
+.logotitle img {
+	float: none;
+	display: inline-block;
+	margin-right:20px;
+}
+/* 登录小图标 */
+.main_input_box .add-on {
+	background:#fff;
+	border-color:#ccc;
+}
+/* 登录输入框 */
+#loginbox .main_input_box input {
+    border-color:#ccc;
+}
+/*按钮*/
+.btn-success{
+	color: #fff !important;
+    border: 1px solid #f14f45;
+    width:80%;
+    height:40px;
+    line-height:40px;
+    padding:0 20px;
+    background:#f14f45;
+    font-size:16px;
+    border-radius:4px ;
+}
+/*鼠标划过*/
+.btn-success:hover, 
+.btn-success:focus, 
+.btn-success:active, 
+.btn-success.active, 
+.btn-success.disabled, 
+.btn-success[disabled]{
+	border: 1px solid #e03f35;
+	background:#e03f35;
+}
+/* 首页*********************************************************** */
+body{
+	background: #fff;
+}
+/* 头部颜色 */
+.bg-dark.dk{
+	background-color: #f6f8f9;
+    border-bottom: 1px solid #ededed;
+}
+/* logo文字的颜色 */
+#logo a {
+	color:#f14f45;
+	background-color: #32383e;
+	width:220px;
+}
+.bg-dark a.navbar-brand:hover,.bg-dark a.navbar-brand:focus {
+	color:#666;
+}
+/* 头部的文字颜色 */
+.bg-dark .nav>li>a {
+	color: #666;
+}
+/* 头部的文字颜色 鼠标划过 */
+.bg-dark .nav>li>a:hover, .bg-dark .nav>li>a:focus{
+	color: #f14f45;
+	background-color: transparent;
+}
+
+/* 菜单 *********************************************************** */
+/* 菜单的宽度 */
+.nav-primary {
+    width: 220px;
+}
+/* 菜单背景颜色 */
+.bg-dark.lter,
+/* 二级菜单 */
+.nav-primary ul.nav ul{
+	background-color: #32383e;
+	border:0;
+}
+/* 二级菜单 */
+.nav-primary ul.nav ul{
+	border: 1px solid #ededed;
+	left: 220px;
+}
+.nav-primary ul.nav li:first-child ul {
+    margin-top: 0;
+}
+/* 菜单文字的颜色 */
+.nav-primary  .nav>li>a {
+	color: #9fb3c2;
+}
+
+/* 菜单鼠标划过 */
+.nav-primary ul.nav>li:hover>a,
+.nav-primary ul.nav>li:focus>a,
+.nav-primary ul.nav>li>a:hover,
+.nav-primary ul.nav>li>a:focus,
+.nav-primary ul.nav>li>a:active,
+.nav-primary ul.nav>li.active>a{
+	background-color: #252a2e;
+	color: #f14f45;
+}
+/* 菜单图标 */
+/* 系统 */
+.icon-system{
+	background: url(../../images/theme_c/icon.png) 0 0 no-repeat; 
+}
+/* 登录 */
+.icon-user{
+	background:  url(../../images/theme_c/icon.png) -25px 0 no-repeat; 
+}
+/* 日志 */
+.icon-log{
+	background:  url(../../images/theme_c/icon.png) -50px 0 no-repeat; 
+}
+/* 财务 */
+.icon-finance{
+	background:  url(../../images/theme_c/icon.png) -75px 0 no-repeat;  
+}
+/* 报表 */
+.icon-report{
+	background:  url(../../images/theme_c/icon.png) -100px 0 no-repeat;  
+}
+/* 系统 */
+.nav-primary ul.nav>li:focus .icon-system,
+.nav-primary ul.nav>li:hover .icon-system,
+.nav-primary ul.nav>li>a:hover .icon-system,
+.nav-primary ul.nav>li>a:focus .icon-system,
+.nav-primary ul.nav>li>a:active .icon-system,
+.nav-primary ul.nav>li.active .icon-system{
+	background:  url(../../images/theme_c/icon_hover.png) 0 0  no-repeat; 
+}
+/* 登录 */
+.nav-primary ul.nav>li:focus .icon-user,
+.nav-primary ul.nav>li:hover .icon-user,
+.nav-primary ul.nav>li>a:hover .icon-user,
+.nav-primary ul.nav>li>a:focus .icon-user,
+.nav-primary ul.nav>li>a:active .icon-user,
+.nav-primary ul.nav>li.active .icon-user{
+	background:  url(../../images/theme_c/icon_hover.png) -25px 0  no-repeat; 
+}
+/* 日志 */
+.nav-primary ul.nav>li:focus .icon-log,
+.nav-primary ul.nav>li:hover .icon-log,
+.nav-primary ul.nav>li>a:hover .icon-log,
+.nav-primary ul.nav>li>a:focus .icon-log,
+.nav-primary ul.nav>li>a:active .icon-log,
+.nav-primary ul.nav>li.active .icon-log{
+	background:  url(../../images/theme_c/icon_hover.png) -50px 0 no-repeat; 
+}
+/* 财务 */
+.nav-primary ul.nav>li:focus .icon-finance,
+.nav-primary ul.nav>li:hover .icon-finance,
+.nav-primary ul.nav>li>a:hover .icon-finance,
+.nav-primary ul.nav>li>a:focus .icon-finance,
+.nav-primary ul.nav>li>a:active .icon-finance,
+.nav-primary ul.nav>li.active .icon-finance{
+	background:  url(../../images/theme_c/icon_hover.png) -75px 0 no-repeat; 
+}
+/* 报表 */
+.nav-primary ul.nav>li:focus .icon-report,
+.nav-primary ul.nav>li:hover .icon-report,
+.nav-primary ul.nav>li>a:hover .icon-report,
+.nav-primary ul.nav>li>a:focus .icon-report,
+.nav-primary ul.nav>li>a:active .icon-report,
+.nav-primary ul.nav>li.active .icon-report{
+	background:  url(../../images/theme_c/icon_hover.png) -100px 0 no-repeat; 
+}
+/* 主题 */
+.theme {
+	background-color: #f6f8f9;
+    border: 1px solid #ededed;
+}
+.theme li{
+	color:#666;
+}
+.theme li:hover{
+	color: #f14f45;
+	background:#e5edf1;
+}
+/* 欢迎界面的背景 */
+.welcome{
+	background: none; 
+	background-size:80%;
+}
+/* 欢迎界面的文字 */
+.welcomeTile{
+	color: #f14f45;    
+	border: 0;
+}
