@@ -377,7 +377,7 @@ $("#payFileAutoImportBtn").click(function (){
 		if(startTime==""||endTime==""){
 			alert("日期不能为空!")
 		}else{
-			var $btn = $("#payImpButton").button('loading');
+			var $btn = $("#payFileAutoImportBtn").button('loading');
 			$.post(rootPath +'/check_money/payFileAutoImport.do',
 					{'startTime':startTime,
 					 'endTime':endTime,

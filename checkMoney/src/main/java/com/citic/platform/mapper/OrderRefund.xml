@@ -16,6 +16,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="remark" column="remark" jdbcType="CHAR"/>
 		<result property="refundTime" column="refundTime" jdbcType="CHAR"/>
 		<result property="paySource" column="paySource" jdbcType="CHAR"/>
+		<result property="payPlatform" column="payPlatform" jdbcType="CHAR"/>
 		
         <association property="store" javaType="com.citic.platform.entity.Store">  
              <id property="id" column="id"/>

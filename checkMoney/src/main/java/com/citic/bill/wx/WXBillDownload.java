@@ -1,15 +1,12 @@
 package com.citic.bill.wx;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.SortedMap;
 
 import java.util.TreeMap;
 
-import com.citic.bill.alipay.AlipayBillDownload;
 import com.citic.bill.util.CommonUtil;
 import com.citic.bill.util.ConfigUtil;
 import com.citic.bill.util.CsvUtil;
@@ -24,13 +21,13 @@ import com.citic.bill.util.WXPayCommonUtil;
 public class WXBillDownload {
 
 
-    protected void billDownload(String appid,String mch_id,String appKey) throws IOException{
+    protected void billDownload(String appid,String mch_id,String appKey,String billDate) throws IOException{
         SortedMap<Object,Object> parameters =new TreeMap<Object,Object>();
         //设置必传参数
         parameters.put("appid",appid);
         parameters.put("mch_id",mch_id);
         parameters.put("nonce_str",WXPayCommonUtil.CreateNoncestr());
-        parameters.put("bill_date","20171230");//下载对账单的日期，格式：20140603，日期不可为当天。
+        parameters.put("bill_date",billDate);//下载对账单的日期，格式：20140603，日期不可为当天。
         //bill_type:ALL返回当日所有订单信息,默认值SUCCESS返回当日成功支付的订单。REFUND，返回当日退款订单
         parameters.put("bill_type","ALL");
         parameters.put("sign", WXPayCommonUtil.createSign("utf-8", parameters,appKey));
@@ -49,7 +46,7 @@ public class WXBillDownload {
 			}
         	CsvUtil csvUtil = new CsvUtil();
         	String filePath = FileUtil.getBillPath();
-        	csvUtil.createCsv(dataList, filePath+"20171230.csv");
+        	csvUtil.createCsv(dataList, filePath+billDate+"_账务明细.csv");
 //        	System.out.println(str.replace("%", "%\r\n"));
         	
        }

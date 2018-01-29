@@ -9,5 +9,5 @@ import java.io.IOException;
  */
 public interface IBillDown {
 
-	public void billDownload() throws IOException;
+	public void billDownload(String billDate) throws IOException;
 }

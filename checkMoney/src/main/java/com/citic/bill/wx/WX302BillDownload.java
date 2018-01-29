@@ -4,18 +4,17 @@ import java.io.IOException;
 
 import com.citic.bill.IBillDown;
 import com.citic.bill.util.ConfigUtil;
-
+/**
+ * 微信302（微信）获取账单类
+ * @author jial
+ *
+ */
 public class WX302BillDownload extends WXBillDownload implements IBillDown{
 	
-  public static void main(String[]args) throws Exception {
-
-  	WX302BillDownload wX302BillDownload = new WX302BillDownload();
-  	wX302BillDownload.billDownload();
-  }
 
 	
-	public  void billDownload() throws IOException{
-		super.billDownload(ConfigUtil.WX_APP_ID_302, ConfigUtil.WX_MCH_ID_302, ConfigUtil.WX_API_KEY_302);
+	public  void billDownload(String billDate) throws IOException{
+		super.billDownload(ConfigUtil.WX_APP_ID_302, ConfigUtil.WX_MCH_ID_302, ConfigUtil.WX_API_KEY_302,billDate);
 	}
 	
 }

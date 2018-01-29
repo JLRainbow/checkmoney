@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 import com.citic.bill.BillFatory;
 import com.citic.bill.IBillDown;
+import com.citic.bill.util.DateUtil;
 import com.citic.bill.util.FileUtil;
 import com.citic.entity.AccountPaymentChkFormMap;
 import com.citic.entity.AccountReceiptChkFormMap;
@@ -25,6 +26,7 @@ import com.citic.entity.ConfigInf;
 import com.citic.entity.ReceiptConfig;
 import com.citic.entity.WalletAccountConfig;
 import com.citic.factory.PayFileHandleFactory;
+import com.citic.factory.impl.WXScanCodePayFileHandle;
 import com.citic.factory.inf.IPayFileHandle;
 import com.citic.factory.load.DataLoadDB;
 import com.citic.mapper.AccountPaymentChkMapper;
@@ -32,7 +34,6 @@ import com.citic.mapper.AccountReceiptChkMapper;
 import com.citic.mapper.ChannelManagementMapper;
 import com.citic.service.CheckMoneyService;
 import com.citic.util.CsvUtil;
-import com.mysql.jdbc.Connection;
 
 @Service
 public class CheckMoneyServiceImpl implements CheckMoneyService {
@@ -471,50 +472,74 @@ public class CheckMoneyServiceImpl implements CheckMoneyService {
 	public Map<String, Object> payFileAutoImport(String payWay, String startTime, String endTime) {
 		IBillDown billDownloadImp = BillFatory.getBillDownloadImp(payWay);
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		//设置时间 
+		String pattern = "yyyy-MM-dd";
+		if(payWay.equals("微信")||payWay.equals("微信扫码")){
+			pattern = "yyyyMMdd";
+			startTime = startTime.replaceAll("-", "");
+			endTime = endTime.replaceAll("-", "");
+		}
 		try {
-			billDownloadImp.billDownload();
+			//将时间段的分隔成每一天
+			List<String> findDates = DateUtil.findDates(startTime, endTime, pattern);
+			for (String billDate : findDates) {
+				//调用获取账单接口下载账单
+				billDownloadImp.billDownload(billDate);
+			}
 			String filePath = FileUtil.getBillPath();
             File[] fs = new File(filePath).listFiles();
+            int x = 0;//成功导入数据库数据数目
             for (File file : fs) {
             	String str = file.getAbsolutePath();
             	str = str.substring(str.lastIndexOf("_")+1,str.lastIndexOf("."));
                 if (str.equals("账务明细")) {
-                	//读取csv文件
-                	
                 	InputStream inputStream = new FileInputStream(file.getAbsolutePath());
+                	CsvUtil csvUtil = new CsvUtil(inputStream);
                 	
                 	ChannelManagementFormMap channelManagementFormMap = new ChannelManagementFormMap();
             		// 通过支付方式找到对应配置信息，将json信息转换成对象
-            		channelManagementFormMap.put("where", "where channel_name = '" + payWay + "'");
+                	String channelName = payWay;
+                	if(payWay.equals("微信扫码")){ //微信扫码的读取csv文件的配置按微信的来
+                		channelName = "微信";
+                	}
+            		channelManagementFormMap.put("where", "where channel_name = '" + channelName + "'");
             		List<ChannelManagementFormMap> channelManagementList = channelManagementMapper
             				.findByWhere(channelManagementFormMap);
             		ChannelManagementFormMap channelManagement = channelManagementList.get(0);
             		String config_inf = (String) channelManagement.get("config_inf");
             		ConfigInf configInf = JSON.parseObject(config_inf, ConfigInf.class);
+            		if(payWay.equals("微信扫码")){
+            			configInf.setChannel_name("微信扫码");
+            		}
             		System.out.println(configInf.toString());
-
-            		CsvUtil csvUtil = new CsvUtil(inputStream);
-            		int rowNum = csvUtil.getRowNum();// 获取行数
-                	System.out.println("==========行数" + rowNum);
-                	
+            		List<Object> dataList = null;
             		//获取处理后数据
-            		IPayFileHandle payFileHandleImpl = PayFileHandleFactory.getPayFileHandleImpl(configInf.getChannel_name());
-            		List<Object> dataList = payFileHandleImpl.getPayFileHandle(configInf, csvUtil);
+            		if(payWay.equals("微信扫码")){
+            			dataList = new WXScanCodePayFileHandle().getPayFileHandle2(configInf, csvUtil);
+            		}else{
+            			IPayFileHandle payFileHandleImpl = PayFileHandleFactory.getPayFileHandleImpl(channelName);
+            			dataList = payFileHandleImpl.getPayFileHandle(configInf, csvUtil);
+            		}
             		
             		String sql = "LOAD DATA LOCAL INFILE 'xx.csv' " + "INTO TABLE t_account_payment_chk "
             				+ "CHARACTER SET GBK " + "FIELDS TERMINATED by ',' " + "LINES TERMINATED by '\r\n' "
             				+ "(check_order,pay_date,fund_type,pay_amount,check_result,channel_name,comment)";
-            		int x =DataLoadDB.load(csvUtil, dataList, "/temp.csv", sql);
+            		x +=DataLoadDB.load(csvUtil, dataList, "/temp.csv", sql);
             		inputStream.close();
             		resultMap.put("impDataNum", x);
             		resultMap.put("success", "导入成功");
                 }
+                //删除文件
+//                if(file.delete()) {
+//                    System.out.println("文件删除成功");
+//                }else{
+//                	System.out.println("文件删除失败");
+//                }
             }
-		} catch (IOException e) {
-			resultMap.put("error", "导入失败");
+		} catch (Exception e) {
+			resultMap.put("error", "下载对账单失败,请及时联系管理员");
 			throw new RuntimeException("下载对账单失败"+e);
 		}
-		
 		
 		return resultMap;
 	}

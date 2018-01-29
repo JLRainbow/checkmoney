@@ -1,10 +1,7 @@
 package com.citic.bill.alipay;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Date;
-import java.util.Properties;
 
 
 import com.alibaba.fastjson.JSON;
@@ -27,13 +24,13 @@ public class AlipayBillDownload implements IBillDown{
     public static AlipayClient alipayClient = new DefaultAlipayClient(ConfigUtil.ALIPAY_DOWNLOAD_BILL_URL, 
     		ConfigUtil.ALIPAY_APP_ID, ConfigUtil.ALIPAY_APP_PRIVATE_KEY, "json", "GBK",  ConfigUtil.ALIPAY_PUBLIC_KEY,"RSA"); 
     
-    public  void  billDownload ()  throws IOException{ 
+    public  void  billDownload (String billDate)  throws IOException{ 
         
         AlipayDataDataserviceBillDownloadurlQueryRequest request = new AlipayDataDataserviceBillDownloadurlQueryRequest();
         JSONObject json = new JSONObject();
         json.put("bill_type", "signcustomer");
         //昨天的数据 new DateTime().minusDays(1).toString("yyyy-MM-dd")
-        json.put("bill_date", "2017-12-30");
+        json.put("bill_date", billDate);
         request.setBizContent(json.toString());
                 
 		AlipayDataDataserviceBillDownloadurlQueryResponse response = null;
