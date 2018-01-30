@@ -530,11 +530,11 @@ public class CheckMoneyServiceImpl implements CheckMoneyService {
             		resultMap.put("success", "导入成功");
                 }
                 //删除文件
-//                if(file.delete()) {
-//                    System.out.println("文件删除成功");
-//                }else{
-//                	System.out.println("文件删除失败");
-//                }
+                if(file.delete()) {
+                    System.out.println("文件删除成功");
+                }else{
+                	System.out.println("文件删除失败");
+                }
             }
 		} catch (Exception e) {
 			resultMap.put("error", "下载对账单失败,请及时联系管理员");
