@@ -1,5 +1,6 @@
 package com.citic.bill.wx;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +47,12 @@ public class WXBillDownload {
 			}
         	CsvUtil csvUtil = new CsvUtil();
         	String filePath = FileUtil.getBillPath();
+        	File file =new File(filePath);    
+    		//如果文件夹不存在则创建    
+    		if (!file .exists()){  
+    			System.out.println("dill文件夹不存在");
+    		    file .mkdirs();    
+    		} 
         	csvUtil.createCsv(dataList, filePath+billDate+"_账务明细.csv");
 //        	System.out.println(str.replace("%", "%\r\n"));
         	

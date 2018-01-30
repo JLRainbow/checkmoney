@@ -1,5 +1,6 @@
 package com.citic.bill.alipay;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
@@ -49,6 +50,12 @@ public class AlipayBillDownload implements IBillDown{
 			try {
 				//读取配置路径
 				String filePath = FileUtil.getBillPath();
+				File file =new File(filePath);    
+	    		//如果文件夹不存在则创建    
+	    		if (!file .exists()){  
+	    			System.out.println("dill文件夹不存在");
+	    		    file .mkdirs();    
+	    		} 
 				// 指定希望保存的文件路径
 				String newZip = filePath + new Date().getTime() + ".zip";
 				FileUtil.downloadNet(urlStr, newZip);
