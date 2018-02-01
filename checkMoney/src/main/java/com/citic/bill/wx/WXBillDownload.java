@@ -45,6 +45,7 @@ public class WXBillDownload {
         	for (int i = 0; i < resultArray.length; i++) {
         		dataList.add(resultArray[i]);
 			}
+        	dataList.add("`");//生成csv的最后一行是一个` 防止读取csv多读取一行
         	CsvUtil csvUtil = new CsvUtil();
         	String filePath = FileUtil.getBillPath();
         	File file =new File(filePath);    
@@ -55,7 +56,7 @@ public class WXBillDownload {
     		} 
         	csvUtil.createCsv(dataList, filePath+billDate+"_账务明细.csv");
 //        	System.out.println(str.replace("%", "%\r\n"));
-        	
+        	 System.out.println("下载对账单成功");
        }
     }
 }

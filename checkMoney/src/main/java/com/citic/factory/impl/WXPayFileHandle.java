@@ -45,7 +45,8 @@ public class WXPayFileHandle implements IPayFileHandle {
 				String a1 = row3.split(",")[Integer.parseInt(skp1) - 1];// 获取商户订单号
 				String s1 = a1.substring(1, a1.length()).trim();// 去除数据的 `
 				if (!s.isEmpty() 	//商户数据包不是空并且不是合并支付的数据（订单号以com开的的为合并数据）的将商户数据包替换商户订单号
-						&&!s1.startsWith("com")) {
+						&&!s1.startsWith("com")
+						&&s.startsWith("ch_")) {
 					s1 = s1.replace(s1, s);
 				}
 				String a6 = row3.split(",")[configInf.getPay_date_position() - 1];// 获取发生时间列

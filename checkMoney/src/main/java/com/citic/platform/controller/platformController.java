@@ -70,8 +70,8 @@ public class platformController extends BaseController{
 		ArrayList<Object> dataList = new  ArrayList<Object>();
 		for (OrderReceipts orderReceipts : OrderReceiptsList) {
 			String relation_id = orderReceipts.getCharge_id();
-			//替换支付宝扫码的relation_id
-			if("支付宝扫码".equals(orderReceipts.getPay_platform())||
+			//将paysource='ping'的支付宝扫码的relation_id替换为id
+			if(("支付宝扫码".equals(orderReceipts.getPay_platform())&&"ping".equals(orderReceipts.getPaySource()))||
 				"POS".equals(orderReceipts.getPay_platform())||
 				"现金".equals(orderReceipts.getPay_platform())){
 				relation_id = orderReceipts.getId();

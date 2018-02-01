@@ -1,7 +1,6 @@
 package com.citic.factory.impl;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,13 +33,19 @@ public class WXScanCodePayFileHandle implements IPayFileHandle {
 		for (int i = configInf.getStart_line(); i <= rowNum - configInf.getEnd_bottom_line() - 1; i++) {
 			String row = csvUtil.getRow(i);// 获取行
 			String row3 = new String(row.getBytes("gbk"), "utf-8");// 解码,防止乱码
-			String a1 = row3.split(",")[Integer.parseInt(skp2) - 1];// 获取商户数据包
-			String s1 = a1.substring(1, a1.length()).trim();// 去除数据的 `
-			String a = row3.split(",")[Integer.parseInt(skp1) - 1];// 获取商户订单号
+			String a = row3.split(",")[Integer.parseInt(skp2) - 1];// 获取商户数据包
 			String s = a.substring(1, a.length()).trim();// 去除数据的 `
+			String a1 = row3.split(",")[Integer.parseInt(skp1) - 1];// 获取商户订单号
+			String s1 = a1.substring(1, a1.length()).trim();// 去除数据的 `
+//			//聚合支付和合并支付替换逻辑
+//			if(s1.contains("聚合支付")|| //如果商户数据包中含有聚合支付就获取商户订单号作为对账流水号
+//				s.startsWith("com")){	// 将商户订单号中以com开的替换掉商户数据包
+//				s1 = s1.replace(s1, s);
+//			}
 			//聚合支付和合并支付替换逻辑
-			if(s1.contains("聚合支付")|| //如果商户数据包中含有聚合支付就获取商户订单号作为对账流水号
-				s.startsWith("com")){	// 将商户订单号中以com开的替换掉商户数据包
+			if (!s.isEmpty() 	//商户数据包不是空并且不是合并支付的数据（订单号以com开的的为合并数据）的将商户数据包替换商户订单号
+					&&!s1.startsWith("com")
+					&&s.startsWith("ch_")) {
 				s1 = s1.replace(s1, s);
 			}
 			String a6 = row3.split(",")[configInf.getPay_date_position() - 1];// 获取发生时间列
@@ -102,9 +107,10 @@ public class WXScanCodePayFileHandle implements IPayFileHandle {
 				String s1 = a1.substring(1, a1.length()).trim();// 去除数据的 `
 				
 				//聚合支付和合并支付替换逻辑
-				if(s.contains("聚合支付")|| //如果商户数据包中含有聚合支付就获取商户订单号作为对账流水号
-					s1.startsWith("com")){	// 将商户订单号中以com开的替换掉商户数据包
-					s = s.replace(s, s1);
+				if (!s.isEmpty() 	//商户数据包不是空并且不是合并支付的数据（订单号以com开的的为合并数据）的将商户数据包替换商户订单号
+						&&!s1.startsWith("com")
+						&&s.startsWith("ch_")) {
+					s1 = s1.replace(s1, s);
 				}
 				String a6 = row3.split(",")[configInf.getPay_date_position() - 1];// 获取发生时间列
 				String s6 = a6.substring(1, a6.length()).trim();
@@ -128,7 +134,7 @@ public class WXScanCodePayFileHandle implements IPayFileHandle {
 				}
 
 				List<Object> list = new ArrayList<Object>();
-				list.add(s);
+				list.add(s1);//将商户订单号作为队长流水号
 				list.add(s6);
 				list.add(s13);
 				list.add(s8);
