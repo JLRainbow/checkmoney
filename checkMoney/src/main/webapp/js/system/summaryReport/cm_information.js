@@ -166,22 +166,22 @@ function getGrid(chanelType){
 	if(chanelType=="支付渠道"){
 		$("#pay_platformDIV").css('display','none');
 		$("#channel_nameDIV").css('display','block');
-		$.post(rootPath +'/summary_report/getPayWay.do',
-				function(result){
-			 		$("#channel_name").empty();
-					var newOption1  =  document.createElement("option"); //动态添加option
-		            newOption1.value = ""; 
-		            newOption1.text = "全部";
-		            document.getElementById("channel_name").options.add(newOption1); 
-					for (var i = 0, length = result.length; i< length; i++) {
-							var newOption  =  document.createElement("option"); //动态添加option
-							newOption.value = result[i].channel_name; 
-							newOption.text =result[i].channel_name;
-							document.getElementById("channel_name").options.add(newOption); 
-							
-					}
-					
-				},"json")
+//		$.post(rootPath +'/summary_report/getPayWay.do',
+//				function(result){
+//			 		$("#channel_name").empty();
+//					var newOption1  =  document.createElement("option"); //动态添加option
+//		            newOption1.value = ""; 
+//		            newOption1.text = "全部";
+//		            document.getElementById("channel_name").options.add(newOption1); 
+//					for (var i = 0, length = result.length; i< length; i++) {
+//							var newOption  =  document.createElement("option"); //动态添加option
+//							newOption.value = result[i].channel_name; 
+//							newOption.text =result[i].channel_name;
+//							document.getElementById("channel_name").options.add(newOption); 
+//							
+//					}
+//					
+//				},"json")
 		grid = lyGrid({
 			id : 'paging',
 			l_column : [ {

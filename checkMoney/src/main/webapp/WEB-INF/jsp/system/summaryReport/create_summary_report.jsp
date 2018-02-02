@@ -22,13 +22,16 @@
 		                <option value="支付宝核对汇总表">支付宝核对汇总表</option>
 		                <option value="微信核对汇总表">微信核对汇总表</option>
 		                <option value="国安付核对汇总表">国安付核对汇总表</option>
-		                <option value="微信扫码核对汇总表">微信扫码核对汇总表</option>
+<!-- 		                <option value="微信扫码核对汇总表">微信扫码核对汇总表</option> -->
 			        </select>
 		        </div>
 	            <label>支付方式</label>
 	            <div class="form-group">
 	            	<select class="form-control" id="payWay" name="payWay">
 		               	<option value="">全部</option>
+		               	 <option value="支付宝">支付宝</option>
+		                <option value="微信">微信</option>
+		                <option value="国安付/银行卡支付">国安付/银行卡支付</option>
 		        	</select>
 		        </div>
 		        <label>收款/退款</label>
@@ -62,25 +65,25 @@
 </body>
 <script type="text/javascript">
 //获取支付方式
-$().ready(function(){
-	$.post('${pageContext.request.contextPath}/summary_report/getPayWay.do',
-			function(result){
-				for (var i = 0, length = result.length; i< length; i++) {
-					var newOption  =  document.createElement("option"); //动态添加option
-			            newOption.value = result[i].channel_name; 
-			            newOption.text =result[i].channel_name;
-			            document.getElementById("payWay").options.add(newOption); 
-				}
-				var newOption1  =  document.createElement("option"); //动态添加option
-	            newOption1.value = "POS"; 
-	            newOption1.text = "POS";
-	            document.getElementById("payWay").options.add(newOption1); 
-	            var newOption2  =  document.createElement("option"); //动态添加option
-	            newOption2.value = "现金"; 
-	            newOption2.text = "现金";
-	            document.getElementById("payWay").options.add(newOption2); 
-	},"json")
-});
+// $().ready(function(){
+// 	$.post('${pageContext.request.contextPath}/summary_report/getPayWay.do',
+// 			function(result){
+// 				for (var i = 0, length = result.length; i< length; i++) {
+// 					var newOption  =  document.createElement("option"); //动态添加option
+// 			            newOption.value = result[i].channel_name; 
+// 			            newOption.text =result[i].channel_name;
+// 			            document.getElementById("payWay").options.add(newOption); 
+// 				}
+// 				var newOption1  =  document.createElement("option"); //动态添加option
+// 	            newOption1.value = "POS"; 
+// 	            newOption1.text = "POS";
+// 	            document.getElementById("payWay").options.add(newOption1); 
+// 	            var newOption2  =  document.createElement("option"); //动态添加option
+// 	            newOption2.value = "现金"; 
+// 	            newOption2.text = "现金";
+// 	            document.getElementById("payWay").options.add(newOption2); 
+// 	},"json")
+// });
 function createReport(){
 	var h1 = document.getElementById("payWay");//获取dom
 	h1.removeAttribute('disabled');
@@ -107,10 +110,10 @@ $("#reportType").change(function (){
 		 $("#payWay").val("国安付/银行卡支付");
 		 h1.setAttribute('disabled','disabled');//添加属性
 	}
-	if(reportType == "微信扫码核对汇总表"){
-		 $("#payWay").val("微信扫码");
-		 h1.setAttribute('disabled','disabled');//添加属性
-	}
+// 	if(reportType == "微信扫码核对汇总表"){
+// 		 $("#payWay").val("微信扫码");
+// 		 h1.setAttribute('disabled','disabled');//添加属性
+// 	}
 	
 });
 

@@ -24,10 +24,10 @@ public class PayFileHandleFactory {
 	public static IPayFileHandle getPayFileHandleImpl(String payWay){
 		IPayFileHandle payFileHandle = null;
 		switch (payWay) {
-			case "支付宝": payFileHandle = new AlipayPayFileHandle(); break;
-			case "微信": payFileHandle = new WXPayFileHandle(); break;
-			case "微信扫码": payFileHandle = new WXScanCodePayFileHandle(); break;
-			case "国安付": payFileHandle = new WalletBankPayFileHandle(); break;
+			case "alipay": payFileHandle = new AlipayPayFileHandle(); break;
+			case "wx_302": payFileHandle = new WXPayFileHandle(); break;
+			case "wx_401": payFileHandle = new WXScanCodePayFileHandle(); break;
+			case "gapay": payFileHandle = new WalletBankPayFileHandle(); break;
 		}
 		return payFileHandle;
 	}

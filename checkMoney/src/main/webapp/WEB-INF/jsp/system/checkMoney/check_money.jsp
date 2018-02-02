@@ -25,9 +25,9 @@
                             <select class="form-control" id="payWay" name="payWay">
                             	<option value="">-----------请选择----------</option>
                                 <c:forEach items="${payList}" var="list">
-								<option value="${list.channel_name}">${list.channel_name}</option>
+								<option value="${list.channel_id}">${list.channel_name}</option>
 								</c:forEach>
-								<option value="支付文件自动导入">支付文件自动导入</option>
+								<option value="支付文件下载自动导入">支付文件下载自动导入</option>
                             </select>
                         </div>
                         <div class="col-md-3">
@@ -60,7 +60,7 @@
 								<select class="form-control" id="payWayAuto">
 	                            	<option value="">-----------请选择----------</option>
 	                                <c:forEach items="${payList}" var="list">
-									<option value="${list.channel_name}">${list.channel_name}</option>
+									<option value="${list.channel_id}">${list.channel_name}</option>
 									</c:forEach>
 	                            </select>
 							  </div>
@@ -237,9 +237,9 @@
                         <div class="col-sm-8">
                             <select class="form-control" id="chkPayWay" name="chkPayWay">
                                 <option value="">-----------请选择-----------</option>
-                                <c:forEach items="${payList}" var="list">
-									<option value="${list.channel_name}">${list.channel_name}</option>
-								</c:forEach>
+                                <option value="支付宝">支付宝</option>
+                                <option value="微信">微信</option>
+                                <option value="国安付/银行卡支付">国安付/银行卡支付</option>
                             </select>
                         </div>
                     </div>

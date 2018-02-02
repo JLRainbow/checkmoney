@@ -40,10 +40,10 @@
            		<div id="channel_nameDIV">
 	           		<label>支付渠道</label>
 		           	<select class="form-control" id="channel_name" name="channel_name">
-<!-- 		                <option value="">全选</option> -->
-<!-- 		                <option value="微信">微信</option> -->
-<!-- 		                <option value="支付宝">支付宝</option> -->
-<!-- 		                <option value="国安付/银行卡支付">国安付/银行卡支付</option> -->
+		                <option value="">全选</option>
+		                <option value="支付宝">支付宝</option>
+		                <option value="微信">微信</option>
+		                <option value="国安付/银行卡支付">国安付/银行卡支付</option>
 		           	</select>
 	           	</div>
 	           	<div id="pay_platformDIV"  style="display: none;">

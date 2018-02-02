@@ -19,6 +19,12 @@
 		    	</div>
 		   	</div>
 		   	<div class="form-group">
+		    	<label class="col-sm-3 control-label">渠道简称</label>
+		    	<div class="col-sm-9">
+		     		<input type="text" class="form-control" id="channel_id" name="channelManagementFormMap.channel_id"><span id="isExist"></span>
+		    	</div>
+		   	</div>
+		   	<div class="form-group">
 		    	<label class="col-sm-3 control-label">渠道类型</label>
 		    	<div class="col-sm-9">
 		     		<select id="channel_type" class="form-control" name="channelManagementFormMap.channel_type">
@@ -72,6 +78,7 @@ $(document).ready(function() {
      $("#addChannel").click(function(){
     	 var flag = true;
     	 var channel_name = $.trim($("#channel_name").val());
+    	 var channel_id = $.trim($("#channel_id").val());
 		 var config_inf = $.trim($("#config_inf").val());
 		 var channel_type = $("#channel_type").val();
 		 var data_type = $("#data_type").val();
@@ -95,6 +102,7 @@ $(document).ready(function() {
 	 	 	if(isSubmit){
 				$.post('${pageContext.request.contextPath}/check_money/addChannelManagement.do',
 							{'channelManagementFormMap.channel_name':channel_name,
+							'channelManagementFormMap.channel_id':channel_id,	
 							'channelManagementFormMap.config_inf':config_inf,
 							'channelManagementFormMap.channel_type':channel_type,
 							'channelManagementFormMap.data_type':data_type,

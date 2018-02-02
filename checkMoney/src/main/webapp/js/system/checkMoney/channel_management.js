@@ -10,9 +10,14 @@ $(function() {
 		}, {
 			colkey : "channel_name",
 			name : "渠道名称"
+		}, {
+			colkey : "channel_id",
+			name : "渠道简称",
+			width : "100px",
 		},{
 			colkey : "channel_type",
 			name : "渠道类型",
+			width : "120px",
 			renderData : function(rowindex, data, rowdata, column) {
 				if(data=="1"){
 					return "支付渠道";
@@ -36,6 +41,7 @@ $(function() {
 		}, {
 			colkey : "data_type",
 			name : "数据格式",
+			width : "100px",
 			renderData : function(rowindex, data, rowdata, column) {
 				if(data=="1"){
 					return "CSV文件";
@@ -46,8 +52,12 @@ $(function() {
 				}
 			},
 		}, {
+			colkey : "comment",
+			name : "备注"
+		}, {
 			colkey : null,
 			name : "操作",
+			width : "100px",
 			renderData : function(rowindex, data, rowdata, column) {
 				var id=rowdata.id;
 				

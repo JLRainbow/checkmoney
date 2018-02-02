@@ -18,6 +18,13 @@
 		    	</div>
 		   	</div>
 		   	<div class="form-group">
+		    	<label class="col-sm-3 control-label">渠道简称</label>
+		    	<div class="col-sm-9">
+					<input type="text"  class="form-control" id="channel_id" value="${channelManagementFormMap.channel_id}" 
+						disabled="disabled" name="channelManagementFormMap.channel_id">
+		    	</div>
+		   	</div>
+		   	<div class="form-group">
 		    	<label class="col-sm-3 control-label">渠道类型</label>
 		    	<div class="col-sm-9">
 		     		<select id="channel_type" disabled="disabled" name="channelManagementFormMap.channel_type"  class="form-control">
@@ -54,6 +61,13 @@
 			     		name="channelManagementFormMap.config_inf">${channelManagementFormMap.config_inf}</textarea>
 			    </div>
 		   </div>
+		   <div class="form-group">
+		    	<label class="col-sm-3 control-label">备注</label>
+		    	<div class="col-sm-9">
+					<input type="text"  class="form-control" id="comment" value="${channelManagementFormMap.comment}" 
+						disabled="disabled" name="channelManagementFormMap.comment">
+		    	</div>
+		   	</div>
 	   </div>
 		
 </body>

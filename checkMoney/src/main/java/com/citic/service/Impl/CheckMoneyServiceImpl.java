@@ -51,7 +51,7 @@ public class CheckMoneyServiceImpl implements CheckMoneyService {
 			String payWay) throws Exception {
 		ChannelManagementFormMap channelManagementFormMap = new ChannelManagementFormMap();
 		// 通过支付方式找到对应配置信息，将json信息转换成对象
-		channelManagementFormMap.put("where", "where channel_name = '" + payWay + "'");
+		channelManagementFormMap.put("where", "where channel_id = '" + payWay + "'");
 		List<ChannelManagementFormMap> channelManagementList = channelManagementMapper
 				.findByWhere(channelManagementFormMap);
 		ChannelManagementFormMap channelManagement = channelManagementList.get(0);
@@ -61,7 +61,7 @@ public class CheckMoneyServiceImpl implements CheckMoneyService {
 
 		CsvUtil csvUtil = new CsvUtil(inputStream);
 		//获取处理后数据
-		IPayFileHandle payFileHandleImpl = PayFileHandleFactory.getPayFileHandleImpl(configInf.getChannel_name());
+		IPayFileHandle payFileHandleImpl = PayFileHandleFactory.getPayFileHandleImpl(payWay);
 		List<Object> dataList = payFileHandleImpl.getPayFileHandle(configInf, csvUtil);
 		
 		String sql = "LOAD DATA LOCAL INFILE 'xx.csv' " + "INTO TABLE t_account_payment_chk "
@@ -474,7 +474,7 @@ public class CheckMoneyServiceImpl implements CheckMoneyService {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		//设置时间 
 		String pattern = "yyyy-MM-dd";
-		if(payWay.equals("微信")||payWay.equals("微信扫码")){
+		if(payWay.equals("wx_302")||payWay.equals("wx_401")){
 			pattern = "yyyyMMdd";
 			startTime = startTime.replaceAll("-", "");
 			endTime = endTime.replaceAll("-", "");
@@ -486,6 +486,7 @@ public class CheckMoneyServiceImpl implements CheckMoneyService {
 				//调用获取账单接口下载账单
 				billDownloadImp.billDownload(billDate);
 			}
+			//获取下载文件保存的路径配置
 			String filePath = FileUtil.getBillPath();
             File[] fs = new File(filePath).listFiles();
             int x = 0;//成功导入数据库数据数目
@@ -496,28 +497,25 @@ public class CheckMoneyServiceImpl implements CheckMoneyService {
                 	InputStream inputStream = new FileInputStream(file.getAbsolutePath());
                 	CsvUtil csvUtil = new CsvUtil(inputStream);
                 	
-                	ChannelManagementFormMap channelManagementFormMap = new ChannelManagementFormMap();
-            		// 通过支付方式找到对应配置信息，将json信息转换成对象
                 	String channelName = payWay;
-                	if(payWay.equals("微信扫码")){ //微信扫码的读取csv文件的配置按微信的来
-                		channelName = "微信";
+                	if(payWay.equals("wx_401")){ //微信401的读取csv文件的配置按微信302的来
+                		channelName = "wx_302";
                 	}
-            		channelManagementFormMap.put("where", "where channel_name = '" + channelName + "'");
+                	// 通过支付方式找到对应配置信息，将json信息转换成对象
+                	ChannelManagementFormMap channelManagementFormMap = new ChannelManagementFormMap();
+            		channelManagementFormMap.put("where", "where channel_id = '" + channelName + "'");
             		List<ChannelManagementFormMap> channelManagementList = channelManagementMapper
             				.findByWhere(channelManagementFormMap);
             		ChannelManagementFormMap channelManagement = channelManagementList.get(0);
             		String config_inf = (String) channelManagement.get("config_inf");
             		ConfigInf configInf = JSON.parseObject(config_inf, ConfigInf.class);
-            		if(payWay.equals("微信扫码")){
-            			configInf.setChannel_name("微信扫码");
-            		}
             		System.out.println(configInf.toString());
             		List<Object> dataList = null;
             		//获取处理后数据
-            		if(payWay.equals("微信扫码")){
+            		if(payWay.equals("wx_401")){
             			dataList = new WXScanCodePayFileHandle().getPayFileHandle2(configInf, csvUtil);
             		}else{
-            			IPayFileHandle payFileHandleImpl = PayFileHandleFactory.getPayFileHandleImpl(channelName);
+            			IPayFileHandle payFileHandleImpl = PayFileHandleFactory.getPayFileHandleImpl(payWay);
             			dataList = payFileHandleImpl.getPayFileHandle(configInf, csvUtil);
             		}
             		
@@ -538,8 +536,8 @@ public class CheckMoneyServiceImpl implements CheckMoneyService {
                 }
             }
 		} catch (Exception e) {
-			resultMap.put("error", "下载对账单失败,请及时联系管理员");
-			throw new RuntimeException("下载对账单失败"+e);
+			resultMap.put("error", "导入账单失败,请及时联系管理员");
+			throw new RuntimeException("导入账单失败"+e);
 		}
 		
 		return resultMap;

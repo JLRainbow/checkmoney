@@ -29,7 +29,7 @@ $("#payWay").change(function (){
 	var payWay = $('#payWay').val();
 	if(payWay!=""){
 		$.post(rootPath +'/check_money/getDataTypeByChannelName.do',
-				{'ChannelManagementFormMap.channel_name':payWay},
+				{'ChannelManagementFormMap.channel_id':payWay},
 				function(result){
 					$("#payDataType").text(result);
 				},"json")
@@ -127,8 +127,6 @@ function impPayData(){
 	if($("#importFile").val() == ""){
 		alert("请选择要导入的文件!");
 	}else{
-//		alert($("#importFile").val());
-//		alert($("#fileName").val());
 		$('#monthPay').val('');
 		$("#payNoChkNum").text('0');
 		$("#payAlipayNum").text('0');
@@ -136,7 +134,7 @@ function impPayData(){
 		$("#payGapayNum").text('0');
 		var payWay = $.trim($('#payWay').val());
 		var $btn = $("#payImpButton").button('loading');
-		if("支付宝"==payWay||"微信"==payWay||"微信扫码"==payWay){
+		if("alipay"==payWay||"wx_302"==payWay||"wx_401"==payWay){
 			$.ajaxFileUpload({
 				url:rootPath +'/check_money/importFileLoadData.do?payWay='+payWay,
 				secureuri:false,
@@ -163,7 +161,7 @@ function impPayData(){
 			});
 		}
 			
-		if("国安付/银行卡支付"==payWay){
+		if("gapay"==payWay){
 			$.ajaxFileUpload({
 				url:rootPath +'/check_money/importWalletFile.do?payWay='+payWay,
 				secureuri:false,
@@ -295,7 +293,7 @@ $('#payWay').change(function(e){
 	$("#payManualImportDiv").css('display','block');
 	$("#payFileAutoImportDiv").css('display','none');
 	var payWay = $.trim($('#payWay').val());
-	if(payWay=="支付文件自动导入"){
+	if(payWay=="支付文件下载自动导入"){
 		$("#payManualImportDiv").css('display','none');
 		$("#payFileAutoImportDiv").css('display','block');
 		$('.selectpicker').selectpicker({

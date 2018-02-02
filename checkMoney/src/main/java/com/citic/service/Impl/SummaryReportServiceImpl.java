@@ -53,37 +53,37 @@ public class SummaryReportServiceImpl implements SummaryReportService {
 				String str2 = str.substring(0, str.length()-1)+")";
 				sql+=str2;
 			}else{
-				if(payWay.equals("微信")){
-					sql+=" and pay_platform in ( '"+payWay+"') ";
-				}else if(payWay.equals("微信扫码")){
-					payWay = "微信扫码,微信公众号";
-					 String str = " AND pay_platform in (";
-					   String[] split = payWay.split(",");
-						for (String string : split) {
-							str += "'"+string+"',";
-							
-						}
-						String str2 = str.substring(0, str.length()-1)+")";
-						sql+=str2;
-				}else{
+//				if(payWay.equals("微信")){
+//					sql+=" and pay_platform in ( '"+payWay+"') ";
+//				}else if(payWay.equals("微信扫码")){
+//					payWay = "微信扫码,微信公众号";
+//					 String str = " AND pay_platform in (";
+//					   String[] split = payWay.split(",");
+//						for (String string : split) {
+//							str += "'"+string+"',";
+//							
+//						}
+//						String str2 = str.substring(0, str.length()-1)+")";
+//						sql+=str2;
+//				}else{
 					sql+=" and pay_platform like '"+payWay+"%' ";
 					
-				}
+//				}
 			}
 			
 			sql+=" AND id not in (SELECT id FROM `t_account_receipt_chk` WHERE merge_flag IS NOT NULL AND check_result IN (0, 1, 2)) ORDER BY receipt_date";
 			accountReceiptChkFormMap.put("where", sql);
 			List<AccountReceiptChkFormMap> list = accountReceiptChkMapper.findByWhere(accountReceiptChkFormMap);
 			result = impReceipForExcel(list);
-			if(!payWay.equals("微信扫码,微信公众号")){
+//			if(!payWay.equals("微信扫码,微信公众号")){
 				payWay = (payWay==""?"全部":payWay);
-			}else{
-				payWay = "微信扫码";
-			}
+//			}else{
+//				payWay = "微信扫码";
+//			}
 			fileName = fileName +"_"+payWay;
 		}
 		//支付导出Excel逻辑
-		if("支付宝核对汇总表".equals(fileName)||"微信核对汇总表".equals(fileName)||"国安付核对汇总表".equals(fileName)||"微信扫码核对汇总表".equals(fileName)){
+		if("支付宝核对汇总表".equals(fileName)||"微信核对汇总表".equals(fileName)||"国安付核对汇总表".equals(fileName)){
 			AccountPaymentChkFormMap accountPaymentChkFormMap = new AccountPaymentChkFormMap();
 			String sql=" WHERE pay_date >='"+startDate+"' AND pay_date <='"+endDate+"' AND fund_type in ( "+fund_type+") ";
 			String str = " AND channel_name in (";

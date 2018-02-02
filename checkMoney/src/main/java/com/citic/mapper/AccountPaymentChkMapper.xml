@@ -27,7 +27,7 @@
 	where ap.check_result=0 AND ap.channel_name in
 	<foreach item="chkPayWay" collection="map.list" open="(" close=")" separator=",">
             #{chkPayWay}
-        </foreach>
+    </foreach>
 	AND ap.fund_type=#{map.chkReceiptWay} 
 	AND ap.pay_date &gt;= #{map.startTimeChkMoney} AND ap.pay_date &lt;= #{map.endTimeChkMoney};
 	</update>

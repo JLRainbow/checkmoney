@@ -13,9 +13,9 @@ public class BillFatory {
 	public static IBillDown getBillDownloadImp(String payWay){
 		IBillDown billDown = null;
 		switch (payWay) {
-			case "支付宝": billDown = new AlipayBillDownload(); break;
-			case "微信":  billDown = new WX302BillDownload(); break;
-			case "微信扫码":  billDown = new WX401BillDownload(); break;
+			case "alipay": billDown = new AlipayBillDownload(); break;
+			case "wx_302":  billDown = new WX302BillDownload(); break;
+			case "wx_401":  billDown = new WX401BillDownload(); break;
 			default : throw new RuntimeException("不支持该支付方式导入");
 		}
 		return billDown;

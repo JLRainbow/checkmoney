@@ -135,8 +135,8 @@ public class CheckMoneyController extends BaseController {
 	@RequestMapping(value="/getDataTypeByChannelName",method=RequestMethod.POST)
 	public String getDataTypeByChannelName() throws Exception {
 		ChannelManagementFormMap channelManagementFormMap = getFormMap(ChannelManagementFormMap.class);
-		String channel_name = (String) channelManagementFormMap.get("channel_name");
-		channelManagementFormMap.put("where", "where channel_name = '"+channel_name+"'");
+		String channel_id = (String) channelManagementFormMap.get("channel_id");
+		channelManagementFormMap.put("where", "where channel_id = '"+channel_id+"'");
 		List<ChannelManagementFormMap> list = channelManagementMapper.findByWhere(channelManagementFormMap);
 		String dataType = "";
 		if(list.size()!=0){
@@ -259,10 +259,11 @@ public class CheckMoneyController extends BaseController {
 			,@RequestParam(value ="endTimeChkMoney") String endTimeChkMoney){
 		Map<String,Object> m = new HashMap<String,Object>();
 		String[] split = chkPayWay.split("/");
-		ArrayList<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<String>();
 		for (String string : split) {
 			list.add(string);
-			if(string.equals("微信扫码")){
+			if(string.equals("微信")){
+				list.add("微信扫码");
 				list.add("微信公众号");
 			}
 			if(string.equals("支付宝")){
