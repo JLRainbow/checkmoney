@@ -1,6 +1,7 @@
 package com.citic.bill;
 
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * 下载账单接口
@@ -9,5 +10,5 @@ import java.io.IOException;
  */
 public interface IBillDown {
 
-	public void billDownload(String billDate) throws IOException;
+	public Map<String, Object> billDownload(String billDate) throws IOException;
 }

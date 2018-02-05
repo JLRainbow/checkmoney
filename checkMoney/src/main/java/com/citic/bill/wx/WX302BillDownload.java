@@ -1,6 +1,7 @@
 package com.citic.bill.wx;
 
 import java.io.IOException;
+import java.util.Map;
 
 import com.citic.bill.IBillDown;
 import com.citic.bill.util.ConfigUtil;
@@ -13,8 +14,8 @@ public class WX302BillDownload extends WXBillDownload implements IBillDown{
 	
 
 	
-	public  void billDownload(String billDate) throws IOException{
-		super.billDownload(ConfigUtil.WX_APP_ID_302, ConfigUtil.WX_MCH_ID_302, ConfigUtil.WX_API_KEY_302,billDate);
+	public  Map<String, Object> billDownload(String billDate) throws IOException{
+		return resultMap = super.billDownload(ConfigUtil.WX_APP_ID_302, ConfigUtil.WX_MCH_ID_302, ConfigUtil.WX_API_KEY_302,billDate);
 	}
 	
 }

@@ -123,6 +123,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			#{item}  
 		</foreach>
 		AND o.refund_status = 'refunded'
+		AND o.refund_platform !='cash'
+		AND o.refund_platform !='pos'
 		AND o.refund_time &gt;= #{startTime}
 		AND o.refund_time &lt;= #{endTime}
 		ORDER BY

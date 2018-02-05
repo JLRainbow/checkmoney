@@ -385,6 +385,9 @@ $("#payFileAutoImportBtn").click(function (){
 							if(data.success!=undefined){
 								alert(data.success+data.impDataNum+"条数据");
 							}
+							if(data.error!=undefined){
+								alert(data.error);
+							}
 						 
 					},"json")
 		}

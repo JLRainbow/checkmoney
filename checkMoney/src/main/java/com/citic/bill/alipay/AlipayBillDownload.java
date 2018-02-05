@@ -3,7 +3,8 @@ package com.citic.bill.alipay;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
-
+import java.util.HashMap;
+import java.util.Map;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -25,7 +26,7 @@ public class AlipayBillDownload implements IBillDown{
     public static AlipayClient alipayClient = new DefaultAlipayClient(ConfigUtil.ALIPAY_DOWNLOAD_BILL_URL, 
     		ConfigUtil.ALIPAY_APP_ID, ConfigUtil.ALIPAY_APP_PRIVATE_KEY, "json", "GBK",  ConfigUtil.ALIPAY_PUBLIC_KEY,"RSA"); 
     
-    public  void  billDownload (String billDate)  throws IOException{ 
+    public  Map<String, Object>  billDownload (String billDate)  throws IOException{ 
         
         AlipayDataDataserviceBillDownloadurlQueryRequest request = new AlipayDataDataserviceBillDownloadurlQueryRequest();
         JSONObject json = new JSONObject();
@@ -35,6 +36,7 @@ public class AlipayBillDownload implements IBillDown{
         request.setBizContent(json.toString());
                 
 		AlipayDataDataserviceBillDownloadurlQueryResponse response = null;
+		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
 			response = alipayClient.execute(request);
 			System.out.println(response.getBillDownloadUrl());
@@ -69,11 +71,16 @@ public class AlipayBillDownload implements IBillDown{
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			  System.out.println(JSON.toJSONString(response));
 			  System.out.println("调用成功");
+			  resultMap.put("stauts", 1);
+			  return resultMap;
 		}else {
+			System.out.println(JSON.toJSONString(response));
              System.out.println("调用失败");
+             resultMap.put("stauts", 0);
+             return resultMap;
         }
          
-         System.out.println(JSON.toJSONString(response));
        } 
 }

@@ -3,7 +3,9 @@ package com.citic.bill.wx;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.SortedMap;
 
 import java.util.TreeMap;
@@ -21,9 +23,11 @@ import com.citic.bill.util.WXPayCommonUtil;
  */
 public class WXBillDownload {
 
+	protected Map<String, Object> resultMap = new HashMap<String, Object>();
 
-    protected void billDownload(String appid,String mch_id,String appKey,String billDate) throws IOException{
+    protected Map<String, Object> billDownload(String appid,String mch_id,String appKey,String billDate) throws IOException{
         SortedMap<Object,Object> parameters =new TreeMap<Object,Object>();
+//        Map<String, Object> resultMap = new HashMap<String, Object>();
         //设置必传参数
         parameters.put("appid",appid);
         parameters.put("mch_id",mch_id);
@@ -39,6 +43,8 @@ public class WXBillDownload {
         if(result.startsWith("<xml>")){//查询日期为当天时，错误信息提示日期无效
             System.out.println(result);
             System.out.println("下载对账单失败");
+            resultMap.put("stauts", 0);
+            return resultMap;
         }else {  
         	String[] resultArray = result.replace("费率", "费率%").split("%");
         	List<String> dataList = new ArrayList<String>();
@@ -57,6 +63,8 @@ public class WXBillDownload {
         	csvUtil.createCsv(dataList, filePath+billDate+"_账务明细.csv");
 //        	System.out.println(str.replace("%", "%\r\n"));
         	 System.out.println("下载对账单成功");
+        	 resultMap.put("stauts", 1);
+        	 return resultMap;
        }
     }
 }

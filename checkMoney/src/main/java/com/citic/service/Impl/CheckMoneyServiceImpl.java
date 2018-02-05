@@ -471,7 +471,7 @@ public class CheckMoneyServiceImpl implements CheckMoneyService {
 	@Override
 	public Map<String, Object> payFileAutoImport(String payWay, String startTime, String endTime) {
 		IBillDown billDownloadImp = BillFatory.getBillDownloadImp(payWay);
-		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		Map<String, Object> resultMap = new HashMap<String, Object>();
 		//设置时间 
 		String pattern = "yyyy-MM-dd";
 		if(payWay.equals("wx_302")||payWay.equals("wx_401")){
@@ -484,7 +484,7 @@ public class CheckMoneyServiceImpl implements CheckMoneyService {
 			List<String> findDates = DateUtil.findDates(startTime, endTime, pattern);
 			for (String billDate : findDates) {
 				//调用获取账单接口下载账单
-				billDownloadImp.billDownload(billDate);
+				resultMap = billDownloadImp.billDownload(billDate);
 			}
 			//获取下载文件保存的路径配置
 			String filePath = FileUtil.getBillPath();
