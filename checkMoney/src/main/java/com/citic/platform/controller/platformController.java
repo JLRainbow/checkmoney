@@ -24,9 +24,7 @@ import com.citic.platform.entity.OrderReceipts;
 import com.citic.platform.entity.OrderRefund;
 import com.citic.platform.service.OrderReceiptsService;
 import com.citic.platform.service.OrderRefundService;
-import com.citic.service.Impl.CheckMoneyServiceImpl;
 import com.citic.util.CsvUtil;
-import com.mysql.jdbc.Connection;
 @Controller
 @RequestMapping("/platform")
 public class platformController extends BaseController{
@@ -67,8 +65,10 @@ public class platformController extends BaseController{
 		List<OrderReceipts> OrderReceiptsList = orderReceiptsService.getPlatformPayData(map);
 		//切换为本地数据源
 		DataSourceContextHolder. setDbType(DataSourceType.SOURCE_DATASOURCE1);
-		ArrayList<Object> dataList = new  ArrayList<Object>();
+		//将数据装到list
+		List<Object> dataList = new  ArrayList<Object>();
 		for (OrderReceipts orderReceipts : OrderReceiptsList) {
+			//替换relation_id业务
 			String relation_id = orderReceipts.getCharge_id();
 			//将paysource='ping'的支付宝扫码的relation_id替换为id
 			if(("支付宝扫码".equals(orderReceipts.getPay_platform())&&"ping".equals(orderReceipts.getPaySource()))||
@@ -76,9 +76,10 @@ public class platformController extends BaseController{
 				"现金".equals(orderReceipts.getPay_platform())){
 				relation_id = orderReceipts.getId();
 			}
-			int checkResult = 0;
 			String chargeId = orderReceipts.getCharge_id();
-			String mergeFlag = "";//合并标识
+			int checkResult = 0;
+			String mergeFlag = "";//设置合并标识
+			//合并数据的relation_id替换业务
 			if(orderReceipts.getPaySn()!=null){
 				relation_id = orderReceipts.getPaySn(); //对账流水号取pay_sn
 				mergeFlag = "paySn";
@@ -92,14 +93,13 @@ public class platformController extends BaseController{
 					relation_id = orderReceipts.getPaySn(); //对账流水号取pay_sn
 					mergeFlag = "paySn";
 				}
-				checkResult = 3;//合并支付
-			}
-			if("POS".equals(orderReceipts.getPay_platform())||
-				"现金".equals(orderReceipts.getPay_platform())||
-				orderReceipts.getPaySn()!=null){
+				checkResult = 3;//合并支付设置对账结果
 				chargeId = orderReceipts.getId();
 			}
-			ArrayList<Object> list = new  ArrayList<Object>();
+//			if(orderReceipts.getPaySn()!=null){
+//				chargeId = orderReceipts.getId();
+//			}
+			List<Object> list = new  ArrayList<Object>();
 			list.add(relation_id);
 			list.add(chargeId);
 			list.add(orderReceipts.getPay_platform());
@@ -165,35 +165,42 @@ public class platformController extends BaseController{
 		List<OrderRefund> orderRefundList = orderRefundService.getPlatformReceiptData(map);
 		//切换为本地数据源
 		DataSourceContextHolder. setDbType(DataSourceType.SOURCE_DATASOURCE1);
-		ArrayList<Object> dataList = new  ArrayList<Object>();
+		//将数据装到list里面
+		List<Object> dataList = new  ArrayList<Object>();
 		for (OrderRefund orderRefund : orderRefundList) {
 			String relation_id = orderRefund.getReceiptsChargeId();
-			//替换退款对账流水号relation_id
-			String refundPlatform = orderRefund.getRefundPlatform();
+			//替换退款对账流水号relation_id业务
+			String refundPlatform = orderRefund.getPayPlatform();
 			if("POS".equals(refundPlatform)||
 				"现金".equals(refundPlatform)){
 				relation_id = orderRefund.getReceiptId();//拿receiptId替换
 			}
 			//支付宝并且paySource不是ping的数据拿id作为对账流水号
-			if("支付宝".equals(refundPlatform)&&
-			   !"ping".equals(orderRefund.getPaySource()) ){
+			if("支付宝".equals(refundPlatform)&&!"ping".equals(orderRefund.getPaySource()) ){
 				relation_id = orderRefund.getId();
 			}
-			//支付宝扫码或者支付宝并且paySource是ping的数据拿refund_charge_id去除前三个字符作为对账流水号
-			if("支付宝扫码".equals(refundPlatform)||
-			   ("支付宝".equals(refundPlatform)&&"ping".equals(orderRefund.getPaySource()))
-			   ){
+			//支付宝并且paySource是ping的数据拿receiptId作为对账流水号
+			if("支付宝".equals(refundPlatform)&&"ping".equals(orderRefund.getPaySource())){
+				relation_id = orderRefund.getReceiptId();
+			}
+			//支付宝扫码并且paySource是ping的数据拿refund_charge_id去除前三个字符作为对账流水号
+			if("支付宝扫码".equals(refundPlatform)&&"ping".equals(orderRefund.getPaySource())){
 				relation_id = orderRefund.getRefundChargeId().substring(3); 
 			}
+			//支付宝扫码并且paySource是不ping的数据拿refund_charge_id去除前三个字符作为对账流水号
+			if("支付宝扫码".equals(refundPlatform)&&!"ping".equals(orderRefund.getPaySource())){
+				relation_id = orderRefund.getId(); 
+			}
+			//国安付的数据拿收款表的refund_charge_id作为对账流水号
 			if("国安付".equals(refundPlatform)){
-				relation_id = orderRefund.getRefundChargeId();//拿收款表的refund_charge_id替换
+				relation_id = orderRefund.getRefundChargeId();
 			}
 			String checkOrder = orderRefund.getId();
 			if("POS".equals(refundPlatform)||
 				"现金".equals(refundPlatform)){
 				checkOrder = orderRefund.getReceiptId();
 			}
-			ArrayList<Object> list = new  ArrayList<Object>();
+			List<Object> list = new  ArrayList<Object>();
 			list.add(relation_id);
 			list.add(checkOrder);
 			list.add(orderRefund.getPayPlatform());
