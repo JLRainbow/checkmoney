@@ -187,10 +187,19 @@ public class platformController extends BaseController{
 			if("支付宝扫码".equals(refundPlatform)&&"ping".equals(orderRefund.getPaySource())){
 				relation_id = orderRefund.getRefundChargeId().substring(3); 
 			}
-			//支付宝扫码并且paySource是不ping的数据拿refund_charge_id去除前三个字符作为对账流水号
+			//支付宝扫码并且paySource不是ping的数据拿id作为对账流水号
 			if("支付宝扫码".equals(refundPlatform)&&!"ping".equals(orderRefund.getPaySource())){
 				relation_id = orderRefund.getId(); 
 			}
+			//微信 微信扫码 微信公众号的数据拿id作为对账流水号
+			if("微信".equals(refundPlatform)||"微信扫码".equals(refundPlatform)||"微信公众号".equals(refundPlatform)){
+				relation_id = orderRefund.getId(); 
+				//是ping的数据拿refund_charge_id去除前三个字符作为对账流水号
+				if("ping".equals(orderRefund.getPaySource())&&orderRefund.getRefundChargeId()!=null){
+					relation_id = orderRefund.getRefundChargeId().substring(3); 
+				}
+			}
+			
 			//国安付的数据拿收款表的refund_charge_id作为对账流水号
 			if("国安付".equals(refundPlatform)){
 				relation_id = orderRefund.getRefundChargeId();

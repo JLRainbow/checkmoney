@@ -49,6 +49,7 @@ public class WXPayFileHandle implements IPayFileHandle {
 						&&s.startsWith("ch_")) {
 					s1 = s1.replace(s1, s);
 				}
+				
 				String a6 = row3.split(",")[configInf.getPay_date_position() - 1];// 获取发生时间列
 				String s6 = a6.substring(1, a6.length()).trim();
 				String a8 = row3.split(",")[configInf.getPay_amount_position() - 1];// 获取收入金额列
@@ -67,6 +68,10 @@ public class WXPayFileHandle implements IPayFileHandle {
 				if ("SUCCESS".equals(s12)) {
 					s13 = 1;
 				} else {
+					//退款的取商户退款单号作为对账单号
+					String a3 = row3.split(",")[configInf.getRefund_orderId_position() - 1];// 商户退款单号
+					String s3 = a3.substring(1, a3.length()).trim();// 把字符串的首尾部的""去掉;
+					s1 = s1.replace(s1, s3);
 					s13 = 2;
 				}
 

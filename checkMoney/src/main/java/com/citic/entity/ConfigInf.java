@@ -13,7 +13,7 @@ public class ConfigInf {
 	private String keywords_position;
 	//支付渠道金额位置
 	private Integer pay_amount_position;
-	//支付渠道金额位置
+	//支付渠道退款金额位置
 	private Integer refund_amount_position;
 	//支付交易日位置
 	private Integer pay_date_position;
@@ -25,7 +25,8 @@ public class ConfigInf {
 	private Integer start_line;
 	//倒数第几行结束读取
 	private Integer end_bottom_line;
-
+	//支付渠道商户退款单号位置
+	private Integer refund_orderId_position;
 	public String getChannel_name() {
 		return channel_name;
 	}
@@ -106,14 +107,25 @@ public class ConfigInf {
 		this.comment_position = comment_position;
 	}
 
+	
+	public Integer getRefund_orderId_position() {
+		return refund_orderId_position;
+	}
+
+	public void setRefund_orderId_position(Integer refund_orderId_position) {
+		this.refund_orderId_position = refund_orderId_position;
+	}
+
 	@Override
 	public String toString() {
 		return "ConfigInf [channel_name=" + channel_name + ", keywords_num=" + keywords_num + ", keywords_position="
 				+ keywords_position + ", pay_amount_position=" + pay_amount_position + ", refund_amount_position="
 				+ refund_amount_position + ", pay_date_position=" + pay_date_position + ", fund_type_position="
 				+ fund_type_position + ", comment_position=" + comment_position + ", start_line=" + start_line
-				+ ", end_bottom_line=" + end_bottom_line + "]";
+				+ ", end_bottom_line=" + end_bottom_line + ", refund_orderId_position=" + refund_orderId_position + "]";
 	}
+
+	
 
 
 }

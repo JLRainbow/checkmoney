@@ -37,11 +37,7 @@ public class WXScanCodePayFileHandle implements IPayFileHandle {
 			String s = a.substring(1, a.length()).trim();// 去除数据的 `
 			String a1 = row3.split(",")[Integer.parseInt(skp1) - 1];// 获取商户订单号
 			String s1 = a1.substring(1, a1.length()).trim();// 去除数据的 `
-//			//聚合支付和合并支付替换逻辑
-//			if(s1.contains("聚合支付")|| //如果商户数据包中含有聚合支付就获取商户订单号作为对账流水号
-//				s.startsWith("com")){	// 将商户订单号中以com开的替换掉商户数据包
-//				s1 = s1.replace(s1, s);
-//			}
+
 			//聚合支付和合并支付替换逻辑
 			if (!s.isEmpty() 	//商户数据包不是空并且不是合并支付的数据（订单号以com开的的为合并数据）的将商户数据包替换商户订单号
 					&&!s1.startsWith("com")
@@ -54,6 +50,10 @@ public class WXScanCodePayFileHandle implements IPayFileHandle {
 			String s8 = a8.substring(1, a8.length()).trim();
 			int s13 = 0;
 			if (s8.contains("-")) {
+				//退款的取商户退款单号作为对账单号
+				String a3 = row3.split(",")[configInf.getRefund_orderId_position() - 1];// 获取商户退款单号
+				String s3 = a3.substring(1, a3.length()).trim();// 去除数据的 `
+				s1 = s1.replace(s1, s3);
 				s8 = s8.substring(1);
 				s13 = 2;
 			}else{
@@ -130,6 +130,10 @@ public class WXScanCodePayFileHandle implements IPayFileHandle {
 				if ("SUCCESS".equals(s12)) {
 					s13 = 1;
 				} else {
+					//退款的取商户退款单号作为对账单号
+					String a3 = row3.split(",")[configInf.getRefund_orderId_position() - 1];// 商户退款单号
+					String s3 = a3.substring(1, a3.length()).trim();// 把字符串的首尾部的""去掉;
+					s1 = s1.replace(s1, s3);
 					s13 = 2;
 				}
 
