@@ -291,7 +291,7 @@
            </div>
                 
                 <div class="col-md-12 text-center">
-                    <button type="button" class="btn btn-danger" id="chk_money" > 对账处理</button>
+                    <button type="button" class="btn btn-danger" data-loading-text="对账中..." id="chk_money" > 对账处理</button>
                 </div>
             </div>
         </div>
