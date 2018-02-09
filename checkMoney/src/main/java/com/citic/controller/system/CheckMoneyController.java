@@ -367,4 +367,19 @@ public class CheckMoneyController extends BaseController {
 		Map<String, Object> resultMap = checkMoneyService.payFileAutoImport(payWay,startTime,endTime);
 		return resultMap;
 	}
+	
+	/**
+	 * 通过流水号对账
+	 */
+	@ResponseBody
+	@RequestMapping("/chkMoneyByRelationId")
+	@SystemLog(module="财务对账业务",methods="财务对账处理（虚虚对账）-通过流水号对账")//记录操作日志
+	public synchronized HashMap<String, Object> chkMoneyByRelationId(@RequestParam(value ="relationId") String relationId){
+		Map<String,Object> m = new HashMap<String,Object>();
+		
+		checkMoneyService.chkMoneyByRelationId(relationId);
+		HashMap<String,Object> map = new HashMap<String,Object>();
+		map.put("success", "对账结束");
+		return map;
+	}
 }

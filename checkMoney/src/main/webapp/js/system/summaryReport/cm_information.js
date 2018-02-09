@@ -26,6 +26,7 @@ $(function() {
 	        	"check_order":check_order}//查询条件数据，必须是json格式
     });
 });
+ 
  function queryDetails(id){
 	 var chanelType = $("#chanelType").val(); 
 	 layer.open({
@@ -70,6 +71,16 @@ $(function() {
 		 endTime.setAttribute('disabled','disabled');//添加属性
 	 }
  })
+ //通过流水号对账
+ function chkMoneyByRelationId(relationId){
+	 $.post(rootPath +'/check_money/chkMoneyByRelationId.do',
+					{'relationId':relationId},
+					function(result){
+						
+						alert(result.success);
+						
+			},"json")
+ }
 function getGrid(chanelType){
 	var check_result = $("#check_result").val();
 	var startTime=$("#startTime").val();
@@ -146,8 +157,11 @@ function getGrid(chanelType){
 				width : "50px",
 				renderData : function(rowindex, data, rowdata, column) {
 					var id=rowdata.id;
+					var relationId=rowdata.relation_id;
 					return "<a class='details' title='查看详情' onclick='queryDetails("+id+")'>"
-                    		+"<span class='glyphicon glyphicon-file'></span></a>";
+                    		+"<span class='glyphicon glyphicon-file'></span></a>"
+                    		+"<a class='details' title='对账' onclick='chkMoneyByRelationId(\""+relationId+"\")'>"
+                    		+"<span class='glyphicon glyphicon-check'></span></a>";
 				},
 			} ],
 			jsonUrl :  rootPath +'/summary_report/chkMoneyInforFindByPage.do',

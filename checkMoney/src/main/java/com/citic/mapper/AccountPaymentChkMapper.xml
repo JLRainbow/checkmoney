@@ -61,4 +61,34 @@
             #{id}
         </foreach>
      </delete>
+     
+     <update id="updateMatchDataByRelationId"  parameterType="java.lang.String">
+		UPDATE t_account_payment_chk ap
+		INNER JOIN t_account_receipt_chk ar
+		ON ( ar.relation_id = ap.check_order
+		AND
+		ap.fund_type = ar.fund_type
+		AND ar.check_result = 0 )
+		SET
+		ap.recipt_amount = ar.pay_amount,
+		ap.eshop_name = ar.eshop_name,
+		ap.provider_name = ar.provider_name,
+		ap.store_name = ar.store_name,
+		ap.self = ar.self,
+		ap.pay_platform = ar.pay_platform
+		where ap.check_order = #{relationId}
+	
+	</update>
+	<update id="updateChkResultByRelationId" parameterType="java.lang.String">
+		UPDATE
+		t_account_payment_chk ap
+		SET ap.check_result = IF(ap.recipt_amount IS
+		NULL,0,CASE
+		WHEN ap.pay_amount - ap.recipt_amount = 0 THEN
+		1
+		ELSE
+		2
+		END)
+		where  ap.check_order = #{relationId}
+	</update>
 </mapper>

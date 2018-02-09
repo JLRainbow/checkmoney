@@ -82,4 +82,24 @@
 		 AND ar.receipt_date &gt;= #{map.startTimeChkMoney} 
 		 AND ar.receipt_date &lt;= #{map.endTimeChkMoney};
 	</update>
+	
+	<update id="updateMatchDataByRelationId" parameterType="java.lang.String">
+		UPDATE t_account_receipt_chk ar
+		INNER JOIN t_account_payment_chk ap
+		ON (ar.relation_id = ap.check_order
+		AND ap.fund_type = ar.fund_type )
+		SET
+		ar.recipt_amount = ap.pay_amount
+		WHERE ar.relation_id = #{relationId}
+	</update>
+	<update id="updateChkResultByRelationId" parameterType="java.lang.String">
+		UPDATE
+		t_account_receipt_chk ar
+		SET ar.check_result = IF(ar.recipt_amount IS NULL,0,CASE
+		WHEN ar.pay_amount - ar.recipt_amount = 0 THEN
+		1
+		ELSE
+		2
+		END) WHERE ar.relation_id = #{relationId}
+	</update>
 </mapper>

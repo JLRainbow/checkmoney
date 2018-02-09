@@ -542,4 +542,18 @@ public class CheckMoneyServiceImpl implements CheckMoneyService {
 		
 		return resultMap;
 	}
+
+	@Override
+	public void chkMoneyByRelationId(String relationId) {
+		try {
+			accountPaymentChkMapper.updateMatchDataByRelationId(relationId);
+			accountReceiptChkMapper.updateMatchDataByRelationId(relationId);
+			accountPaymentChkMapper.updateChkResultByRelationId(relationId);
+			accountReceiptChkMapper.updateChkResultByRelationId(relationId);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
 }

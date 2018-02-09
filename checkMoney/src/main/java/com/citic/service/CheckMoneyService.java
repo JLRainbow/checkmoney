@@ -31,6 +31,8 @@ public interface CheckMoneyService {
 
 	Map<String, Object> payFileAutoImport(String payWay, String startTime, String endTime);
 
+	void chkMoneyByRelationId(String relationId);
+
 	
 
 }

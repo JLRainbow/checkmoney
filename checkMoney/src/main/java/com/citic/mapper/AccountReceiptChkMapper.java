@@ -27,6 +27,10 @@ public interface AccountReceiptChkMapper extends BaseMapper{
 
 	void updateMergePay(@Param("map")Map<String, Object> updateFormMap);
 
+	void updateMatchDataByRelationId(@Param(value="relationId")String relationId);
+
+	void updateChkResultByRelationId(@Param(value="relationId")String relationId);
+
 
 
 }

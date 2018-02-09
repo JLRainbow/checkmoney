@@ -21,4 +21,8 @@ public interface AccountPaymentChkMapper extends BaseMapper{
 
 	void deleteAll(ArrayList<Object> idList);
 
+	void updateMatchDataByRelationId(@Param(value="relationId")String relationId);
+
+	void updateChkResultByRelationId(@Param(value="relationId")String relationId);
+
 }
