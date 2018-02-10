@@ -72,13 +72,37 @@ $(function() {
 	 }
  })
  //通过流水号对账
- function chkMoneyByRelationId(relationId){
+ var post_flag = false; //设置一个对象来控制是否进入AJAX过程
+ function chkMoneyByRelationId(relationId,fundType,chanelType){
+	 if(post_flag) return; //如果正在提交则直接返回，停止执行
+	 post_flag = true;//标记当前状态为正在提交状态
 	 $.post(rootPath +'/check_money/chkMoneyByRelationId.do',
-					{'relationId':relationId},
+					{'relationId':relationId,'fundType':fundType,'chanelType':chanelType},
 					function(result){
-						
-						alert(result.success);
-						
+							//更新页面数据
+						   var check_result = $("#check_result").val();
+						    var startTime=$("#startTime").val();
+							var endTime=$("#endTime").val();
+							var fund_type=$("#fund_type").val();
+							var channel_name=$("#channel_name").val();
+							var pay_platform=$("#pay_platform").val();
+							var check_order=$("#check_order").val();
+						    grid.setOptions({//设置参数，具体参数与表格参数一致
+						        data : {"check_result":check_result,
+							        	"startTime":startTime,
+							        	"fund_type":fund_type,
+							        	"endTime":endTime,
+							        	"channel_name":channel_name,
+							        	"pay_platform":pay_platform,
+							        	"check_order":check_order}//查询条件数据，必须是json格式
+						    });
+						    if(result.isNull!=undefined){
+								alert(result.isNull);
+							}
+							if(result.success!=undefined){
+								alert(result.success);
+							}
+							post_flag =false; //在提交成功之后将标志标记为可提交状态
 			},"json")
  }
 function getGrid(chanelType){
@@ -158,10 +182,15 @@ function getGrid(chanelType){
 				renderData : function(rowindex, data, rowdata, column) {
 					var id=rowdata.id;
 					var relationId=rowdata.relation_id;
+					var fundType=rowdata.fund_type;
+					var checkResult=rowdata.check_result;
+					var str ="";
+					if(checkResult==0){
+						str = "<a class='details' title='对账' onclick='chkMoneyByRelationId(\""+relationId+"\",\""+fundType+"\",\""+chanelType+"\")'>"
+                		+"<span class='glyphicon glyphicon-check'></span></a>"
+					}
 					return "<a class='details' title='查看详情' onclick='queryDetails("+id+")'>"
-                    		+"<span class='glyphicon glyphicon-file'></span></a>"
-                    		+"<a class='details' title='对账' onclick='chkMoneyByRelationId(\""+relationId+"\")'>"
-                    		+"<span class='glyphicon glyphicon-check'></span></a>";
+                    		+"<span class='glyphicon glyphicon-file'></span></a>"+str
 				},
 			} ],
 			jsonUrl :  rootPath +'/summary_report/chkMoneyInforFindByPage.do',
@@ -247,8 +276,16 @@ function getGrid(chanelType){
 				width : "50px",
 				renderData : function(rowindex, data, rowdata, column) {
 					var id=rowdata.id;
+					var checkOrder=rowdata.check_order;
+					var fundType=rowdata.fund_type;
+					var checkResult=rowdata.check_result;
+					var str ="";
+					if(checkResult==0){
+						str = "<a class='details' title='对账' onclick='chkMoneyByRelationId(\""+checkOrder+"\",\""+fundType+"\",\""+chanelType+"\")'>"
+                 		  +"<span class='glyphicon glyphicon-check'></span></a>"
+					}
 					return "<a class='details' title='查看详情' onclick='queryDetails("+id+")'>"
-                   		  +"<span class='glyphicon glyphicon-file'></span></a>";
+                   		  +"<span class='glyphicon glyphicon-file'></span></a>"+str
 				},
 			} ],
 			jsonUrl :  rootPath +'/summary_report/chkMoneyInforFindByPage.do',
