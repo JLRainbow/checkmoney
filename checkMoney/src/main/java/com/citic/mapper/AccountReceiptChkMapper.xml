@@ -21,7 +21,8 @@
 	            #{chkPayWay}
 	        </foreach>
 		AND ar.fund_type=#{map.chkReceiptWay}
-		AND ar.receipt_date &gt;= #{map.startTimeChkMoney} AND ar.receipt_date &lt;= #{map.endTimeChkMoney};
+		AND ar.receipt_date &gt;= #{map.startTimeChkMoney} AND ar.receipt_date &lt;= #{map.endTimeChkMoney}
+		AND ap.pay_date &gt;= #{map.startTimeChkMoney} AND ap.pay_date &lt;= #{map.endTimeChkMoney};
 	</update>
 	<update id="updateChkResult" parameterType="map">
 		UPDATE
@@ -36,7 +37,7 @@
             #{chkPayWay}
         </foreach>
 		 AND ar.fund_type=#{map.chkReceiptWay}
-		 AND ar.receipt_date &gt;= #{map.startTimeChkMoney} AND ar.receipt_date &lt;= #{map.endTimeChkMoney};
+		 AND ar.receipt_date &gt;= #{map.startTimeChkMoney} AND ar.receipt_date &lt;= #{map.endTimeChkMoney}
 	</update>
 	<select id="getClosingDate"  resultType="com.citic.entity.AccountReceiptChkFormMap">
 		SELECT <include refid="selectId" />  FROM t_account_receipt_chk
