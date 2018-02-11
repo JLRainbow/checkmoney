@@ -74,6 +74,7 @@ $(function() {
  //通过流水号对账
  var post_flag = false; //设置一个对象来控制是否进入AJAX过程
  function chkMoneyByRelationId(relationId,fundType,chanelType){
+	 $("body").mLoading("show");
 	 if(post_flag) return; //如果正在提交则直接返回，停止执行
 	 post_flag = true;//标记当前状态为正在提交状态
 	 $.post(rootPath +'/check_money/chkMoneyByRelationId.do',
@@ -102,6 +103,7 @@ $(function() {
 							if(result.success!=undefined){
 								alert(result.success);
 							}
+							$("body").mLoading("hide");//隐藏loading组件
 							post_flag =false; //在提交成功之后将标志标记为可提交状态
 			},"json")
  }

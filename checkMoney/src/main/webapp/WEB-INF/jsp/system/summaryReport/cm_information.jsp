@@ -6,6 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>对账信息查询</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/system/wages/bootstrap-datetimepicker.css" type="text/css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/mloading/jquery.mloading.css">
+
 </head>
 <body>
 <div class="page-wrapper">
@@ -87,5 +89,7 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/system/wages/locales/bootstrap-datetimepicker.zh-CN.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/system/wages/date.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/system/summaryReport/cm_information.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/common/mloading/jquery.mloading.js"></script>
+
 </body>
 </html>
