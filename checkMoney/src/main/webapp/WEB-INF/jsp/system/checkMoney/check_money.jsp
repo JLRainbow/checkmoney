@@ -59,9 +59,12 @@
 					        <div class="col-md-6">
 								<select class="form-control" id="payWayAuto">
 	                            	<option value="">-----------请选择----------</option>
-	                                <c:forEach items="${payList}" var="list">
-									<option value="${list.channel_id}">${list.channel_name}</option>
-									</c:forEach>
+	                            	<option value="alipay">支付宝</option>
+	                            	<option value="wx_302">微信（302账户）</option>
+	                            	<option value="wx_401">微信（401账户）</option>
+<%-- 	                                <c:forEach items="${payList}" var="list"> --%>
+<%-- 									<option value="${list.channel_id}">${list.channel_name}</option> --%>
+<%-- 									</c:forEach> --%>
 	                            </select>
 							  </div>
 					        <div class="col-md-3">

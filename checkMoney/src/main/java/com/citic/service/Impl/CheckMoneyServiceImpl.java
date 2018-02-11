@@ -389,7 +389,7 @@ public class CheckMoneyServiceImpl implements CheckMoneyService {
 		ChannelManagementFormMap channelManagementFormMap = new ChannelManagementFormMap();
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		// 通过支付方式找到对应配置信息，将json信息转换成对象
-		channelManagementFormMap.put("where", "where channel_name = '" + payWay + "'");
+		channelManagementFormMap.put("where", "where channel_id = '" + payWay + "'");
 		List<ChannelManagementFormMap> channelManagementList = channelManagementMapper
 				.findByWhere(channelManagementFormMap);
 		ChannelManagementFormMap channelManagement = channelManagementList.get(0);
@@ -397,7 +397,7 @@ public class CheckMoneyServiceImpl implements CheckMoneyService {
 		WalletAccountConfig configInf = JSON.parseObject(config_inf, WalletAccountConfig.class);
 		System.out.println(configInf.toString());
 
-		IPayFileHandle payFileHandleImpl = PayFileHandleFactory.getPayFileHandleImpl(configInf.getChannel_name());
+		IPayFileHandle payFileHandleImpl = PayFileHandleFactory.getPayFileHandleImpl(payWay);
 		List<Object> dataList = payFileHandleImpl.getPayFileHandle(configInf, result);
 
 		//将处理好的数据load到DB中
