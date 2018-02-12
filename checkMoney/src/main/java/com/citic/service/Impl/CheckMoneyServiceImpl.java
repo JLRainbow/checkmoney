@@ -485,6 +485,7 @@ public class CheckMoneyServiceImpl implements CheckMoneyService {
 			for (String billDate : findDates) {
 				//调用获取账单接口下载账单
 				resultMap = billDownloadImp.billDownload(billDate);
+				System.out.println("=========bill down success============");
 			}
 			//获取下载文件保存的路径配置
 			String filePath = FileUtil.getBillPath();
@@ -493,7 +494,7 @@ public class CheckMoneyServiceImpl implements CheckMoneyService {
             for (File file : fs) {
             	String str = file.getAbsolutePath();
             	str = str.substring(str.lastIndexOf("_")+1,str.lastIndexOf("."));
-                if (str.equals("账务明细")) {
+                if (str.equals("账务明细")||str.equals("wx")) {
                 	InputStream inputStream = new FileInputStream(file.getAbsolutePath());
                 	CsvUtil csvUtil = new CsvUtil(inputStream);
                 	
@@ -528,12 +529,12 @@ public class CheckMoneyServiceImpl implements CheckMoneyService {
             		resultMap.put("success", "导入成功");
                 }
                 //删除文件
-                System.gc();
-                if(file.delete()) {
-                    System.out.println("文件删除成功");
-                }else{
-                	System.out.println("文件删除失败");
-                }
+//                System.gc();
+//                if(file.delete()) {
+//                    System.out.println("文件删除成功");
+//                }else{
+//                	System.out.println("文件删除失败");
+//                }
             }
 		} catch (Exception e) {
 			resultMap.put("error", "导入账单失败,请及时联系管理员");

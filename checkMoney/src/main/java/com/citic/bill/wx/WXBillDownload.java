@@ -57,10 +57,11 @@ public class WXBillDownload {
         	File file =new File(filePath);    
     		//如果文件夹不存在则创建    
     		if (!file .exists()){  
-    			System.out.println("dill文件夹不存在");
+    			System.out.println("dill is not exist");
     		    file .mkdirs();    
     		} 
-        	csvUtil.createCsv(dataList, filePath+billDate+"_账务明细.csv");
+//    		String str = new String(("_账务明细.csv").getBytes("gbk"), "utf-8");
+        	csvUtil.createCsv(dataList, filePath+billDate+"_wx.csv");
 //        	System.out.println(str.replace("%", "%\r\n"));
         	 System.out.println("下载对账单成功");
         	 resultMap.put("stauts", 1);
