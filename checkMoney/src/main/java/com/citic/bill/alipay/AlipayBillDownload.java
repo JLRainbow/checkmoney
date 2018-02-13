@@ -43,9 +43,9 @@ public class AlipayBillDownload implements IBillDown{
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
 			response = alipayClient.execute(request);
-			logger.info(response.getBillDownloadUrl());
+			logger.info("response.getBillDownloadUrl() ==>>"+response.getBillDownloadUrl());
 		} catch (AlipayApiException e) {
-			logger.error("alipayClient execute error",e);
+			logger.error("alipayClient execute error ==>>",e);
 		}
          if(response.isSuccess()){ 
         	// 将接口返回的对账单下载地址传入urlStr
@@ -59,7 +59,7 @@ public class AlipayBillDownload implements IBillDown{
 	    		//如果文件夹不存在则创建    
 	    		if (!file .exists()){  
 	    		    file .mkdirs();  
-	    		    logger.debug("bill path is create success");
+	    		    logger.debug("================>> bill path is create success");
 	    		} 
 				// 指定希望保存的文件路径
 				String newZip = filePath + new Date().getTime() + ".zip";
@@ -68,13 +68,13 @@ public class AlipayBillDownload implements IBillDown{
 				FileUtil.unZip(newZip, filePath);
 				
 			} catch (Exception e) {
-				logger.error("alipay zip error",e);
+				logger.error("alipay zip error ==>>",e);
 			}
-			  logger.debug("invoking success :"+JSON.toJSONString(response));
+			  logger.debug("invoking success ==>>"+JSON.toJSONString(response));
 			  resultMap.put("stauts", 1);
 			  return resultMap;
 		}else {
-			logger.debug("invoking error :"+JSON.toJSONString(response));
+			logger.debug("invoking error ==>>"+JSON.toJSONString(response));
             resultMap.put("stauts", 0);
             return resultMap;
         }

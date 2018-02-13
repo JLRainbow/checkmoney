@@ -10,6 +10,9 @@ import java.util.SortedMap;
 
 import java.util.TreeMap;
 
+import org.apache.log4j.Logger;
+
+import com.citic.bill.alipay.AlipayBillDownload;
 import com.citic.bill.util.CommonUtil;
 import com.citic.bill.util.ConfigUtil;
 import com.citic.bill.util.CsvUtil;
@@ -23,6 +26,8 @@ import com.citic.bill.util.WXPayCommonUtil;
  */
 public class WXBillDownload {
 
+	private static Logger logger = Logger.getLogger(WXBillDownload.class);
+	
 	protected Map<String, Object> resultMap = new HashMap<String, Object>();
 
     protected Map<String, Object> billDownload(String appid,String mch_id,String appKey,String billDate) throws IOException{
@@ -41,11 +46,11 @@ public class WXBillDownload {
         String result=CommonUtil.httpsRequest(ConfigUtil.WX_DOWNLOAD_BILL_URL, "POST",reuqestXml);
 
         if(result.startsWith("<xml>")){//查询日期为当天时，错误信息提示日期无效
-            System.out.println(result);
-            System.out.println("下载对账单失败");
+        	logger.error("wx bill down error ==>>"+result);
             resultMap.put("stauts", 0);
             return resultMap;
         }else {  
+        	logger.debug(" ======================>>  wx bill down success");
         	String[] resultArray = result.replace("费率", "费率%").split("%");
         	List<String> dataList = new ArrayList<String>();
         	for (int i = 0; i < resultArray.length; i++) {
@@ -57,13 +62,14 @@ public class WXBillDownload {
         	File file =new File(filePath);    
     		//如果文件夹不存在则创建    
     		if (!file .exists()){  
-    			System.out.println("dill is not exist");
+    			logger.debug("================>> bill path is create success");
     		    file .mkdirs();    
     		} 
-//    		String str = new String(("_账务明细.csv").getBytes("gbk"), "utf-8");
-        	csvUtil.createCsv(dataList, filePath+billDate+"_wx.csv");
-//        	System.out.println(str.replace("%", "%\r\n"));
-        	 System.out.println("下载对账单成功");
+        	try {
+				csvUtil.createCsv(dataList, filePath+billDate+"_wx.csv");
+			} catch (Exception e) {
+				logger.error("wx createCsv error ==>>",e);
+			}
         	 resultMap.put("stauts", 1);
         	 return resultMap;
        }
