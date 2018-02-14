@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
@@ -22,6 +24,8 @@ import com.citic.bill.util.FileUtil;
  *
  */
 public class AlipayBillDownload implements IBillDown{
+	
+	private static Logger logger = Logger.getLogger(AlipayBillDownload.class);
 	//初始化实例请求对象 
     public static AlipayClient alipayClient = new DefaultAlipayClient(ConfigUtil.ALIPAY_DOWNLOAD_BILL_URL, 
     		ConfigUtil.ALIPAY_APP_ID, ConfigUtil.ALIPAY_APP_PRIVATE_KEY, "json", "GBK",  ConfigUtil.ALIPAY_PUBLIC_KEY,"RSA"); 
@@ -39,10 +43,9 @@ public class AlipayBillDownload implements IBillDown{
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
 			response = alipayClient.execute(request);
-			System.out.println(response.getBillDownloadUrl());
-
+			logger.info(response.getBillDownloadUrl());
 		} catch (AlipayApiException e) {
-			e.printStackTrace();
+			logger.error("alipayClient execute error",e);
 		}
          if(response.isSuccess()){ 
         	// 将接口返回的对账单下载地址传入urlStr
@@ -55,31 +58,25 @@ public class AlipayBillDownload implements IBillDown{
 				File file =new File(filePath);    
 	    		//如果文件夹不存在则创建    
 	    		if (!file .exists()){  
-	    			System.out.println("dill文件夹不存在");
-	    		    file .mkdirs();    
+	    		    file .mkdirs();  
+	    		    logger.debug("bill path is create success");
 	    		} 
 				// 指定希望保存的文件路径
 				String newZip = filePath + new Date().getTime() + ".zip";
 				FileUtil.downloadNet(urlStr, newZip);
 				// 解压到指定目录
 				FileUtil.unZip(newZip, filePath);
-	            // 删除文件
-//	            for (File file : fs) {
-//	                file.delete();
-//	            }
 				
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error("alipay zip error",e);
 			}
-			  System.out.println(JSON.toJSONString(response));
-			  System.out.println("调用成功");
+			  logger.debug("invoking success :"+JSON.toJSONString(response));
 			  resultMap.put("stauts", 1);
 			  return resultMap;
 		}else {
-			System.out.println(JSON.toJSONString(response));
-             System.out.println("调用失败");
-             resultMap.put("stauts", 0);
-             return resultMap;
+			logger.debug("invoking error :"+JSON.toJSONString(response));
+            resultMap.put("stauts", 0);
+            return resultMap;
         }
          
        } 
