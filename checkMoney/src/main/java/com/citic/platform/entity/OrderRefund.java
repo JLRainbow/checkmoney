@@ -30,6 +30,8 @@ public class OrderRefund {
 
 	private String payPlatform;//支付平台
 	
+	private String orderSn;//订单编号
+	
 	public String getReceiptsChargeId() {
 		return receiptsChargeId;
 	}
@@ -142,6 +144,14 @@ public class OrderRefund {
 
 	public void setPayPlatform(String payPlatform) {
 		this.payPlatform = payPlatform;
+	}
+
+	public String getOrderSn() {
+		return orderSn;
+	}
+
+	public void setOrderSn(String orderSn) {
+		this.orderSn = orderSn;
 	}
 	
 	
