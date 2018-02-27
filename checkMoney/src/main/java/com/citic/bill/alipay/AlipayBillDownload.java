@@ -65,7 +65,7 @@ public class AlipayBillDownload implements IBillDown{
 				String newZip = filePath + new Date().getTime() + ".zip";
 				FileUtil.downloadNet(urlStr, newZip);
 				// 解压到指定目录
-				FileUtil.unZip(newZip, filePath);
+				FileUtil.unZip2(newZip, filePath,false);
 				
 			} catch (Exception e) {
 				logger.error("alipay zip error ==>>",e);

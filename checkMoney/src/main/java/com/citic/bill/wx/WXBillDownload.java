@@ -47,7 +47,7 @@ public class WXBillDownload {
 
         if(result.startsWith("<xml>")){//查询日期为当天时，错误信息提示日期无效
         	logger.error("wx bill down error ==>>"+result);
-            resultMap.put("stauts", 0);
+            resultMap.put("error", 0);
             return resultMap;
         }else {  
         	logger.debug(" ======================>>  wx bill down success");

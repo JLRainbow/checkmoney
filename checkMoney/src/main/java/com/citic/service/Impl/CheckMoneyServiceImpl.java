@@ -11,12 +11,14 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 import com.citic.bill.BillFatory;
 import com.citic.bill.IBillDown;
+import com.citic.bill.alipay.AlipayBillDownload;
 import com.citic.bill.util.DateUtil;
 import com.citic.bill.util.FileUtil;
 import com.citic.entity.AccountPaymentChkFormMap;
@@ -37,6 +39,8 @@ import com.citic.util.CsvUtil;
 
 @Service
 public class CheckMoneyServiceImpl implements CheckMoneyService {
+	
+	private static Logger logger = Logger.getLogger(CheckMoneyServiceImpl.class);
 
 	@Autowired
 	private ChannelManagementMapper channelManagementMapper;
@@ -485,7 +489,7 @@ public class CheckMoneyServiceImpl implements CheckMoneyService {
 			for (String billDate : findDates) {
 				//调用获取账单接口下载账单
 				resultMap = billDownloadImp.billDownload(billDate);
-				System.out.println("=========bill down success============");
+				logger.debug("=========bill down success============");
 			}
 			//获取下载文件保存的路径配置
 			String filePath = FileUtil.getBillPath();
@@ -494,7 +498,7 @@ public class CheckMoneyServiceImpl implements CheckMoneyService {
             for (File file : fs) {
             	String str = file.getAbsolutePath();
             	str = str.substring(str.lastIndexOf("_")+1,str.lastIndexOf("."));
-                if (str.equals("账务明细")||str.equals("wx")) {
+                if (str.equals("financialDetails")||str.equals("wx")) {
                 	InputStream inputStream = new FileInputStream(file.getAbsolutePath());
                 	CsvUtil csvUtil = new CsvUtil(inputStream);
                 	
@@ -532,13 +536,16 @@ public class CheckMoneyServiceImpl implements CheckMoneyService {
                 System.gc();
                 if(file.delete()) {
                     System.out.println("文件删除成功");
+                    logger.info("billdown File delete success");
                 }else{
                 	System.out.println("文件删除失败");
+                	logger.info("billdown File delete error");
                 }
             }
 		} catch (Exception e) {
+			logger.error("导入账单失败"+e.getMessage());
 			resultMap.put("error", "导入账单失败,请及时联系管理员");
-			throw new RuntimeException("导入账单失败"+e);
+			return resultMap;
 		}
 		
 		return resultMap;

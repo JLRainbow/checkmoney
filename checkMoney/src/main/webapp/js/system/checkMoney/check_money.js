@@ -16,6 +16,9 @@ $("#chk_money").click(function (){
 					'startTimeChkMoney':startTimeChkMoney,'endTimeChkMoney':endTimeChkMoney},
 					function(result){
 						alert(result.success);
+						if(data.error!=undefined){
+							alert(data.error);
+						}
 						$btn.button('reset');
 			},"json")
 		}
