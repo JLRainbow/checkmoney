@@ -8,18 +8,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.URLEncoder;
 import java.util.Enumeration;
 import java.util.Properties;
-import java.util.zip.ZipInputStream;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import org.apache.tools.zip.ZipEntry;
 import org.apache.tools.zip.ZipFile;
@@ -130,23 +123,23 @@ public class FileUtil {
      * @param deleteFile：解压完成后是否删除文件 
      * @throws Exception 
      */  
-    public static void unZip2(String srcFile,String dest,boolean deleteFile)  throws Exception {  
+    public static void unZip(String srcFile,String dest,boolean deleteFile)  throws Exception {  
         File file = new File(srcFile);  
         if(!file.exists()) {  
-            throw new Exception("解压文件不存在!");  
+        	logger.debug("=================>> 解压文件不存在");
         }  
         ZipFile zipFile = new ZipFile(file,CHINESE_CHARSET);  
         Enumeration e = zipFile.getEntries();  
         while(e.hasMoreElements()) {  
             ZipEntry zipEntry = (ZipEntry)e.nextElement();  
-            logger.debug("changeFileName before:"+zipEntry.getName());
+            logger.debug("change FileName before:"+zipEntry.getName());
             if(zipEntry.isDirectory()) {  
                 String name = zipEntry.getName();  
                 name = name.substring(0,name.length()-1);  
                 File f = new File(dest + name);  
                 f.mkdirs();  
             } else { 
-            	logger.debug("changeFileName before:"+changeFileName(zipEntry.getName()));
+            	logger.debug("change FileName after:"+changeFileName(zipEntry.getName()));
                 File f = new File(dest + changeFileName(zipEntry.getName()));
                 f.getParentFile().mkdirs();  
                 f.createNewFile();  
@@ -172,9 +165,14 @@ public class FileUtil {
     }
     
     public static void main(String[] args) throws Exception {
-		unZip2("E:/csv/bill/1519633370780.zip","E:/csv/bill/",true);
+		unZip("E:/csv/bill/1519633370780.zip","E:/csv/bill/",true);
     }
-    
+    /**
+     * 
+     *方法：修改文件名称，防止解压时候中文名称乱码
+     *创建时间：2018年2月27日
+     *创建者：jial
+     */
     private static String changeFileName(String fileName) {
     	String prefix = fileName.substring(0,fileName.lastIndexOf("_")+1);
     	String suffix = fileName.substring(fileName.lastIndexOf("."),fileName.length());

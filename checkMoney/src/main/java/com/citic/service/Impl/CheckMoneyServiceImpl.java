@@ -489,66 +489,71 @@ public class CheckMoneyServiceImpl implements CheckMoneyService {
 			for (String billDate : findDates) {
 				//调用获取账单接口下载账单
 				resultMap = billDownloadImp.billDownload(billDate);
-				logger.debug("=========bill down success============");
 			}
-			//获取下载文件保存的路径配置
-			String filePath = FileUtil.getBillPath();
-            File[] fs = new File(filePath).listFiles();
-            int x = 0;//成功导入数据库数据数目
-            for (File file : fs) {
-            	String str = file.getAbsolutePath();
-            	str = str.substring(str.lastIndexOf("_")+1,str.lastIndexOf("."));
-                if (str.equals("financialDetails")||str.equals("wx")) {
-                	InputStream inputStream = new FileInputStream(file.getAbsolutePath());
-                	CsvUtil csvUtil = new CsvUtil(inputStream);
-                	
-                	String channelName = payWay;
-                	if(payWay.equals("wx_401")){ //微信401的读取csv文件的配置按微信302的来
-                		channelName = "wx_302";
-                	}
-                	// 通过支付方式找到对应配置信息，将json信息转换成对象
-                	ChannelManagementFormMap channelManagementFormMap = new ChannelManagementFormMap();
-            		channelManagementFormMap.put("where", "where channel_id = '" + channelName + "'");
-            		List<ChannelManagementFormMap> channelManagementList = channelManagementMapper
-            				.findByWhere(channelManagementFormMap);
-            		ChannelManagementFormMap channelManagement = channelManagementList.get(0);
-            		String config_inf = (String) channelManagement.get("config_inf");
-            		ConfigInf configInf = JSON.parseObject(config_inf, ConfigInf.class);
-            		System.out.println(configInf.toString());
-            		List<Object> dataList = null;
-            		//获取处理后数据
-            		if(payWay.equals("wx_401")){
-            			dataList = new WXScanCodePayFileHandle().getPayFileHandle2(configInf, csvUtil);
-            		}else{
-            			IPayFileHandle payFileHandleImpl = PayFileHandleFactory.getPayFileHandleImpl(payWay);
-            			dataList = payFileHandleImpl.getPayFileHandle(configInf, csvUtil);
-            		}
-            		
-            		String sql = "LOAD DATA LOCAL INFILE 'xx.csv' " + "INTO TABLE t_account_payment_chk "
-            				+ "CHARACTER SET GBK " + "FIELDS TERMINATED by ',' " + "LINES TERMINATED by '\r\n' "
-            				+ "(check_order,pay_date,fund_type,pay_amount,check_result,channel_name,comment)";
-            		x +=DataLoadDB.load(csvUtil, dataList, "/temp.csv", sql);
-            		inputStream.close();
-            		resultMap.put("impDataNum", x);
-            		resultMap.put("success", "导入成功");
-                }
-                //删除文件
-                System.gc();
-                if(file.delete()) {
-                    System.out.println("文件删除成功");
-                    logger.info("billdown File delete success");
-                }else{
-                	System.out.println("文件删除失败");
-                	logger.info("billdown File delete error");
-                }
-            }
+			if((boolean) resultMap.get("success")){
+				//获取下载文件保存的路径配置
+				String filePath = FileUtil.getBillPath();
+	            File[] fs = new File(filePath).listFiles();
+	            int x = 0;//成功导入数据库数据数目
+				for (File file : fs) {
+					String str = file.getAbsolutePath();
+					str = str.substring(str.lastIndexOf("_")+1,str.lastIndexOf("."));
+				    if (str.equals("financialDetails")||str.equals("wx")) {
+				    	InputStream inputStream = new FileInputStream(file.getAbsolutePath());
+				    	CsvUtil csvUtil = new CsvUtil(inputStream);
+				    	
+				    	String channelName = payWay;
+				    	if(payWay.equals("wx_401")){ //微信401的读取csv文件的配置按微信302的来
+				    		channelName = "wx_302";
+				    	}
+				    	// 通过支付方式找到对应配置信息，将json信息转换成对象
+				    	ChannelManagementFormMap channelManagementFormMap = new ChannelManagementFormMap();
+						channelManagementFormMap.put("where", "where channel_id = '" + channelName + "'");
+						List<ChannelManagementFormMap> channelManagementList = channelManagementMapper
+								.findByWhere(channelManagementFormMap);
+						ChannelManagementFormMap channelManagement = channelManagementList.get(0);
+						String config_inf = (String) channelManagement.get("config_inf");
+						ConfigInf configInf = JSON.parseObject(config_inf, ConfigInf.class);
+						System.out.println(configInf.toString());
+						List<Object> dataList = null;
+						//获取处理后数据
+						if(payWay.equals("wx_401")){
+							dataList = new WXScanCodePayFileHandle().getPayFileHandle2(configInf, csvUtil);
+						}else{
+							IPayFileHandle payFileHandleImpl = PayFileHandleFactory.getPayFileHandleImpl(payWay);
+							dataList = payFileHandleImpl.getPayFileHandle(configInf, csvUtil);
+						}
+						
+						String sql = "LOAD DATA LOCAL INFILE 'xx.csv' " + "INTO TABLE t_account_payment_chk "
+								+ "CHARACTER SET GBK " + "FIELDS TERMINATED by ',' " + "LINES TERMINATED by '\r\n' "
+								+ "(check_order,pay_date,fund_type,pay_amount,check_result,channel_name,comment)";
+						x +=DataLoadDB.load(csvUtil, dataList, "/temp.csv", sql);
+						inputStream.close();
+				    }
+				  //删除文件
+				    System.gc();
+				    if(file.delete()) {
+				        System.out.println("文件删除成功");
+				        logger.info("==========>> billdown File delete success");
+				    }else{
+				    	System.out.println("文件删除失败");
+				    	logger.info("==========>> billdown File delete error");
+				    }
+				}
+				resultMap.put("impDataNum", x);
+	    		resultMap.put("success", true);
+	            return resultMap;
+			}else{
+				return resultMap;
+			}
 		} catch (Exception e) {
-			logger.error("导入账单失败"+e.getMessage());
-			resultMap.put("error", "导入账单失败,请及时联系管理员");
-			return resultMap;
+			logger.error("导入账单失败 ==>>"+e);
+			resultMap.put("success", false);
+		    resultMap.put("errMsg", "导入账单失败");
+		    return resultMap;
 		}
 		
-		return resultMap;
+		
 	}
 
 	@Override

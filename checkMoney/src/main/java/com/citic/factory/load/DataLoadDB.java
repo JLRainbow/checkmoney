@@ -49,7 +49,7 @@ public class DataLoadDB {
 			System.out.println("Load执行结果：" + x);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		} finally {
 
 			try {

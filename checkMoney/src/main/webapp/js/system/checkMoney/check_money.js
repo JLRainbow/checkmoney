@@ -16,9 +16,6 @@ $("#chk_money").click(function (){
 					'startTimeChkMoney':startTimeChkMoney,'endTimeChkMoney':endTimeChkMoney},
 					function(result){
 						alert(result.success);
-						if(data.error!=undefined){
-							alert(data.error);
-						}
 						$btn.button('reset');
 			},"json")
 		}
@@ -384,13 +381,18 @@ $("#payFileAutoImportBtn").click(function (){
 					 'endTime':endTime,
 					 'payWay':payWay},
 					function(data){
-						 $btn.button('reset');
-							if(data.success!=undefined){
-								alert(data.success+data.impDataNum+"条数据");
-							}
-							if(data.error!=undefined){
-								alert(data.error);
-							}
+						$btn.button('reset');
+						if(data.success){
+							alert("导入成功"+data.impDataNum+"条数据");
+						}else{
+							alert(data.errMsg);
+						}
+//						if(data.success!=undefined){
+//							alert(data.success+data.impDataNum+"条数据");
+//						}
+//						if(data.error!=undefined){
+//							alert(data.error);
+//						}
 						 
 					},"json")
 		}

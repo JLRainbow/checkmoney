@@ -33,6 +33,7 @@ public class AlipayBillDownload implements IBillDown{
     public  Map<String, Object>  billDownload (String billDate)  throws IOException{ 
         
         AlipayDataDataserviceBillDownloadurlQueryRequest request = new AlipayDataDataserviceBillDownloadurlQueryRequest();
+        Map<String, Object> resultMap = new HashMap<String, Object>();
         JSONObject json = new JSONObject();
         json.put("bill_type", "signcustomer");
         //昨天的数据 new DateTime().minusDays(1).toString("yyyy-MM-dd")
@@ -40,44 +41,52 @@ public class AlipayBillDownload implements IBillDown{
         request.setBizContent(json.toString());
                 
 		AlipayDataDataserviceBillDownloadurlQueryResponse response = null;
-		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
 			response = alipayClient.execute(request);
-			logger.info("response.getBillDownloadUrl() ==>>"+response.getBillDownloadUrl());
+			logger.debug("response.getBillDownloadUrl() ==>>"+response.getBillDownloadUrl());
+			
+			 if(response.isSuccess()){
+				 	logger.debug("alipay invoking billdown success ==>>"+JSON.toJSONString(response));
+		        	// 将接口返回的对账单下载地址传入urlStr
+					String urlStr = response.getBillDownloadUrl();
+					
+					// 开始下载
+					try {
+						//读取配置路径
+						String filePath = FileUtil.getBillPath();
+						File file =new File(filePath);    
+			    		//如果文件夹不存在则创建    
+			    		if (!file .exists()){  
+			    		    file .mkdirs();  
+			    		    logger.debug("================>> bill path is create success");
+			    		} 
+						// 指定希望保存的文件路径
+						String newZip = filePath + new Date().getTime() + ".zip";
+						FileUtil.downloadNet(urlStr, newZip);
+						// 解压到指定目录
+						FileUtil.unZip(newZip, filePath,false);
+						logger.debug("================>> bill path unZip success");
+						resultMap.put("success", true);
+						return resultMap;
+					} catch (Exception e) {
+						logger.error("alipay zip error ==>>",e);
+						resultMap.put("success", false);
+						resultMap.put("errMsg", "支付宝对账单文件解压缩失败");
+			            return resultMap;
+					}
+				}else {
+					logger.debug("alipay invoking billdown error ==>>"+JSON.toJSONString(response));
+					resultMap.put("success", false);
+		            resultMap.put("errMsg", "支付宝调用失败");
+		            return resultMap;
+		        }
 		} catch (AlipayApiException e) {
 			logger.error("alipayClient execute error ==>>",e);
-		}
-         if(response.isSuccess()){ 
-        	// 将接口返回的对账单下载地址传入urlStr
-			String urlStr = response.getBillDownloadUrl();
-			
-			// 开始下载
-			try {
-				//读取配置路径
-				String filePath = FileUtil.getBillPath();
-				File file =new File(filePath);    
-	    		//如果文件夹不存在则创建    
-	    		if (!file .exists()){  
-	    		    file .mkdirs();  
-	    		    logger.debug("================>> bill path is create success");
-	    		} 
-				// 指定希望保存的文件路径
-				String newZip = filePath + new Date().getTime() + ".zip";
-				FileUtil.downloadNet(urlStr, newZip);
-				// 解压到指定目录
-				FileUtil.unZip2(newZip, filePath,false);
-				
-			} catch (Exception e) {
-				logger.error("alipay zip error ==>>",e);
-			}
-			  logger.debug("invoking success ==>>"+JSON.toJSONString(response));
-			  resultMap.put("stauts", 1);
-			  return resultMap;
-		}else {
-			logger.debug("invoking error ==>>"+JSON.toJSONString(response));
-            resultMap.put("stauts", 0);
+			resultMap.put("success", false);
+            resultMap.put("errMsg", "支付宝请求接口异常");
             return resultMap;
-        }
+		}
+        
          
        } 
 }
