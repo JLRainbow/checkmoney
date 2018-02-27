@@ -114,6 +114,7 @@ public class platformController extends BaseController{
 			list.add(1);
 			list.add(1);
 			list.add(mergeFlag);
+			list.add(orderReceipts.getOrderSn());
 			dataList.add(list);
 		}
 		//将整理好的数据load到DB中
@@ -123,7 +124,7 @@ public class platformController extends BaseController{
 					"FIELDS TERMINATED by ',' "+
 					"LINES TERMINATED by '\r\n' "+
 					"(relation_id,check_order,pay_platform,pay_amount,status,receipt_date,"
-					+ "store_name,eshop_name,eshop_id,self,check_result,source,fund_type,merge_flag)";	
+					+ "store_name,eshop_name,eshop_id,self,check_result,source,fund_type,merge_flag,order_sn)";	
 		int x =DataLoadDB.load(new CsvUtil(), dataList, "/tempDB.csv", sql);
 		
 		
@@ -224,6 +225,7 @@ public class platformController extends BaseController{
 			list.add(0);
 			list.add(1);
 			list.add(2);
+			list.add(orderRefund.getOrderSn());
 			dataList.add(list);
 		}
 		//将整理好的数据load到DB中
@@ -233,7 +235,7 @@ public class platformController extends BaseController{
 				"FIELDS TERMINATED by ',' "+
 				"LINES TERMINATED by '\r\n' "+
 				"(relation_id,check_order,pay_platform,pay_amount,status,receipt_date,"
-				+ "store_name,eshop_name,eshop_id,self,comment,check_result,source,fund_type)";		
+				+ "store_name,eshop_name,eshop_id,self,comment,check_result,source,fund_type,order_sn)";		
 		int x =DataLoadDB.load(new CsvUtil(), dataList, "/tempDB.csv", sql);
 		
 		

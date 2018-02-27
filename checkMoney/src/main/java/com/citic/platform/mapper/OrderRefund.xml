@@ -17,6 +17,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="refundTime" column="refundTime" jdbcType="CHAR"/>
 		<result property="paySource" column="paySource" jdbcType="CHAR"/>
 		<result property="payPlatform" column="payPlatform" jdbcType="CHAR"/>
+		<result property="orderSn" column="orderSn" jdbcType="CHAR"/>
 		
         <association property="store" javaType="com.citic.platform.entity.Store">  
              <id property="id" column="id"/>
@@ -37,6 +38,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			o.refund_charge_id AS refundChargeId,
 			o.id AS id,
 			d.id AS receiptId,
+			ord.order_sn AS orderSn,
 			o.price AS price,
 			(
 				CASE o.refund_platform

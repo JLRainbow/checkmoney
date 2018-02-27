@@ -31,6 +31,8 @@ public class OrderReceipts {
 	
 	private String paySource;
 
+	private String orderSn;//订单编号
+	
 	public String getId() {
 		return id;
 	}
@@ -141,6 +143,14 @@ public class OrderReceipts {
 
 	public void setPaySource(String paySource) {
 		this.paySource = paySource;
+	}
+
+	public String getOrderSn() {
+		return orderSn;
+	}
+
+	public void setOrderSn(String orderSn) {
+		this.orderSn = orderSn;
 	}
 	
 	

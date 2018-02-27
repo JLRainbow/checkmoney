@@ -14,6 +14,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="eshop_id" column="eshop_id" jdbcType="CHAR"/>
 		<result property="paySn" column="paySn" jdbcType="CHAR"/>
 		<result property="paySource" column="paySource" jdbcType="CHAR"/>
+		<result property="orderSn" column="orderSn" jdbcType="CHAR"/>
 		
         <association property="store" javaType="com.citic.platform.entity.Store">  
              <id property="id" column="id"/>
@@ -30,7 +31,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="getPlatformPayData"  resultMap="OrderReceiptsMap" parameterType="java.util.Map">
 		SELECT
-			r.id,r.charge_id,r.price,
+			r.id,
+			r.charge_id,
+			ord.order_sn AS orderSn,
+			r.price,
 		(
 			CASE r.pay_status
 			WHEN 'waitpay' THEN
