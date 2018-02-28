@@ -10,13 +10,17 @@ $("#chk_money").click(function (){
 		if(startTimeChkMoney==""||endTimeChkMoney==""){
 			alert("日期不能为空!")
 		}else{
-			var $btn = $("#chk_money").button('loading');
+			var $btn = $("#chk_money").attr("data-loading-text","对账中...").button('loading');
 			$.post(rootPath +'/check_money/chkMoney.do',
 					{'chkPayWay':chkPayWay,'chkReceiptWay':chkReceiptWay,
 					'startTimeChkMoney':startTimeChkMoney,'endTimeChkMoney':endTimeChkMoney},
 					function(result){
-						alert(result.success);
 						$btn.button('reset');
+						if(result.success){
+							alert("对账结束");
+						}else{
+							alert(result.errMsg);
+						}
 			},"json")
 		}
 	}
@@ -143,15 +147,12 @@ function impPayData(){
 				success: function (data, status)
 				{
 					$btn.button('reset');
-					if(data.isEmpty!=undefined){
-						alert(data.isEmpty);
+					if(data.success){
+						alert("成功导入"+data.impDataNum+"条数据");
+					}else{
+						alert(data.errMsg);
 					}
-					if(data.success!=undefined){
-						alert(data.success+data.impDataNum+"条数据");
-					}
-					if(data.importError!=undefined){
-						alert(data.importError);
-					}
+					
 				},
 				error: function (data, status, e)
 				{
@@ -338,8 +339,10 @@ $("#DBimp").click(function(e){
 						 'DBpayPlatform':DBpayPlatform},
 						function(data){
 							$btn.button('reset');
-							if(data.success!=undefined){
-								alert(data.success+data.impDataNum+"条数据");
+							if(data.success){
+								alert("成功导入"+data.impDataNum+"条数据");
+							}else{
+								alert(data.errMsg)
 							}
 							 
 						},"json")
@@ -352,8 +355,10 @@ $("#DBimp").click(function(e){
 						 'DBpayPlatform':DBpayPlatform},
 						function(data){
 							$btn.button('reset');
-							if(data.success!=undefined){
-								alert(data.success+data.impDataNum+"条数据");
+							if(data.success){
+								alert("成功导入"+data.impDataNum+"条数据");
+							}else{
+								alert(data.errMsg)
 							}
 							
 						},"json")
@@ -383,16 +388,10 @@ $("#payFileAutoImportBtn").click(function (){
 					function(data){
 						$btn.button('reset');
 						if(data.success){
-							alert("导入成功"+data.impDataNum+"条数据");
+							alert("成功导入"+data.impDataNum+"条数据");
 						}else{
 							alert(data.errMsg);
 						}
-//						if(data.success!=undefined){
-//							alert(data.success+data.impDataNum+"条数据");
-//						}
-//						if(data.error!=undefined){
-//							alert(data.error);
-//						}
 						 
 					},"json")
 		}

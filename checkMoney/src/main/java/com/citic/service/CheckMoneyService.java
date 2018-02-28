@@ -27,7 +27,7 @@ public interface CheckMoneyService {
 
 	HashMap<String, Object> getReceiptNoChkNum(String monthReceipt);
 
-	HashMap<String, Object> importFileLoadData(HttpServletResponse response, InputStream inputStream, String payWay) throws Exception;
+	Map<String, Object> importFileLoadData(HttpServletResponse response, InputStream inputStream, String payWay) throws Exception;
 
 	Map<String, Object> payFileAutoImport(String payWay, String startTime, String endTime);
 

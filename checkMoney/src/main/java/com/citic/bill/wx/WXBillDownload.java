@@ -79,7 +79,7 @@ public class WXBillDownload {
 				}
 			}
 		} catch (Exception e) {
-			logger.error("wx httpsRequest() error ==>>"+e);
+			logger.error("wx httpsRequest() error ==>>",e);
 			resultMap.put("success", false);
 		    resultMap.put("errMsg", "微信请求接口异常");
 		    return resultMap;

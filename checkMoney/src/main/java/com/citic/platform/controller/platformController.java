@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +30,8 @@ import com.citic.util.CsvUtil;
 @RequestMapping("/platform")
 public class platformController extends BaseController{
 	
+	private static final Logger logger = Logger.getLogger(platformController.class);
+	
 	@Autowired
 	private OrderReceiptsService orderReceiptsService;
 	
@@ -44,14 +47,15 @@ public class platformController extends BaseController{
 	 *方法：获取平台收款数据
 	 *创建时间：2017年7月13日
 	 *创建者：jial
-	 * @throws IOException 
+	 * @throws Exception 
 	 */
 	@ResponseBody
 	@RequestMapping(value="/getPlatformPayData",method=RequestMethod.POST)
 	@SystemLog(module="财务对账业务",methods="财务对账处理（虚虚对账）-平台DB导入收款数据")//记录操作日志
-	public HashMap<String,Object> getPlatformPayData(@RequestParam(value ="startTime") String startTime
+	public Map<String,Object> getPlatformPayData(@RequestParam(value ="startTime") String startTime
 			,@RequestParam(value ="endTime") String endTime
-			,@RequestParam(value ="DBpayPlatform") String DBpayPlatform) throws IOException {
+			,@RequestParam(value ="DBpayPlatform") String DBpayPlatform) {
+		Map<String,Object> resultMap = new HashMap<String,Object>();
 		startTime+=" 00:00:00";
 		endTime+=" 23:59:59";
 		String[] DBpayPlatformArray = DBpayPlatform.split(",");
@@ -60,9 +64,20 @@ public class platformController extends BaseController{
 		map.put("endTime", endTime);
 		map.put("DBpayPlatformArray", DBpayPlatformArray);
 		
-		 //手动切换为平台数据源
-		DataSourceContextHolder. setDbType(DataSourceType.SOURCE_PALTFORMDATASOURCE);  
-		List<OrderReceipts> OrderReceiptsList = orderReceiptsService.getPlatformPayData(map);
+		List<OrderReceipts> OrderReceiptsList =null;
+		try {
+			//手动切换为平台数据源
+			logger.info("get platfrom receipt data start =========>> ");
+			DataSourceContextHolder.setDbType(DataSourceType.SOURCE_PALTFORMDATASOURCE);  
+			OrderReceiptsList = orderReceiptsService.getPlatformPayData(map);
+			logger.info("get platfrom  receipt data end =========>> ");
+			resultMap.put("success", true);
+		} catch (Exception e) {
+			logger.error("getPlatformPayData error ==>>",e);
+			resultMap.put("success", false);
+			resultMap.put("errMsg", "获取平台支付数据异常");
+			return resultMap;
+		}
 		//切换为本地数据源
 		DataSourceContextHolder. setDbType(DataSourceType.SOURCE_DATASOURCE1);
 		//将数据装到list
@@ -125,20 +140,37 @@ public class platformController extends BaseController{
 					"LINES TERMINATED by '\r\n' "+
 					"(relation_id,check_order,pay_platform,pay_amount,status,receipt_date,"
 					+ "store_name,eshop_name,eshop_id,self,check_result,source,fund_type,merge_flag,order_sn)";	
-		int x =DataLoadDB.load(new CsvUtil(), dataList, "/tempDB.csv", sql);
+		int x = 0;//load数量
+		try {
+			x = DataLoadDB.load(new CsvUtil(), dataList, "/tempDB.csv", sql);
+			resultMap.put("impDataNum", x);
+			resultMap.put("success", true);
+		} catch (Exception e) {
+			logger.error("getPlatformPayData load error ==>>",e);
+			resultMap.put("success", false);
+			resultMap.put("errMsg", "导入异常");
+			return resultMap;
+		}
 		
 		
 		TempPo tempPo = new TempPo();
 		tempPo.setStartTime(startTime);
 		tempPo.setEndTime(endTime);
-		//最后根据根据eshop_id更新供应商名称
-		accountReceiptChkMapper.matchProviderName(tempPo);
-		//插入合并支付数据
-		orderReceiptsService.mergePay(map);
-		HashMap<String,Object> result = new HashMap<String,Object>();
-		result.put("impDataNum", x);
-		result.put("success", "导入成功");
-		return result;
+		try {
+			//最后根据根据eshop_id更新供应商名称
+			accountReceiptChkMapper.matchProviderName(tempPo);
+			//插入合并支付数据
+			orderReceiptsService.mergePay(map);
+			resultMap.put("success", true);
+		} catch (Exception e) {
+			logger.error("getPlatformPayData mergePay error ==>>",e);
+			resultMap.put("success", false);
+			resultMap.put("errMsg", "插入合并支付数据异常");
+			return resultMap;
+		}
+		
+		
+		return resultMap;
 	}
 
 	/**
@@ -151,9 +183,10 @@ public class platformController extends BaseController{
 	@ResponseBody
 	@RequestMapping(value="/getPlatformReceiptData",method=RequestMethod.POST)
 	@SystemLog(module="财务对账业务",methods="财务对账处理（虚虚对账）-平台DB导入退款数据")//记录操作日志
-	public HashMap<String,Object> getPlatformReceiptData(@RequestParam(value ="startTime") String startTime
+	public Map<String,Object> getPlatformReceiptData(@RequestParam(value ="startTime") String startTime
 			,@RequestParam(value ="endTime") String endTime
-			,@RequestParam(value ="DBpayPlatform") String DBpayPlatform) throws IOException {
+			,@RequestParam(value ="DBpayPlatform") String DBpayPlatform)  {
+		Map<String,Object> resultMap = new HashMap<String,Object>();
 		startTime+=" 00:00:00";
 		endTime+=" 23:59:59";
 		String[] DBpayPlatformArray = DBpayPlatform.split(",");
@@ -161,9 +194,20 @@ public class platformController extends BaseController{
 		map.put("startTime", startTime);
 		map.put("endTime", endTime);
 		map.put("DBpayPlatformArray", DBpayPlatformArray);
-		 //手动切换为平台数据源
-		DataSourceContextHolder. setDbType(DataSourceType.SOURCE_PALTFORMDATASOURCE);  
-		List<OrderRefund> orderRefundList = orderRefundService.getPlatformReceiptData(map);
+		 List<OrderRefund> orderRefundList = null;;
+		try {
+			//手动切换为平台数据源
+			logger.info("get platfrom refund data start =========>> ");
+			DataSourceContextHolder. setDbType(DataSourceType.SOURCE_PALTFORMDATASOURCE);  
+			orderRefundList = orderRefundService.getPlatformReceiptData(map);
+			logger.info("get platfrom refund data end =========>> ");
+			resultMap.put("success", true);
+		} catch (Exception e) {
+			logger.error("getPlatformReceiptData error ==>>",e);
+			resultMap.put("success", false);
+			resultMap.put("errMsg", "获取平台退款数据异常");
+			return resultMap;
+		}
 		//切换为本地数据源
 		DataSourceContextHolder. setDbType(DataSourceType.SOURCE_DATASOURCE1);
 		//将数据装到list里面
@@ -236,20 +280,34 @@ public class platformController extends BaseController{
 				"LINES TERMINATED by '\r\n' "+
 				"(relation_id,check_order,pay_platform,pay_amount,status,receipt_date,"
 				+ "store_name,eshop_name,eshop_id,self,comment,check_result,source,fund_type,order_sn)";		
-		int x =DataLoadDB.load(new CsvUtil(), dataList, "/tempDB.csv", sql);
+		int x = 0;
+		try {
+			x = DataLoadDB.load(new CsvUtil(), dataList, "/tempDB.csv", sql);
+			resultMap.put("impDataNum", x);
+			resultMap.put("success", true);
+		} catch (IOException e) {
+			logger.error("getPlatformReceiptData load error ==>>",e);
+			resultMap.put("success", false);
+			resultMap.put("errMsg", "导入异常");
+			return resultMap;
+		}
 		
 		
 		TempPo tempPo = new TempPo();
 		tempPo.setStartTime(startTime);
 		tempPo.setEndTime(endTime);
 		//最后根据根据eshop_id更新供应商名称
-		accountReceiptChkMapper.matchProviderName(tempPo);
-		HashMap<String,Object> result = new HashMap<String,Object>();
-		result.put("impDataNum", x);
-		result.put("success", "导入成功");
+		try {
+			accountReceiptChkMapper.matchProviderName(tempPo);
+		} catch (Exception e) {
+			logger.error("getPlatformReceiptData load error ==>>",e);
+			resultMap.put("success", false);
+			resultMap.put("errMsg", "导入异常");
+			return resultMap;
+		}
 		
-		System.out.println("====获取平台退款数据=====");
-		return result;
+		
+		return resultMap;
 		
 	}
 	

@@ -7,7 +7,7 @@ import com.citic.platform.entity.OrderReceipts;
 
 public interface OrderReceiptsService {
 
-	List<OrderReceipts> getPlatformPayData(Map<String, Object> map);
+	List<OrderReceipts> getPlatformPayData(Map<String, Object> map) throws Exception;
 
 	void mergePay(Map<String, Object> map);
 

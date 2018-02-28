@@ -20,9 +20,12 @@ public class OrderReceiptsServiceImpl implements OrderReceiptsService {
 	private AccountReceiptChkMapper accountReceiptChkMapper;
 
 	@Override
-	public List<OrderReceipts> getPlatformPayData(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return orderReceiptsMapper.getPlatformPayData(map);
+	public List<OrderReceipts> getPlatformPayData(Map<String, Object> map) throws Exception {
+		try {
+			return orderReceiptsMapper.getPlatformPayData(map);
+		} catch (Exception e) {
+			throw new RuntimeException();
+		}
 	}
 
 	@Override

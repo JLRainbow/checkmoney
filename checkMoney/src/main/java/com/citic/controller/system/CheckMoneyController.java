@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,6 +41,8 @@ import com.citic.util.ExcelUtil1;
 @Controller
 @RequestMapping("/check_money")
 public class CheckMoneyController extends BaseController {
+	
+	private static final Logger logger = Logger.getLogger(CheckMoneyController.class);
 
 	@Autowired
 	private CheckMoneyService checkMoneyService;
@@ -191,24 +194,24 @@ public class CheckMoneyController extends BaseController {
 	@ResponseBody
 	@RequestMapping("/importFileLoadData")
 	@SystemLog(module = "财务对账业务", methods = "财务对账处理（虚虚对账）-支付渠道导入") // 记录操作日志
-	public synchronized HashMap<String, Object> importFileLoadData(@RequestParam(value = "file") MultipartFile file,
-			@RequestParam(value = "payWay") String payWay, HttpServletResponse response) throws Exception, IOException {
-		HashMap<String, Object> map = new HashMap<String, Object>();
-		HashMap<String, Object> importCsv = null;
+	public synchronized Map<String, Object> importFileLoadData(@RequestParam(value = "file") MultipartFile file,
+			@RequestParam(value = "payWay") String payWay, HttpServletResponse response){
+		Map<String, Object> resultMap = new HashMap<String, Object>();
 		if (file.isEmpty()) {
-			map.put("isEmpty", "导入文件内容为空");
-			return map;
+			resultMap.put("isEmpty", "导入文件内容为空");
+			return resultMap;
 		} else {
 			try {
 				InputStream inputStream = file.getInputStream();
-				importCsv = checkMoneyService.importFileLoadData(response, inputStream, payWay);
+				resultMap = checkMoneyService.importFileLoadData(response, inputStream, payWay);
+				return resultMap;
 			} catch (Exception e) {
-				e.printStackTrace();
-				map.put("importError", "导入文件异常,请检查关键字位置配置是否正确或者导入文件是否正确");
-				return map;
+				logger.error("importFileLoadData importFileLoadData error ==>>", e);
+				resultMap.put("success", false);
+				resultMap.put("errMsg", "导入文件异常,请检查关键字位置配置是否正确或者导入文件是否正确");
+				return resultMap;
 			}
 
-			return importCsv;
 		}
 	}
 
@@ -277,7 +280,7 @@ public class CheckMoneyController extends BaseController {
 	@ResponseBody
 	@RequestMapping("/chkMoney")
 	@SystemLog(module = "财务对账业务", methods = "财务对账处理（虚虚对账）-对账处理") // 记录操作日志
-	public synchronized HashMap<String, Object> chkMoney(@RequestParam(value = "chkPayWay") String chkPayWay,
+	public synchronized Map<String, Object> chkMoney(@RequestParam(value = "chkPayWay") String chkPayWay,
 			@RequestParam(value = "chkReceiptWay") String chkReceiptWay,
 			@RequestParam(value = "startTimeChkMoney") String startTimeChkMoney,
 			@RequestParam(value = "endTimeChkMoney") String endTimeChkMoney) {
@@ -300,10 +303,16 @@ public class CheckMoneyController extends BaseController {
 		endTimeChkMoney += " 23:59:59";
 		m.put("startTimeChkMoney", startTimeChkMoney);
 		m.put("endTimeChkMoney", endTimeChkMoney);
-		checkMoneyService.chkMoney(m);
-		HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put("success", "对账结束");
-		return map;
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			checkMoneyService.chkMoney(m);
+			resultMap.put("success", true);
+			return resultMap;
+		} catch (Exception e) {
+			resultMap.put("success", false);
+			resultMap.put("errMsg", "对账异常");
+			return resultMap;
+		}
 	}
 
 	/**
