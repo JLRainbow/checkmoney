@@ -503,7 +503,7 @@ public class CheckMoneyServiceImpl implements CheckMoneyService {
 		try {
 			//删除上次操作的文件
 			try {
-				File lastTimeFile = new File(FileUtil.getOperationFilePath());
+				File lastTimeFile = new File(FileUtil.getBillPath());
 				if(lastTimeFile.exists()){
 					  File[] listFiles = lastTimeFile.listFiles();
 					  for (File file : listFiles) {
@@ -566,15 +566,7 @@ public class CheckMoneyServiceImpl implements CheckMoneyService {
 						x +=DataLoadDB.load(csvUtil, dataList, "/temp.csv", sql);
 						inputStream.close();
 				    }
-				  //删除文件
-				    System.gc();
-				    if(file.delete()) {
-				        System.out.println("文件删除成功");
-				        logger.info("==========>> billdown File delete success");
-				    }else{
-				    	System.out.println("文件删除失败");
-				    	logger.info("==========>> billdown File delete error");
-				    }
+				  
 				}
 				resultMap.put("impDataNum", x);
 	    		resultMap.put("success", true);

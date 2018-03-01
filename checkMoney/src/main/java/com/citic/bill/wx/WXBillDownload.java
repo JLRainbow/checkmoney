@@ -59,24 +59,16 @@ public class WXBillDownload {
 				}
 				dataList.add("`");//生成csv的最后一行是一个` 防止读取csv多读取一行
 				CsvUtil csvUtil = new CsvUtil();
-				String filePath = FileUtil.getBillPath();
-				File file =new File(filePath);    
-				//如果文件夹不存在则创建    
-				if (!file .exists()){  
-					logger.info("================>> bill path is create success");
-				    file .mkdirs();    
-				} 
 				//创建这次下载的文件夹
-				File thisTimeFile =new File(FileUtil.getOperationFilePath());    
+				File thisTimeFile =new File(FileUtil.getBillPath());    
 	    		//如果文件夹不存在则创建    
 	    		if (!thisTimeFile .exists()){  
 	    			thisTimeFile .mkdirs();  
 	    		    logger.debug("================>> thisTimeFile path is create success");
 	    		} 
 				try {
-					csvUtil.createCsv(dataList, filePath+billDate+"_wx.csv");
 					///保存这次下载的文件
-					csvUtil.createCsv(dataList, FileUtil.getOperationFilePath()+billDate+"_wx.csv");
+					csvUtil.createCsv(dataList, FileUtil.getBillPath()+billDate+"_wx.csv");
 					logger.info("================>> wx createCsv success");
 					resultMap.put("success", true);
 					return resultMap;

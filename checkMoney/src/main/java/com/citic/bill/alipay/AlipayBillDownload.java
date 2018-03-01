@@ -52,27 +52,19 @@ public class AlipayBillDownload implements IBillDown{
 					
 					// 开始下载
 					try {
-						//读取配置路径
-						String filePath = FileUtil.getBillPath();
-						File file =new File(filePath);    
-			    		//如果文件夹不存在则创建    
-			    		if (!file .exists()){  
-			    		    file .mkdirs();  
-			    		    logger.debug("================>> bill path is create success");
-			    		} 
-						// 指定希望保存的文件路径
-						String newZip = filePath + new Date().getTime() + ".zip";
-						FileUtil.downloadNet(urlStr, newZip);
+
+						//指定希望保存的文件路径
+						String newZip = FileUtil.getBillPath() + new Date().getTime() + ".zip";
 						//创建这次下载的文件夹
-						File thisTimeFile =new File(FileUtil.getOperationFilePath());    
+						File thisTimeFile =new File(FileUtil.getBillPath());    
 			    		//如果文件夹不存在则创建    
 			    		if (!thisTimeFile .exists()){  
 			    			thisTimeFile .mkdirs();  
 			    		    logger.debug("================>> thisTimeFile path is create success");
 			    		} 
-						FileUtil.downloadNet(urlStr, FileUtil.getOperationFilePath() + new Date().getTime() + ".zip");
+						FileUtil.downloadNet(urlStr, newZip);
 						// 解压到指定目录
-						FileUtil.unZip(newZip, filePath,false);
+						FileUtil.unZip(newZip, FileUtil.getBillPath(),false);
 						logger.debug("================>> bill path unZip success");
 						resultMap.put("success", true);
 						return resultMap;
