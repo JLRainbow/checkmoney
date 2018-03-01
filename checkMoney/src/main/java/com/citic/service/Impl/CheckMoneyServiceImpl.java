@@ -501,6 +501,25 @@ public class CheckMoneyServiceImpl implements CheckMoneyService {
 			endTime = endTime.replaceAll("-", "");
 		}
 		try {
+			//删除上次操作的文件
+			try {
+				File lastTimeFile = new File(FileUtil.getOperationFilePath());
+				if(lastTimeFile.exists()){
+					  File[] listFiles = lastTimeFile.listFiles();
+					  for (File file : listFiles) {
+						  file.delete();
+					  }
+					  lastTimeFile.delete();
+					  logger.info(" =======>> lastTimeFile delete success");
+				}else{
+					 logger.info(" =======>> lastTimeFile is not exists");
+				}
+			} catch (IOException e) {
+				logger.error("lastTimeFile delete error ==>>",e);
+				resultMap.put("success", false);
+			    resultMap.put("errMsg", "系统内部异常");
+			    return resultMap;
+			}
 			//将时间段的分隔成每一天
 			List<String> findDates = DateUtil.findDates(startTime, endTime, pattern);
 			for (String billDate : findDates) {

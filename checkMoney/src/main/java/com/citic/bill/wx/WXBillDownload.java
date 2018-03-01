@@ -66,8 +66,17 @@ public class WXBillDownload {
 					logger.info("================>> bill path is create success");
 				    file .mkdirs();    
 				} 
+				//创建这次下载的文件夹
+				File thisTimeFile =new File(FileUtil.getOperationFilePath());    
+	    		//如果文件夹不存在则创建    
+	    		if (!thisTimeFile .exists()){  
+	    			thisTimeFile .mkdirs();  
+	    		    logger.debug("================>> thisTimeFile path is create success");
+	    		} 
 				try {
 					csvUtil.createCsv(dataList, filePath+billDate+"_wx.csv");
+					///保存这次下载的文件
+					csvUtil.createCsv(dataList, FileUtil.getOperationFilePath()+billDate+"_wx.csv");
 					logger.info("================>> wx createCsv success");
 					resultMap.put("success", true);
 					return resultMap;

@@ -116,6 +116,20 @@ public class FileUtil {
 		is.close();
 		return filePath;
     }
+    /**
+     * 
+     *方法：获取保存这次操作文件的文件夹路径
+     *创建时间：2018年3月1日
+     *创建者：jial
+     */
+    public static String getOperationFilePath() throws IOException{
+    	Properties props =new Properties();
+		InputStream is = AlipayBillDownload.class.getClassLoader().getResourceAsStream("config.properties");
+		props.load(is);
+		String filePath = props.getProperty("operationFilePath");
+		is.close();
+		return filePath;
+    }
     
     /** 
      * @param srcFile：压缩文件路径 
