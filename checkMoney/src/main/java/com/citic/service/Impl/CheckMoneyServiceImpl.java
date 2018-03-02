@@ -491,8 +491,16 @@ public class CheckMoneyServiceImpl implements CheckMoneyService {
 
 	@Override
 	public Map<String, Object> payFileAutoImport(String payWay, String startTime, String endTime) {
-		IBillDown billDownloadImp = BillFatory.getBillDownloadImp(payWay);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
+		IBillDown billDownloadImp = null;
+		try {
+			billDownloadImp = BillFatory.getBillDownloadImp(payWay);
+		} catch (Exception e) {
+			logger.error("payFileAutoImport getBillDownloadImp error ==>>",e);
+			resultMap.put("success", false);
+		    resultMap.put("errMsg", "暂不支持此导入");
+		    return resultMap;
+		}
 		//设置时间 
 		String pattern = "yyyy-MM-dd";
 		if(payWay.equals("wx_302")||payWay.equals("wx_401")){
