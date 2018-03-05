@@ -275,6 +275,7 @@ $('#receiptWay').change(function(e){
 	$("#receiptDataDiv").css('display','block');
 	$("#relationDataDiv").css('display','block');
 	$("#DBDataDiv").css('display','none');
+	$("#platformWeBankDiv").css('display','none');
 	var receiptWay = $.trim($('#receiptWay').val());
 	if(receiptWay=="微超"){
 		$("#relationDataDiv").css('display','none');
@@ -282,7 +283,16 @@ $('#receiptWay').change(function(e){
 	if(receiptWay=="平台DB"){
 		$("#receiptDataDiv").css('display','none');
 		$("#relationDataDiv").css('display','none');
+		$("#platformWeBankDiv").css('display','none');
 		$("#DBDataDiv").css('display','block');
+		$('.selectpicker').selectpicker({
+            'selectedText': 'cat'
+        });
+	}
+	if(receiptWay=="平台微众"){
+		$("#receiptDataDiv").css('display','none');
+		$("#relationDataDiv").css('display','none');
+		$("#platformWeBankDiv").css('display','block');
 		$('.selectpicker').selectpicker({
             'selectedText': 'cat'
         });
@@ -307,6 +317,7 @@ $('#payWay').change(function(e){
 $(document).ready(function(){ 
 　　$("#DBDataDiv").css('display','none');
    $("#payFileAutoImportDiv").css('display','none');
+   $("#platformWeBankDiv").css('display','none');
 });
 // 关系数据：上传时文件名加入input
 $('.file-team').delegate('#receiptRelation','change',function(e){

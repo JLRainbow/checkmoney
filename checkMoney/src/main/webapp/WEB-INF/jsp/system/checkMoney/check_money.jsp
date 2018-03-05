@@ -62,9 +62,7 @@
 	                            	<option value="alipay">支付宝</option>
 	                            	<option value="wx_302">微信（302账户）</option>
 	                            	<option value="wx_401">微信（401账户）</option>
-<%-- 	                                <c:forEach items="${payList}" var="list"> --%>
-<%-- 									<option value="${list.channel_id}">${list.channel_name}</option> --%>
-<%-- 									</c:forEach> --%>
+									<option value="weBank">微众银行</option>
 	                            </select>
 							  </div>
 					        <div class="col-md-3">
@@ -158,6 +156,7 @@
                             <button type="button" id="impReceiptRelationButton" class="btn btn-info" onclick="impReceiptRelation();">导入</button>
                         </div>  
                     </div>
+                    <!--     平台DB-->
                     <div id='DBDataDiv' >
 
 					     <div class="row file-team ">
@@ -205,6 +204,42 @@
 					        <div class="col-md-4">
 					            <div class="input-append date form_datetime datetime_c" id="datetimepicker2" data-date="" data-date-format="yyyy-mm-dd">
 					                <input id="endTime" name="endTime" type="text" value="" readonly="" class="form-control">
+					                <span class="add-on "><i class="icon-th glyphicon glyphicon-th-large"></i></span>
+					            </div>
+					        </div>
+					     </div>
+                    </div>
+					<!--     平台微众银行 -->
+                     <div id='platformWeBankDiv' >
+
+					     
+					    <div class="row file-team ">
+	                        <div class="col-md-3">
+					            <p class="form-control-static">收款/退款：</p>
+					       	</div>
+	                        <div class="col-md-6">
+	                            <select class="form-control" id="platformWeBankReceiptOrRefund">
+									<option value="1">收款</option>
+									<option value="2">退款</option>
+	                            </select>
+	                        </div>
+					        <div class="col-md-3">
+	                            <button type="button" id="platformWeBankImpBtn" class="btn btn-info" >导入</button>
+	                        </div>
+                      	</div>
+                      	<div class="row file-team ">
+		                    <div class="col-md-3">
+					             <p class="form-control-static">日　　期：</p>
+					        </div>
+					        <div class="col-md-4">
+					            <div class="input-append date form_datetime datetime_c" id="datetimepicker1" data-date="" data-date-format="yyyy-mm-dd">
+					                <input  id="startTime" name="startTime" type="text" value="" readonly="" class="form-control" style="float:left;">
+					                <span class="add-on "><i class="icon-th glyphicon glyphicon-th-large"></i></span>
+					            </div>
+					      	</div>
+					        <div class="col-md-4">
+					            <div class="input-append date form_datetime datetime_c" id="datetimepicker2" data-date="" data-date-format="yyyy-mm-dd">
+					                <input id="endTime" name="endTime" type="text" value="" readonly="" class="form-control" style="float:left;">
 					                <span class="add-on "><i class="icon-th glyphicon glyphicon-th-large"></i></span>
 					            </div>
 					        </div>

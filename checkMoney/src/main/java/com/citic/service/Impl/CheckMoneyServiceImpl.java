@@ -109,6 +109,7 @@ public class CheckMoneyServiceImpl implements CheckMoneyService {
 		return map;
 
 	}
+	
 
 	private HashMap<String, Object> getPayChkNum() {
 		AccountPaymentChkFormMap accountPaymentChkFormMap = new AccountPaymentChkFormMap();
