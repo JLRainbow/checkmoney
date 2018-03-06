@@ -2,6 +2,7 @@ package com.citic.platform.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,8 +24,11 @@ import com.citic.factory.load.DataLoadDB;
 import com.citic.mapper.AccountReceiptChkMapper;
 import com.citic.platform.entity.OrderReceipts;
 import com.citic.platform.entity.OrderRefund;
+import com.citic.platform.entity.WxGiftCardBuyRecord;
 import com.citic.platform.service.OrderReceiptsService;
 import com.citic.platform.service.OrderRefundService;
+import com.citic.platform.service.WxGiftCardBuyRecordService;
+import com.citic.util.Common;
 import com.citic.util.CsvUtil;
 @Controller
 @RequestMapping("/platform")
@@ -38,16 +42,17 @@ public class platformController extends BaseController{
 	@Autowired
 	private AccountReceiptChkMapper accountReceiptChkMapper;
 	
-	
 	@Autowired
 	private OrderRefundService orderRefundService;
+	
+	@Autowired
+	private WxGiftCardBuyRecordService wxGiftCardBuyRecordService;
 	
 	/**
 	 * 
 	 *方法：获取平台收款数据
 	 *创建时间：2017年7月13日
 	 *创建者：jial
-	 * @throws Exception 
 	 */
 	@ResponseBody
 	@RequestMapping(value="/getPlatformPayData",method=RequestMethod.POST)
@@ -178,7 +183,6 @@ public class platformController extends BaseController{
 	 *方法：获取平台退款数据
 	 *创建时间：2017年7月13日
 	 *创建者：jial
-	 * @throws IOException 
 	 */
 	@ResponseBody
 	@RequestMapping(value="/getPlatformReceiptData",method=RequestMethod.POST)
@@ -310,5 +314,74 @@ public class platformController extends BaseController{
 		return resultMap;
 		
 	}
-	
+	/**
+	 * 
+	 *方法：获取平台微信购卡记录list
+	 *创建时间：2018年3月6日
+	 *创建者：jial
+	 */
+	@ResponseBody
+	@RequestMapping(value="/getWxGiftCardBuyRecordList",method=RequestMethod.POST)
+	@SystemLog(module="财务对账业务",methods="platform-getWxGiftCardBuyRecordList")//记录操作日志
+	public Map<String,Object> getWxGiftCardBuyRecordList(@RequestParam(value ="startTime") String startTime
+			,@RequestParam(value ="endTime") String endTime) {
+		Map<String,Object> resultMap = new HashMap<String,Object>();
+		startTime+=" 00:00:00";
+		endTime+=" 23:59:59";
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("startTime", Common.Date2TimeStamp(startTime,"yyyy-MM-dd HH:mm:ss"));
+		params.put("endTime", Common.Date2TimeStamp(endTime,"yyyy-MM-dd HH:mm:ss"));
+		
+		List<WxGiftCardBuyRecord> wxGiftCardBuyRecordList =null;
+		try {
+			//手动切换为平台数据源
+			logger.info("getWxGiftCardBuyRecordList start =========>> ");
+			DataSourceContextHolder.setDbType(DataSourceType.SOURCE_PALTFORMDATASOURCE);  
+			wxGiftCardBuyRecordList = wxGiftCardBuyRecordService.queryWxGiftCardBuyRecord(params);
+			logger.info("getWxGiftCardBuyRecordList end =========>> ");
+			resultMap.put("success", true);
+		} catch (Exception e) {
+			logger.error("getWxGiftCardBuyRecordList error ==>>",e);
+			resultMap.put("success", false);
+			resultMap.put("errMsg", "获取平台微众银行数据异常");
+			return resultMap;
+		}
+		//切换为本地数据源
+		DataSourceContextHolder. setDbType(DataSourceType.SOURCE_DATASOURCE1);
+		//将数据装到list
+		List<Object> dataList = new  ArrayList<Object>();
+		for(WxGiftCardBuyRecord wxGiftCardBuyRecord:wxGiftCardBuyRecordList){
+			List<Object> list = new  ArrayList<Object>();
+			list.add(wxGiftCardBuyRecord.getId());
+			list.add(wxGiftCardBuyRecord.getWxOrderId());
+			list.add(Common.TimeStamp2Date(wxGiftCardBuyRecord.getPayFinishTime(), "yyyy-MM-dd HH:mm:ss"));//需要将时间转换
+			list.add(wxGiftCardBuyRecord.getTotalPrice());
+			list.add(wxGiftCardBuyRecord.getPrice());
+			list.add(wxGiftCardBuyRecord.getCardId());
+			list.add(wxGiftCardBuyRecord.getCardCode());
+			list.add(Common.fromDateH());
+			dataList.add(list);
+		}
+			
+		//将整理好的数据load到DB中
+		 String sql = "LOAD DATA LOCAL INFILE 'xx.csv' "+
+					"INTO TABLE t_wx_gift_card_buy_record "+
+					"CHARACTER SET GBK "+
+					"FIELDS TERMINATED by ',' "+
+					"LINES TERMINATED by '\r\n' "+
+					"(id,wx_order_id,pay_finish_time,total_price,price,card_id,"
+					+ "card_code,create_time)";	
+		int x = 0;//load数量
+		try {
+			x = DataLoadDB.load(new CsvUtil(), dataList, "/wx_gift_card_buy_record.csv", sql);
+			resultMap.put("impDataNum", x);
+			resultMap.put("success", true);
+			return resultMap;
+		} catch (Exception e) {
+			logger.error("getPlatformPayData load error ==>>",e);
+			resultMap.put("success", false);
+			resultMap.put("errMsg", "导入异常");
+			return resultMap;
+		}
+	}
 }

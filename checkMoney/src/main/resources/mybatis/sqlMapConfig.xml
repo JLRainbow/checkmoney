@@ -14,5 +14,6 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	<mappers>
 		<mapper resource="com/citic/platform/mapper/OrderReceipts.xml" />
 		<mapper resource="com/citic/platform/mapper/OrderRefund.xml" />
+		<mapper resource="com/citic/platform/mapper/WxGiftCardBuyRecord.xml" />
 	</mappers>
 </configuration>

@@ -233,13 +233,13 @@
 					        </div>
 					        <div class="col-md-4">
 					            <div class="input-append date form_datetime datetime_c" id="datetimepicker1" data-date="" data-date-format="yyyy-mm-dd">
-					                <input  id="startTime" name="startTime" type="text" value="" readonly="" class="form-control" style="float:left;">
+					                <input  id="platformWeBankStartTime"  type="text" value="" readonly="" class="form-control" style="float:left;">
 					                <span class="add-on "><i class="icon-th glyphicon glyphicon-th-large"></i></span>
 					            </div>
 					      	</div>
 					        <div class="col-md-4">
 					            <div class="input-append date form_datetime datetime_c" id="datetimepicker2" data-date="" data-date-format="yyyy-mm-dd">
-					                <input id="endTime" name="endTime" type="text" value="" readonly="" class="form-control" style="float:left;">
+					                <input id="platformWeBankEndTime"  type="text" value="" readonly="" class="form-control" style="float:left;">
 					                <span class="add-on "><i class="icon-th glyphicon glyphicon-th-large"></i></span>
 					            </div>
 					        </div>

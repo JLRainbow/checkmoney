@@ -379,6 +379,39 @@ $("#DBimp").click(function(e){
 	}
 })
 
+//平台微众银行数据导入
+$("#platformWeBankImpBtn").click(function(){
+	
+	var startTime = $("#platformWeBankStartTime").val();
+	var endTime = $("#platformWeBankEndTime").val();
+	var DBpayOrReceipt = $("#DBpayOrReceipt").val();
+	
+	
+		if(startTime==""||endTime==""){
+			alert("日期不能为空!")
+		}else{
+			var $btn = $("#DBimp").button('loading');
+			
+			
+				$.post(rootPath +'/platform/getWxGiftCardBuyRecordList.do',
+						{'startTime':startTime,
+						 'endTime':endTime},
+						function(data){
+							$btn.button('reset');
+							if(data.success){
+								alert("成功导入"+data.impDataNum+"条数据");
+							}else{
+								alert(data.errMsg)
+							}
+							 
+						},"json")
+				
+			
+			
+	
+		}
+	
+})
 //支付文件下载自动导入
 $("#payFileAutoImportBtn").click(function (){
 	var startTime = $("#payFileAutoStartTime").val();

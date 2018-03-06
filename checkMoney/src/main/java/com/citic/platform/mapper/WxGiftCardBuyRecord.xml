@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.citic.platform.mapper.WxGiftCardBuyRecordMapper">
+	<resultMap type="com.citic.platform.entity.WxGiftCardBuyRecord" id="wxGiftCardBuyRecordMap">
+		<result property="id" column="id" />
+		<result property="wxOrderId" column="wx_order_id" />
+		<result property="payFinishTime" column="pay_finish_time" />
+		<result property="totalPrice" column="total_price" />
+		<result property="price" column="price" />
+		<result property="cardId" column="card_id" />
+		<result property="cardCode" column="card_code" />
+		<result property="createTime" column="create_time" />
+       
+	</resultMap>
+
+	<select id="queryWxGiftCardBuyRecord"  resultMap="wxGiftCardBuyRecordMap" parameterType="java.util.Map">
+	SELECT
+	wgcbr.id,
+	wgcbr.wx_order_id,
+	wgcbr.pay_finish_time,
+	wgcbr.total_price,
+	wgcbr.price,
+	wgcbr.card_id,
+	wgcbr.card_code
+	FROM
+	t_wx_gift_card_buy_record wgcbr
+	WHERE wgcbr.total_price > 1
+	AND wgcbr.create_time >= '2018-02-12 00:00:00'
+	AND wgcbr.pay_finish_time &gt;= #{startTime}
+	AND wgcbr.pay_finish_time &lt;= #{endTime}
+	GROUP BY
+	wgcbr.card_code
+	ORDER BY
+	wgcbr.wx_order_id
+
+	</select>
+
+	
+</mapper>

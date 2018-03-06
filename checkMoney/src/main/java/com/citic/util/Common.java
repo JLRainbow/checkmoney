@@ -21,6 +21,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
@@ -32,6 +33,7 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.util.TextUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -116,13 +118,13 @@ public class Common {
 	}
 
 	/**
-	 * 返回当前时间　格式：yyyy-MM-dd hh:mm:ss
+	 * 返回当前时间　格式：yyyy-MM-dd HH:mm:ss
 	 * 
 	 * @return String
 	 */
 	public static String fromDateH() {
-		DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-		return format1.format(new Date());
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		return format.format(new Date());
 	}
 
 	static {
@@ -659,4 +661,37 @@ public class Common {
 			}
 		}
 	}
+	
+	/**
+     * Java将Unix时间戳转换成指定格式日期字符串
+     * @param timestampString 时间戳 如："1473062802";
+     * @param formats 要格式化的格式 默认："yyyy-MM-dd HH:mm:ss";
+     *
+     * @return 返回结果 如："2016-09-05 12:04:25";
+     */
+    public static String TimeStamp2Date(String timestampString, String formats) {
+        if (TextUtils.isEmpty(formats))
+            formats = "yyyy-MM-dd HH:mm:ss";
+        Long timestamp = Long.parseLong(timestampString) * 1000;
+        String date = new SimpleDateFormat(formats, Locale.CHINA).format(new Date(timestamp));
+        return date;
+    }
+    
+    /**
+     * 日期格式字符串转换成时间戳
+     *
+     * @param dateStr 字符串日期
+     * @param format   如：yyyy-MM-dd HH:mm:ss
+     *
+     * @return
+     */
+    public static String Date2TimeStamp(String dateStr, String format) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat(format);
+            return String.valueOf(sdf.parse(dateStr).getTime() / 1000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
 }
