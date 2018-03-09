@@ -606,4 +606,49 @@ public class CheckMoneyServiceImpl implements CheckMoneyService {
 		}
 		
 	}
+
+	@Override
+	public Map<String, Object> importWxWeBankFile(HttpServletResponse response, InputStream inputStream,
+			String payWay) throws Exception{
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		ChannelManagementFormMap channelManagementFormMap = new ChannelManagementFormMap();
+		// 通过支付方式找到对应配置信息，将json信息转换成对象
+		channelManagementFormMap.put("where", "where channel_id = '" + payWay + "'");
+		List<ChannelManagementFormMap> channelManagementList = channelManagementMapper
+				.findByWhere(channelManagementFormMap);
+		ChannelManagementFormMap channelManagement = channelManagementList.get(0);
+		String config_inf = (String) channelManagement.get("config_inf");
+		ConfigInf configInf = JSON.parseObject(config_inf, ConfigInf.class);
+		System.out.println(configInf.toString());
+
+		CsvUtil csvUtil = new CsvUtil(inputStream);
+		//获取处理后数据
+		List<Object> dataList = null;
+		try {
+			IPayFileHandle payFileHandleImpl = PayFileHandleFactory.getPayFileHandleImpl(payWay);
+			dataList = payFileHandleImpl.getPayFileHandle(configInf, csvUtil);
+			resultMap.put("success", true);
+		} catch (Exception e) {
+			logger.error("importFileLoadData payFileHandle error ==>>",e);
+			resultMap.put("success", false);
+			resultMap.put("errMsg", "导入文件异常,请检查关键字位置配置是否正确或者导入文件是否正确");
+			return resultMap;
+		}
+		
+		String sql = "LOAD DATA LOCAL INFILE 'xx.csv' " + "INTO TABLE t_wx_webank "
+				+ "CHARACTER SET GBK " + "FIELDS TERMINATED by ',' " + "LINES TERMINATED by '\r\n' "
+				+ "(check_order,pay_date,fund_type,pay_amount,check_result)";
+		int x = 0;
+		try {
+			x = DataLoadDB.load(csvUtil, dataList, "/temp.csv", sql);
+			resultMap.put("impDataNum", x);
+			resultMap.put("success", true);
+			return resultMap;
+		} catch (Exception e) {
+			logger.error("importFileLoadData load error ==>>",e);
+			resultMap.put("success", false);
+			resultMap.put("errMsg", "导入异常");
+			return resultMap;
+		}
+	}
 }

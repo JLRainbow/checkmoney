@@ -355,8 +355,8 @@ public class platformController extends BaseController{
 			list.add(wxGiftCardBuyRecord.getId());
 			list.add(wxGiftCardBuyRecord.getWxOrderId());
 			list.add(Common.TimeStamp2Date(wxGiftCardBuyRecord.getPayFinishTime(), "yyyy-MM-dd HH:mm:ss"));//需要将时间转换
-			list.add(wxGiftCardBuyRecord.getTotalPrice());
-			list.add(wxGiftCardBuyRecord.getPrice());
+			list.add(Common.div(wxGiftCardBuyRecord.getTotalPrice(), "100", 2));
+			list.add(Common.div(wxGiftCardBuyRecord.getPrice(), "100", 2));
 			list.add(wxGiftCardBuyRecord.getCardId());
 			list.add(wxGiftCardBuyRecord.getCardCode());
 			list.add(Common.fromDateH());

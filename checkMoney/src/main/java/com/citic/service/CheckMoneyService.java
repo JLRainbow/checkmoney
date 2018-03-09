@@ -33,6 +33,8 @@ public interface CheckMoneyService {
 
 	void chkMoneyByRelationId(String relationId);
 
+	Map<String, Object> importWxWeBankFile(HttpServletResponse response, InputStream inputStream, String payWay) throws Exception;
+
 	
 
 }

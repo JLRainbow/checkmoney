@@ -138,7 +138,7 @@ function impPayData(){
 		$("#payGapayNum").text('0');
 		var payWay = $.trim($('#payWay').val());
 		var $btn = $("#payImpButton").button('loading');
-		if("alipay"==payWay||"wx_302"==payWay||"wx_401"==payWay){
+		if("alipay"==payWay||"wx_302"==payWay||"wx_401"==payWay||"wx_weBank"==payWay){
 			$.ajaxFileUpload({
 				url:rootPath +'/check_money/importFileLoadData.do?payWay='+payWay,
 				secureuri:false,
@@ -161,7 +161,29 @@ function impPayData(){
 				
 			});
 		}
-			
+		if("wx_weBank"==payWay){
+			$.ajaxFileUpload({
+				url:rootPath +'/check_money/importWxWeBankFile.do?payWay='+payWay,
+				secureuri:false,
+				fileElementId:'importFile',
+				dataType:'json',
+				success: function (data, status)
+				{
+					$btn.button('reset');
+					if(data.success){
+						alert("成功导入"+data.impDataNum+"条数据");
+					}else{
+						alert(data.errMsg);
+					}
+					
+				},
+				error: function (data, status, e)
+				{
+					alert("【服务器异常，请连续管理员！】"+e);
+				}
+				
+			});
+		}	
 		if("gapay"==payWay){
 			$.ajaxFileUpload({
 				url:rootPath +'/check_money/importWalletFile.do?payWay='+payWay,

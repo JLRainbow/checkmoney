@@ -3,6 +3,7 @@ package com.citic.factory;
 import com.citic.factory.impl.AlipayPayFileHandle;
 import com.citic.factory.impl.WXPayFileHandle;
 import com.citic.factory.impl.WXScanCodePayFileHandle;
+import com.citic.factory.impl.WXWeBankPayFileHandle;
 import com.citic.factory.impl.WalletBankPayFileHandle;
 import com.citic.factory.inf.IPayFileHandle;
 
@@ -28,6 +29,7 @@ public class PayFileHandleFactory {
 			case "wx_302": payFileHandle = new WXPayFileHandle(); break;
 			case "wx_401": payFileHandle = new WXScanCodePayFileHandle(); break;
 			case "gapay": payFileHandle = new WalletBankPayFileHandle(); break;
+			case "wx_weBank": payFileHandle = new WXWeBankPayFileHandle(); break;
 		}
 		return payFileHandle;
 	}

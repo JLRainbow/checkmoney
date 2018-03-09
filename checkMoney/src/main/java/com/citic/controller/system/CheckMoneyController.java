@@ -215,6 +215,34 @@ public class CheckMoneyController extends BaseController {
 		}
 	}
 
+	
+	/**
+	 * 将微众银行支付文件数据导入数据库
+	 */
+	@ResponseBody
+	@RequestMapping("/importWxWeBankFile")
+	@SystemLog(module = "财务对账业务", methods = "财务对账处理（虚虚对账）-importWxWeBankFile") // 记录操作日志
+	public synchronized Map<String, Object> importWxWeBankFile(@RequestParam(value = "file") MultipartFile file,
+			@RequestParam(value = "payWay") String payWay, HttpServletResponse response){
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		if (file.isEmpty()) {
+			resultMap.put("isEmpty", "导入文件内容为空");
+			return resultMap;
+		} else {
+			try {
+				InputStream inputStream = file.getInputStream();
+				resultMap = checkMoneyService.importWxWeBankFile(response, inputStream, payWay);
+				return resultMap;
+			} catch (Exception e) {
+				logger.error("importWxWeBankFile importWxWeBankFile error ==>>", e);
+				resultMap.put("success", false);
+				resultMap.put("errMsg", "导入文件异常,请检查关键字位置配置是否正确或者导入文件是否正确");
+				return resultMap;
+			}
+
+		}
+	}
+	
 	/**
 	 * 导入平台数据Excel
 	 */
