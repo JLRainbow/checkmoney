@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.citic.mapper.WxWebankMapper">
+
+	<update id="updateReciptAmount" parameterType="map">
+		UPDATE t_wx_webank t1
+		LEFT JOIN t_wx_gift_card_buy_record t2 ON
+		t1.check_order = t2.wx_order_id
+		SET
+		t1.recipt_amount = t2.total_price,
+		t1.check_time = NOW()
+		WHERE
+		t1.check_result = 0
+		AND t2.check_result = 0
+		AND t1.fund_type = #{parmsMap.chkReceiptWay}
+		AND t1.pay_date &gt;= #{parmsMap.startTimeChkMoney}
+		AND t1.pay_date &lt;= #{parmsMap.endTimeChkMoney}
+		AND t2.pay_finish_time &gt;= #{parmsMap.startTimeChkMoney}
+		AND t2.pay_finish_time &lt;= #{parmsMap.endTimeChkMoney}
+
+	</update>
+
+	<update id="updateCheckResult" parameterType="map">
+		UPDATE t_wx_webank t1
+		SET t1.check_result =
+		IF (
+		t1.recipt_amount IS NULL,
+		0,
+		CASE
+		WHEN t1.pay_amount - t1.recipt_amount = 0 THEN
+		1
+		ELSE
+		2
+		END
+		)
+		WHERE
+		t1.check_result = 0
+		AND t1.pay_date &gt;= #{parmsMap.startTimeChkMoney}
+		AND t1.pay_date &lt;= #{parmsMap.endTimeChkMoney}
+	</update>
+	
+</mapper>

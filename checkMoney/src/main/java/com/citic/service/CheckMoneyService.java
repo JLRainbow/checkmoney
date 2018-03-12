@@ -35,6 +35,8 @@ public interface CheckMoneyService {
 
 	Map<String, Object> importWxWeBankFile(HttpServletResponse response, InputStream inputStream, String payWay) throws Exception;
 
+	void chkMoneyForWeBank(Map<String, Object> parmsMap);
+
 	
 
 }

@@ -11,7 +11,13 @@ $("#chk_money").click(function (){
 			alert("日期不能为空!")
 		}else{
 			var $btn = $("#chk_money").attr("data-loading-text","对账中...").button('loading');
-			$.post(rootPath +'/check_money/chkMoney.do',
+			var chkMoneyUrl = "";
+			if(chkPayWay=="weBank"){
+				chkMoneyUrl = rootPath +'/check_money/chkMoneyForWeBank.do';
+			}else{
+				chkMoneyUrl = rootPath +'/check_money/chkMoney.do';
+			}
+			$.post(chkMoneyUrl,
 					{'chkPayWay':chkPayWay,'chkReceiptWay':chkReceiptWay,
 					'startTimeChkMoney':startTimeChkMoney,'endTimeChkMoney':endTimeChkMoney},
 					function(result){

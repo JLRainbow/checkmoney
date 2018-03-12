@@ -278,6 +278,7 @@
                                 <option value="支付宝">支付宝</option>
                                 <option value="微信">微信</option>
                                 <option value="国安付/银行卡支付">国安付/银行卡支付</option>
+                                <option value="weBank">微众银行</option>
                             </select>
                         </div>
                     </div>

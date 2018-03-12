@@ -337,12 +337,42 @@ public class CheckMoneyController extends BaseController {
 			resultMap.put("success", true);
 			return resultMap;
 		} catch (Exception e) {
+			logger.error("chkMoney  ==>>",e);
 			resultMap.put("success", false);
 			resultMap.put("errMsg", "对账异常");
 			return resultMap;
 		}
 	}
 
+	/**
+	 * 对账微众银行处理
+	 */
+	@ResponseBody
+	@RequestMapping("/chkMoneyForWeBank")
+	@SystemLog(module = "财务对账业务", methods = "财务对账处理（虚虚对账）-chkMoneyForWeBank") // 记录操作日志
+	public synchronized Map<String, Object> chkMoneyForWeBank(@RequestParam(value = "chkPayWay") String chkPayWay,
+			@RequestParam(value = "chkReceiptWay") String chkReceiptWay,
+			@RequestParam(value = "startTimeChkMoney") String startTimeChkMoney,
+			@RequestParam(value = "endTimeChkMoney") String endTimeChkMoney) {
+		Map<String, Object> parmsMap = new HashMap<String, Object>();
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		parmsMap.put("chkReceiptWay", chkReceiptWay);
+		startTimeChkMoney += " 00:00:00";
+		endTimeChkMoney += " 23:59:59";
+		parmsMap.put("startTimeChkMoney", startTimeChkMoney);
+		parmsMap.put("endTimeChkMoney", endTimeChkMoney);
+		try {
+			checkMoneyService.chkMoneyForWeBank(parmsMap);
+			resultMap.put("success", true);
+			return resultMap;
+		} catch (Exception e) {
+			logger.error("chkMoneyForWeBank  ==>>",e);
+			resultMap.put("success", false);
+			resultMap.put("errMsg", "对账异常");
+			return resultMap;
+		}
+	}
+	
 	/**
 	 * 获取未对账数目
 	 */

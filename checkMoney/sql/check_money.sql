@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50636
 File Encoding         : 65001
 
-Date: 2018-03-06 17:13:10
+Date: 2018-03-12 13:20:50
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -180,7 +180,7 @@ CREATE TABLE `t_channel_management` (
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `comment` varchar(150) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COMMENT='收支渠道管理表';
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COMMENT='收支渠道管理表';
 
 -- ----------------------------
 -- Records of t_channel_management
@@ -196,6 +196,7 @@ INSERT INTO `t_channel_management` VALUES ('17', '银行结算明细（315账户
 INSERT INTO `t_channel_management` VALUES ('18', '银行结算汇总（140账户）', null, '3', '0', '3', '{\"channel_name\":\"银行结算汇总（140账户）\",\"start_line\":\"3\",\"trade_date_position\":\"1\",\"account_position\":\"2\",\"borrow_amount_position\":\"3\",\"loan_amount_position\":\"4\",\"surplus_amount_position\":\"5\",\"opposite_account_position\":\"6\",\"opposite_account_name_position\":\"7\",\"check_order_position\":\"8\",\"abstract_position\":\"10\",\"purpose_position\":\"11\"}\r\n', '2017-07-28 14:50:21', '银行结算汇总（140账户）');
 INSERT INTO `t_channel_management` VALUES ('19', '微信（401账户）', 'wx_401', '1', '0', '1', '{\"channel_name\":\"微信\",\"keywords_num\":\"2\",\"keywords_position\":\"8/12\",\"pay_amount_position\":\"18\",\"refund_amount_position\":\"18\",\"refund_orderId_position\":\"10\",\"pay_date_position\":\"4\",\"start_line\":\"7\",\"end_bottom_line\":\"2\"}', '2017-12-25 16:25:01', '微信401');
 INSERT INTO `t_channel_management` VALUES ('20', '平台微众', 'platform_weBank', '2', '0', '2', 'platform_weBank', '2018-03-05 09:23:26', '平台微众');
+INSERT INTO `t_channel_management` VALUES ('21', '微众银行', 'wx_weBank', '1', '0', '1', '{\"channel_name\":\"微众银行\",\"keywords_num\":\"1\",\"keywords_position\":\"7\",\"pay_amount_position\":\"25\",\"refund_amount_position\":\"26\",\"pay_date_position\":\"1\",\"fund_type_position\":\"10\",\"start_line\":\"1\",\"end_bottom_line\":\"2\"}', '2018-03-08 10:02:01', '微众银行');
 
 -- ----------------------------
 -- Table structure for t_log
@@ -211,11 +212,43 @@ CREATE TABLE `t_log` (
   `opertime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `description` varchar(5000) NOT NULL DEFAULT '' COMMENT '日志描述',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_log
 -- ----------------------------
+INSERT INTO `t_log` VALUES ('1', 'ROOT', '财务对账业务', 'platform-getWxGiftCardBuyRecordList', '1147', '0:0:0:0:0:0:0:1', '2018-03-06 17:18:42', '执行成功!');
+INSERT INTO `t_log` VALUES ('2', 'ROOT', '财务对账业务', '财务对账处理（虚虚对账）-支付渠道导入', '2020', '0:0:0:0:0:0:0:1', '2018-03-07 13:10:13', '执行成功!');
+INSERT INTO `t_log` VALUES ('3', 'ROOT', '财务对账业务', '财务对账处理（虚虚对账）-支付渠道导入', '2014', '0:0:0:0:0:0:0:1', '2018-03-07 13:10:52', '执行成功!');
+INSERT INTO `t_log` VALUES ('4', 'ROOT', '对账系统设置', '财务渠道设置-添加渠道管理', '80', '0:0:0:0:0:0:0:1', '2018-03-08 10:02:02', '执行成功!');
+INSERT INTO `t_log` VALUES ('5', 'ROOT', '财务对账业务', '财务对账处理（虚虚对账）-支付渠道导入', '753', '0:0:0:0:0:0:0:1', '2018-03-08 10:57:59', '执行成功!');
+INSERT INTO `t_log` VALUES ('6', 'ROOT', '财务对账业务', '财务对账处理（虚虚对账）-支付渠道导入', '17', '0:0:0:0:0:0:0:1', '2018-03-08 10:58:23', '执行成功!');
+INSERT INTO `t_log` VALUES ('7', 'ROOT', '对账系统设置', '财务渠道设置-修改渠道管理', '85', '0:0:0:0:0:0:0:1', '2018-03-08 15:23:59', '执行成功!');
+INSERT INTO `t_log` VALUES ('8', 'ROOT', '财务对账业务', '财务对账处理（虚虚对账）-importWxWeBankFile', '82109', '0:0:0:0:0:0:0:1', '2018-03-08 15:27:32', '执行成功!');
+INSERT INTO `t_log` VALUES ('9', 'ROOT', '财务对账业务', '财务对账处理（虚虚对账）-importWxWeBankFile', '683', '0:0:0:0:0:0:0:1', '2018-03-08 15:31:35', '执行成功!');
+INSERT INTO `t_log` VALUES ('10', 'ROOT', '财务对账业务', '财务对账处理（虚虚对账）-importWxWeBankFile', '878', '0:0:0:0:0:0:0:1', '2018-03-08 15:35:41', '执行成功!');
+INSERT INTO `t_log` VALUES ('11', 'ROOT', '财务对账业务', '财务对账处理（虚虚对账）-importWxWeBankFile', '18899', '0:0:0:0:0:0:0:1', '2018-03-09 10:19:29', '执行成功!');
+INSERT INTO `t_log` VALUES ('12', 'ROOT', '财务对账业务', 'platform-getWxGiftCardBuyRecordList', '60924', '0:0:0:0:0:0:0:1', '2018-03-09 10:52:35', '执行成功!');
+INSERT INTO `t_log` VALUES ('13', 'ROOT', '财务对账业务', 'platform-getWxGiftCardBuyRecordList', '928', '0:0:0:0:0:0:0:1', '2018-03-09 10:52:49', '执行成功!');
+INSERT INTO `t_log` VALUES ('14', 'ROOT', '财务对账业务', 'platform-getWxGiftCardBuyRecordList', '74089', '0:0:0:0:0:0:0:1', '2018-03-09 10:56:03', '执行成功!');
+INSERT INTO `t_log` VALUES ('15', 'ROOT', '财务对账业务', 'platform-getWxGiftCardBuyRecordList', '347', '0:0:0:0:0:0:0:1', '2018-03-09 10:57:35', '执行成功!');
+INSERT INTO `t_log` VALUES ('16', 'ROOT', '财务对账业务', 'platform-getWxGiftCardBuyRecordList', '1391', '0:0:0:0:0:0:0:1', '2018-03-09 11:03:51', '执行成功!');
+INSERT INTO `t_log` VALUES ('17', 'ROOT', '财务对账业务', '财务对账处理（虚虚对账）-importWxWeBankFile', '1011', '0:0:0:0:0:0:0:1', '2018-03-09 11:04:36', '执行成功!');
+INSERT INTO `t_log` VALUES ('18', 'ROOT', '财务对账业务', '财务对账处理（虚虚对账）-对账处理', '33964', '0:0:0:0:0:0:0:1', '2018-03-09 11:18:12', '执行成功!');
+INSERT INTO `t_log` VALUES ('19', 'ROOT', '财务对账业务', '财务对账处理（虚虚对账）-对账处理', '55390', '0:0:0:0:0:0:0:1', '2018-03-09 15:02:27', '执行成功!');
+INSERT INTO `t_log` VALUES ('20', 'ROOT', '财务对账业务', '财务对账处理（虚虚对账）-对账处理', '6123', '0:0:0:0:0:0:0:1', '2018-03-09 15:15:48', '执行成功!');
+INSERT INTO `t_log` VALUES ('21', 'ROOT', '财务对账业务', '财务对账处理（虚虚对账）-对账处理', '65', '0:0:0:0:0:0:0:1', '2018-03-09 15:16:28', '执行成功!');
+INSERT INTO `t_log` VALUES ('22', 'ROOT', '财务对账业务', '财务对账处理（虚虚对账）-chkMoneyForWeBank', '53314', '0:0:0:0:0:0:0:1', '2018-03-12 09:59:46', '执行成功!');
+INSERT INTO `t_log` VALUES ('23', 'ROOT', '财务对账业务', '财务对账处理（虚虚对账）-chkMoneyForWeBank', '12752', '0:0:0:0:0:0:0:1', '2018-03-12 10:12:34', '执行成功!');
+INSERT INTO `t_log` VALUES ('24', 'ROOT', '财务对账业务', '财务对账处理（虚虚对账）-chkMoneyForWeBank', '6282', '0:0:0:0:0:0:0:1', '2018-03-12 10:30:58', '执行成功!');
+INSERT INTO `t_log` VALUES ('25', 'ROOT', '财务对账业务', '财务对账处理（虚虚对账）-chkMoneyForWeBank', '98', '0:0:0:0:0:0:0:1', '2018-03-12 10:36:18', '执行成功!');
+INSERT INTO `t_log` VALUES ('26', 'ROOT', '财务对账业务', '财务对账处理（虚虚对账）-chkMoneyForWeBank', '116', '0:0:0:0:0:0:0:1', '2018-03-12 10:48:01', '执行成功!');
+INSERT INTO `t_log` VALUES ('27', 'ROOT', '财务对账业务', '财务对账处理（虚虚对账）-chkMoneyForWeBank', '39', '0:0:0:0:0:0:0:1', '2018-03-12 10:49:13', '执行成功!');
+INSERT INTO `t_log` VALUES ('28', 'ROOT', '财务对账业务', '财务对账处理（虚虚对账）-chkMoneyForWeBank', '95', '0:0:0:0:0:0:0:1', '2018-03-12 10:49:43', '执行成功!');
+INSERT INTO `t_log` VALUES ('29', 'ROOT', '财务对账业务', '财务对账处理（虚虚对账）-chkMoneyForWeBank', '481', '0:0:0:0:0:0:0:1', '2018-03-12 10:54:13', '执行成功!');
+INSERT INTO `t_log` VALUES ('30', 'ROOT', '财务对账业务', '财务对账处理（虚虚对账）-chkMoneyForWeBank', '345', '0:0:0:0:0:0:0:1', '2018-03-12 10:59:37', '执行成功!');
+INSERT INTO `t_log` VALUES ('31', 'ROOT', '财务对账业务', '财务对账处理（虚虚对账）-chkMoneyForWeBank', '149', '0:0:0:0:0:0:0:1', '2018-03-12 11:03:11', '执行成功!');
+INSERT INTO `t_log` VALUES ('32', 'ROOT', '财务对账业务', 'platform-getWxGiftCardBuyRecordList', '594', '0:0:0:0:0:0:0:1', '2018-03-12 13:12:37', '执行成功!');
 
 -- ----------------------------
 -- Table structure for t_resources
@@ -9346,11 +9379,31 @@ CREATE TABLE `t_userlogin` (
   `loginip` varchar(40) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `t_user_loginlist` (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_userlogin
 -- ----------------------------
+INSERT INTO `t_userlogin` VALUES ('1', '6', 'ROOT', '2018-03-06 17:18:20', '0:0:0:0:0:0:0:1');
+INSERT INTO `t_userlogin` VALUES ('2', '6', 'ROOT', '2018-03-07 13:09:43', '0:0:0:0:0:0:0:1');
+INSERT INTO `t_userlogin` VALUES ('3', '6', 'ROOT', '2018-03-08 09:58:28', '0:0:0:0:0:0:0:1');
+INSERT INTO `t_userlogin` VALUES ('4', '6', 'ROOT', '2018-03-08 10:48:11', '0:0:0:0:0:0:0:1');
+INSERT INTO `t_userlogin` VALUES ('5', '6', 'ROOT', '2018-03-08 15:23:25', '0:0:0:0:0:0:0:1');
+INSERT INTO `t_userlogin` VALUES ('6', '6', 'ROOT', '2018-03-08 15:30:23', '0:0:0:0:0:0:0:1');
+INSERT INTO `t_userlogin` VALUES ('7', '6', 'ROOT', '2018-03-08 15:35:11', '0:0:0:0:0:0:0:1');
+INSERT INTO `t_userlogin` VALUES ('8', '6', 'ROOT', '2018-03-09 10:14:18', '0:0:0:0:0:0:0:1');
+INSERT INTO `t_userlogin` VALUES ('9', '6', 'ROOT', '2018-03-09 10:18:48', '0:0:0:0:0:0:0:1');
+INSERT INTO `t_userlogin` VALUES ('10', '6', 'ROOT', '2018-03-09 10:49:36', '0:0:0:0:0:0:0:1');
+INSERT INTO `t_userlogin` VALUES ('11', '6', 'ROOT', '2018-03-09 15:00:58', '0:0:0:0:0:0:0:1');
+INSERT INTO `t_userlogin` VALUES ('12', '6', 'ROOT', '2018-03-12 09:57:59', '0:0:0:0:0:0:0:1');
+INSERT INTO `t_userlogin` VALUES ('13', '6', 'ROOT', '2018-03-12 10:11:59', '0:0:0:0:0:0:0:1');
+INSERT INTO `t_userlogin` VALUES ('14', '6', 'ROOT', '2018-03-12 10:30:13', '0:0:0:0:0:0:0:1');
+INSERT INTO `t_userlogin` VALUES ('15', '6', 'ROOT', '2018-03-12 10:35:52', '0:0:0:0:0:0:0:1');
+INSERT INTO `t_userlogin` VALUES ('16', '6', 'ROOT', '2018-03-12 10:47:33', '0:0:0:0:0:0:0:1');
+INSERT INTO `t_userlogin` VALUES ('17', '6', 'ROOT', '2018-03-12 10:53:46', '0:0:0:0:0:0:0:1');
+INSERT INTO `t_userlogin` VALUES ('18', '6', 'ROOT', '2018-03-12 10:59:02', '0:0:0:0:0:0:0:1');
+INSERT INTO `t_userlogin` VALUES ('19', '6', 'ROOT', '2018-03-12 11:02:49', '0:0:0:0:0:0:0:1');
+INSERT INTO `t_userlogin` VALUES ('20', '6', 'ROOT', '2018-03-12 13:05:40', '0:0:0:0:0:0:0:1');
 
 -- ----------------------------
 -- Table structure for t_user_role
@@ -9400,8 +9453,10 @@ CREATE TABLE `t_wx_gift_card_buy_record` (
   `id` char(32) NOT NULL,
   `wx_order_id` varchar(30) DEFAULT NULL,
   `pay_finish_time` datetime DEFAULT NULL,
-  `total_price` int(10) DEFAULT NULL,
-  `price` int(10) DEFAULT NULL,
+  `total_price` decimal(10,2) DEFAULT NULL,
+  `pay_price` decimal(10,2) DEFAULT NULL,
+  `check_result` char(4) DEFAULT NULL,
+  `price` decimal(10,2) DEFAULT NULL,
   `card_id` varchar(30) DEFAULT NULL,
   `card_code` varchar(15) DEFAULT NULL,
   `create_time` datetime DEFAULT NULL,
@@ -9414,4 +9469,29 @@ CREATE TABLE `t_wx_gift_card_buy_record` (
 
 -- ----------------------------
 -- Records of t_wx_gift_card_buy_record
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for t_wx_webank
+-- ----------------------------
+DROP TABLE IF EXISTS `t_wx_webank`;
+CREATE TABLE `t_wx_webank` (
+  `id` int(20) NOT NULL AUTO_INCREMENT,
+  `fund_type` int(1) DEFAULT NULL COMMENT '款单种类  1（收款）,2（退款）',
+  `check_order` varchar(100) DEFAULT NULL COMMENT '对账用流水号',
+  `pay_amount` decimal(10,2) DEFAULT NULL COMMENT '支付渠道金额',
+  `recipt_amount` decimal(10,2) DEFAULT NULL COMMENT '收款渠道金额',
+  `check_result` char(4) DEFAULT NULL COMMENT '对账结果 0（未对账）,1（对账相符），2（稽查）',
+  `pay_date` datetime DEFAULT NULL COMMENT '支付交易日',
+  `check_time` datetime DEFAULT NULL COMMENT '对账时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_key` (`fund_type`,`check_order`),
+  KEY `index_check_order` (`check_order`),
+  KEY `index_fund_type` (`fund_type`),
+  KEY `index_pay_date` (`pay_date`),
+  KEY `index_check_result` (`check_result`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='微众银行表';
+
+-- ----------------------------
+-- Records of t_wx_webank
 -- ----------------------------

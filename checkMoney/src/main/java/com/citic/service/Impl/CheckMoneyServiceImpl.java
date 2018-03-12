@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 import com.citic.bill.BillFatory;
 import com.citic.bill.IBillDown;
-import com.citic.bill.alipay.AlipayBillDownload;
 import com.citic.bill.util.DateUtil;
 import com.citic.bill.util.FileUtil;
 import com.citic.entity.AccountPaymentChkFormMap;
@@ -34,6 +33,8 @@ import com.citic.factory.load.DataLoadDB;
 import com.citic.mapper.AccountPaymentChkMapper;
 import com.citic.mapper.AccountReceiptChkMapper;
 import com.citic.mapper.ChannelManagementMapper;
+import com.citic.mapper.WxGiftCardMapper;
+import com.citic.mapper.WxWebankMapper;
 import com.citic.service.CheckMoneyService;
 import com.citic.util.CsvUtil;
 
@@ -51,6 +52,11 @@ public class CheckMoneyServiceImpl implements CheckMoneyService {
 	@Autowired
 	private AccountReceiptChkMapper accountReceiptChkMapper;
 
+	@Autowired
+	private WxWebankMapper wxWebankMapper;
+	
+	@Autowired
+	private WxGiftCardMapper wxGiftCardMapper;
 	public Map<String, Object> importFileLoadData(HttpServletResponse response, InputStream inputStream,
 			String payWay) throws Exception {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
@@ -650,5 +656,13 @@ public class CheckMoneyServiceImpl implements CheckMoneyService {
 			resultMap.put("errMsg", "导入异常");
 			return resultMap;
 		}
+	}
+
+	@Override
+	public void chkMoneyForWeBank(Map<String, Object> parmsMap) {
+		wxWebankMapper.updateReciptAmount(parmsMap);
+		wxGiftCardMapper.updatePayPrice(parmsMap);
+		wxWebankMapper.updateCheckResult(parmsMap);
+		wxGiftCardMapper.updateCheckResult(parmsMap);
 	}
 }

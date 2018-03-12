@@ -10,4 +10,5 @@ public interface WxGiftCardBuyRecordMapper  extends BaseMapper{
 
 	
 	List<WxGiftCardBuyRecord> queryWxGiftCardBuyRecord(Map<String, Object> map);
+
 }
