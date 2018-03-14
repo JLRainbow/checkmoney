@@ -11,4 +11,6 @@ public interface OrderReceiptsService {
 
 	void mergePay(Map<String, Object> map);
 
+	List<OrderReceipts> getGiftCardFromPlatform(Map<String, Object> map);
+
 }

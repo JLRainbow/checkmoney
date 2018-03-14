@@ -27,9 +27,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	wgcbr.card_code
 	FROM
 	t_wx_gift_card_buy_record wgcbr
-	WHERE wgcbr.total_price > 1
-	AND wgcbr.create_time >= '2018-02-12 00:00:00'
-	AND wgcbr.pay_finish_time &gt;= #{startTime}
+	WHERE 
+	wgcbr.pay_finish_time &gt;= #{startTime}
 	AND wgcbr.pay_finish_time &lt;= #{endTime}
 	GROUP BY
 	wgcbr.card_code

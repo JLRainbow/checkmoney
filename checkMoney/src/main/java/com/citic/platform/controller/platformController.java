@@ -69,12 +69,20 @@ public class platformController extends BaseController{
 		map.put("endTime", endTime);
 		map.put("DBpayPlatformArray", DBpayPlatformArray);
 		
-		List<OrderReceipts> OrderReceiptsList =null;
+		List<OrderReceipts> OrderReceiptsList = null;
+		List<OrderReceipts> giftCardList = null;
 		try {
 			//手动切换为平台数据源
 			logger.info("get platfrom receipt data start =========>> ");
 			DataSourceContextHolder.setDbType(DataSourceType.SOURCE_PALTFORMDATASOURCE);  
 			OrderReceiptsList = orderReceiptsService.getPlatformPayData(map);
+			//从平台获取礼品卡数据
+			for(String str : DBpayPlatformArray){
+				if("gift_card".equals(str)){
+					giftCardList = orderReceiptsService.getGiftCardFromPlatform(map);
+					break;
+				}
+			}
 			logger.info("get platfrom  receipt data end =========>> ");
 			resultMap.put("success", true);
 		} catch (Exception e) {
@@ -116,9 +124,6 @@ public class platformController extends BaseController{
 				checkResult = 3;//合并支付设置对账结果
 				chargeId = orderReceipts.getId();
 			}
-//			if(orderReceipts.getPaySn()!=null){
-//				chargeId = orderReceipts.getId();
-//			}
 			List<Object> list = new  ArrayList<Object>();
 			list.add(relation_id);
 			list.add(chargeId);
@@ -136,6 +141,28 @@ public class platformController extends BaseController{
 			list.add(mergeFlag);
 			list.add(orderReceipts.getOrderSn());
 			dataList.add(list);
+		}
+		//将礼品卡list添加到dataList
+		if(giftCardList!=null&&giftCardList.size()>0){
+			for(OrderReceipts giftCard : giftCardList){
+				List<Object> list = new  ArrayList<Object>();
+				list.add(giftCard.getCardNo());
+				list.add(giftCard.getOrder_group_id());
+				list.add("礼品卡");
+				list.add(giftCard.getPrice());
+				list.add(giftCard.getPay_status());
+				list.add(giftCard.getPay_time());
+				list.add(giftCard.getStore().getName());
+				list.add(giftCard.getEshop().getName());
+				list.add(giftCard.getEshop_id());
+				list.add(giftCard.getEshop().getSelf());
+				list.add(0);//从t_wx_gift_card_buy_record获取对账结果
+				list.add(1);
+				list.add(1);
+				list.add("");
+				list.add("");
+				dataList.add(list);
+			}
 		}
 		//将整理好的数据load到DB中
 		 String sql = "LOAD DATA LOCAL INFILE 'xx.csv' "+
@@ -360,6 +387,7 @@ public class platformController extends BaseController{
 			list.add(wxGiftCardBuyRecord.getCardId());
 			list.add(wxGiftCardBuyRecord.getCardCode());
 			list.add(Common.fromDateH());
+			list.add(0);
 			dataList.add(list);
 		}
 			
@@ -370,7 +398,7 @@ public class platformController extends BaseController{
 					"FIELDS TERMINATED by ',' "+
 					"LINES TERMINATED by '\r\n' "+
 					"(id,wx_order_id,pay_finish_time,total_price,price,card_id,"
-					+ "card_code,create_time)";	
+					+ "card_code,create_time,check_result)";	
 		int x = 0;//load数量
 		try {
 			x = DataLoadDB.load(new CsvUtil(), dataList, "/wx_gift_card_buy_record.csv", sql);

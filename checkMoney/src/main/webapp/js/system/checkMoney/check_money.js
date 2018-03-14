@@ -418,7 +418,7 @@ $("#platformWeBankImpBtn").click(function(){
 		if(startTime==""||endTime==""){
 			alert("日期不能为空!")
 		}else{
-			var $btn = $("#DBimp").button('loading');
+			var $btn = $("#platformWeBankImpBtn").button('loading');
 			
 			
 				$.post(rootPath +'/platform/getWxGiftCardBuyRecordList.do',

@@ -89,4 +89,14 @@ public class OrderReceiptsServiceImpl implements OrderReceiptsService {
 		return parseDBpayPlatform;
 	}
 
+
+	@Override
+	public List<OrderReceipts> getGiftCardFromPlatform(Map<String, Object> map) {
+		try {
+			return orderReceiptsMapper.queryGiftCardFromPlatform(map);
+		} catch (Exception e) {
+			throw new RuntimeException();
+		}
+	}
+
 }

@@ -33,6 +33,8 @@ public class OrderReceipts {
 
 	private String orderSn;//订单编号
 	
+	private String cardNo;//礼品卡号
+	
 	public String getId() {
 		return id;
 	}
@@ -151,6 +153,14 @@ public class OrderReceipts {
 
 	public void setOrderSn(String orderSn) {
 		this.orderSn = orderSn;
+	}
+
+	public String getCardNo() {
+		return cardNo;
+	}
+
+	public void setCardNo(String cardNo) {
+		this.cardNo = cardNo;
 	}
 	
 	

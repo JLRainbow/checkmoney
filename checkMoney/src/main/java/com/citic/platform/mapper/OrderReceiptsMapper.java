@@ -13,4 +13,6 @@ public interface OrderReceiptsMapper extends BaseMapper{
 
 	List<AccountReceiptChkFormMap> getMergePay(Map<String, Object> map);
 
+	List<OrderReceipts> queryGiftCardFromPlatform(Map<String, Object> map);
+
 }
