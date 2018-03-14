@@ -31,6 +31,8 @@ public interface AccountReceiptChkMapper extends BaseMapper{
 
 	void updateChkResultByRelationId(@Param(value="relationId")String relationId);
 
+	void chkMoneyForGiftCard(Map<String, Object> parmsMap);
+
 
 
 }

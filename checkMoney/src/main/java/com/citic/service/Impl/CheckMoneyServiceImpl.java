@@ -665,4 +665,10 @@ public class CheckMoneyServiceImpl implements CheckMoneyService {
 		wxWebankMapper.updateCheckResult(parmsMap);
 		wxGiftCardMapper.updateCheckResult(parmsMap);
 	}
+
+	@Override
+	public void chkMoneyForGiftCard(Map<String, Object> parmsMap) {
+		
+		accountReceiptChkMapper.chkMoneyForGiftCard(parmsMap);
+	}
 }

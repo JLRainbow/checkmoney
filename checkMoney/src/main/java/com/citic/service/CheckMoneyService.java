@@ -37,6 +37,8 @@ public interface CheckMoneyService {
 
 	void chkMoneyForWeBank(Map<String, Object> parmsMap);
 
+	void chkMoneyForGiftCard(Map<String, Object> parmsMap);
+
 	
 
 }

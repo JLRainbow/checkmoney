@@ -14,6 +14,8 @@ $("#chk_money").click(function (){
 			var chkMoneyUrl = "";
 			if(chkPayWay=="weBank"){
 				chkMoneyUrl = rootPath +'/check_money/chkMoneyForWeBank.do';
+			}else if(chkPayWay=="gift_card"){
+				chkMoneyUrl = rootPath +'/check_money/chkMoneyForGiftCard.do';
 			}else{
 				chkMoneyUrl = rootPath +'/check_money/chkMoney.do';
 			}
