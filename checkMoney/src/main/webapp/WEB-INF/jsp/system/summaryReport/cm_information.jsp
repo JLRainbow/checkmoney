@@ -58,6 +58,7 @@
 		                <option value="支付宝">支付宝</option>
 		                <option value="支付宝扫码">支付宝扫码</option>
 		                <option value="国安付/银行卡支付">国安付/银行卡支付</option>
+		                <option value="礼品卡">礼品卡</option>
 		           	</select>
 	           	</div>
 	            <label>开始日期</label>
