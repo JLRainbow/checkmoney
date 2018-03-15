@@ -12,7 +12,6 @@ import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
-import com.citic.bill.alipay.AlipayBillDownload;
 import com.citic.bill.util.CommonUtil;
 import com.citic.bill.util.ConfigUtil;
 import com.citic.bill.util.CsvUtil;
@@ -20,7 +19,7 @@ import com.citic.bill.util.FileUtil;
 import com.citic.bill.util.WXPayCommonUtil;
 
 /**
- * Î¢ĞÅÏÂÔØ¶ÔÕËµ¥
+ * å¾®ä¿¡ä¸‹è½½å¯¹è´¦å•
  * @author jial
  *
  */
@@ -32,42 +31,42 @@ public class WXBillDownload {
 
     protected Map<String, Object> billDownload(String appid,String mch_id,String appKey,String billDate) throws IOException{
         SortedMap<Object,Object> parameters =new TreeMap<Object,Object>();
-        //ÉèÖÃ±Ø´«²ÎÊı
+        //è®¾ç½®å¿…ä¼ å‚æ•°
         parameters.put("appid",appid);
         parameters.put("mch_id",mch_id);
         parameters.put("nonce_str",WXPayCommonUtil.CreateNoncestr());
-        parameters.put("bill_date",billDate);//ÏÂÔØ¶ÔÕËµ¥µÄÈÕÆÚ£¬¸ñÊ½£º20140603£¬ÈÕÆÚ²»¿ÉÎªµ±Ìì¡£
-        //bill_type:ALL·µ»Øµ±ÈÕËùÓĞ¶©µ¥ĞÅÏ¢,Ä¬ÈÏÖµSUCCESS·µ»Øµ±ÈÕ³É¹¦Ö§¸¶µÄ¶©µ¥¡£REFUND£¬·µ»Øµ±ÈÕÍË¿î¶©µ¥
+        parameters.put("bill_date",billDate);//ä¸‹è½½å¯¹è´¦å•çš„æ—¥æœŸï¼Œæ ¼å¼ï¼š20140603ï¼Œæ—¥æœŸä¸å¯ä¸ºå½“å¤©ã€‚
+        //bill_type:ALLè¿”å›å½“æ—¥æ‰€æœ‰è®¢å•ä¿¡æ¯,é»˜è®¤å€¼SUCCESSè¿”å›å½“æ—¥æˆåŠŸæ”¯ä»˜çš„è®¢å•ã€‚REFUNDï¼Œè¿”å›å½“æ—¥é€€æ¬¾è®¢å•
         parameters.put("bill_type","ALL");
         parameters.put("sign", WXPayCommonUtil.createSign("utf-8", parameters,appKey));
         try {
-			//½«²ÎÊı×ª»»³Éxml¸ñÊ½·¢ËÍÇëÇó
+			//å°†å‚æ•°è½¬æ¢æˆxmlæ ¼å¼å‘é€è¯·æ±‚
 			String reuqestXml =WXPayCommonUtil.getRequestXml(parameters);
 			String result=CommonUtil.httpsRequest(ConfigUtil.WX_DOWNLOAD_BILL_URL, "POST",reuqestXml);
 
-			if(result.startsWith("<xml>")){//²éÑ¯ÈÕÆÚÎªµ±ÌìÊ±£¬´íÎóĞÅÏ¢ÌáÊ¾ÈÕÆÚÎŞĞ§
+			if(result.startsWith("<xml>")){//æŸ¥è¯¢æ—¥æœŸä¸ºå½“å¤©æ—¶ï¼Œé”™è¯¯ä¿¡æ¯æç¤ºæ—¥æœŸæ— æ•ˆ
 				logger.error("wx invoking billdown error ==>>"+result);
 				resultMap.put("success", false);
-			    resultMap.put("errMsg", "Î¢ĞÅµ÷ÓÃÊ§°Ü");
+			    resultMap.put("errMsg", "å¾®ä¿¡è°ƒç”¨å¤±è´¥");
 			    return resultMap;
 			}else {  
 				logger.info(" ======================>>  wx invoking billdown success ");
-				String[] resultArray = result.replace("·ÑÂÊ", "·ÑÂÊ%").split("%");
+				String[] resultArray = result.replace("è´¹ç‡", "è´¹ç‡%").split("%");
 				List<String> dataList = new ArrayList<String>();
 				for (int i = 0; i < resultArray.length; i++) {
 					dataList.add(resultArray[i]);
 				}
-				dataList.add("`");//Éú³ÉcsvµÄ×îºóÒ»ĞĞÊÇÒ»¸ö` ·ÀÖ¹¶ÁÈ¡csv¶à¶ÁÈ¡Ò»ĞĞ
+				dataList.add("`");//ç”Ÿæˆcsvçš„æœ€åä¸€è¡Œæ˜¯ä¸€ä¸ª` é˜²æ­¢è¯»å–csvå¤šè¯»å–ä¸€è¡Œ
 				CsvUtil csvUtil = new CsvUtil();
-				//´´½¨Õâ´ÎÏÂÔØµÄÎÄ¼ş¼Ğ
+				//åˆ›å»ºè¿™æ¬¡ä¸‹è½½çš„æ–‡ä»¶å¤¹
 				File thisTimeFile =new File(FileUtil.getBillPath());    
-	    		//Èç¹ûÎÄ¼ş¼Ğ²»´æÔÚÔò´´½¨    
+	    		//å¦‚æœæ–‡ä»¶å¤¹ä¸å­˜åœ¨åˆ™åˆ›å»º    
 	    		if (!thisTimeFile .exists()){  
 	    			thisTimeFile .mkdirs();  
 	    		    logger.debug("================>> thisTimeFile path is create success");
 	    		} 
 				try {
-					///±£´æÕâ´ÎÏÂÔØµÄÎÄ¼ş
+					///ä¿å­˜è¿™æ¬¡ä¸‹è½½çš„æ–‡ä»¶
 					csvUtil.createCsv(dataList, FileUtil.getBillPath()+billDate+"_wx.csv");
 					logger.info("================>> wx createCsv success");
 					resultMap.put("success", true);
@@ -75,14 +74,14 @@ public class WXBillDownload {
 				} catch (Exception e) {
 					logger.error("wx createCsv error ==>>",e);
 					resultMap.put("success", false);
-				    resultMap.put("errMsg", "Î¢ĞÅÕËµ¥Éú³ÉcsvÎÄ¼ş´íÎó");
+				    resultMap.put("errMsg", "å¾®ä¿¡è´¦å•ç”Ÿæˆcsvæ–‡ä»¶é”™è¯¯");
 				    return resultMap;
 				}
 			}
 		} catch (Exception e) {
 			logger.error("wx httpsRequest() error ==>>",e);
 			resultMap.put("success", false);
-		    resultMap.put("errMsg", "Î¢ĞÅÇëÇó½Ó¿ÚÒì³£");
+		    resultMap.put("errMsg", "å¾®ä¿¡è¯·æ±‚æ¥å£å¼‚å¸¸");
 		    return resultMap;
 		}
     }
