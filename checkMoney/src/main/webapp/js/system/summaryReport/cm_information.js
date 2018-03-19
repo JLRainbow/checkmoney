@@ -4,8 +4,22 @@ $(function() {
 	getGrid(chanelType);
 	$("#chanelType").change(function (){
 		var chanelType = $("#chanelType").val();
-		getGrid(chanelType);
+		
+		if(chanelType=="weBank"){
+			$("#pay_platformDIV").css('display','none');
+			$("#channel_nameDIV").css('display','none');
+			$("#weBankDIV").css('display','block');
+			var weBankType = $("#weBankType").val();
+			getWeBank(weBankType);
+			$("#weBankType").change(function (){
+				var weBankType = $("#weBankType").val();
+				getWeBank(weBankType);
+			});
+		}else{
+			getGrid(chanelType);
+		}
 	});
+	
 });
  $("#search").click("click", function() {// 绑定查询按扭
  
@@ -119,6 +133,8 @@ function getGrid(chanelType){
 		//选择渠道改变时查询条件改变
 		$("#pay_platformDIV").css('display','block');
 		$("#channel_nameDIV").css('display','none');
+		
+		$("#weBankDIV").css('display','none');
 		grid = lyGrid({
 			id : 'paging',
 			l_column : [ {
@@ -211,6 +227,7 @@ function getGrid(chanelType){
 	if(chanelType=="支付渠道"){
 		$("#pay_platformDIV").css('display','none');
 		$("#channel_nameDIV").css('display','block');
+		$("#weBankDIV").css('display','none');
 		grid = lyGrid({
 			id : 'paging',
 			l_column : [ {
@@ -287,4 +304,128 @@ function getGrid(chanelType){
 		        	"check_order":check_order}
 		});
 	}
+	
 };
+
+function getWeBank(weBankType){
+	var check_result = $("#check_result").val();
+	var startTime=$("#startTime").val();
+	var endTime=$("#endTime").val();
+	var fund_type=$("#fund_type").val();
+	var check_order=$("#check_order").val();
+	if(weBankType=="微信支付"){
+		grid = lyGrid({
+			id : 'paging',
+			l_column : [ {
+				colkey : "id",
+				name : "id",
+				width : "50px",
+				hide : true
+			}, {
+				colkey : "pay_date",
+				name : "销售日期",
+				width : "70px",
+				isSort:true,
+				renderData : function(rowindex,data, rowdata, column) {
+					return new Date(data).format("yyyy-MM-dd");
+				}
+			},{
+				colkey : "check_order",
+				name : "流水号",
+				width : "160px",
+				isSort:true,
+			},  {
+				colkey : "pay_amount",
+				name : "收款金额",
+				width : "50px",
+			},  {
+				colkey : "recipt_amount",
+				name : "支付金额",
+				width : "50px",
+			}, {
+				colkey : "check_result",
+				name : "对账状态",
+				width : "80px",
+				renderData : function(rowindex, data, rowdata, column) {
+					if(data=="0"){
+						return "未对账";
+					}else if(data=="1"){
+						return "对账符合";
+					}else if(data=="2"){
+						return "稽查";
+					}
+				},
+			} ],
+			jsonUrl :  rootPath +'/summary_report/weBankFindByPage.do',
+			checkbox : false,
+			serNumber : true,// 是否显示序号
+			data : {"weBankType":weBankType,
+					"check_result":check_result,
+					"fund_type":fund_type,
+		        	"startTime":startTime,
+		        	"endTime":endTime,
+		        	"check_order":check_order}
+		});
+	}
+	if(weBankType=="平台收款"){
+
+		grid = lyGrid({
+			id : 'paging',
+			l_column : [ {
+				colkey : "id",
+				name : "id",
+				width : "50px",
+				hide : true
+			}, {
+				colkey : "pay_finish_time",
+				name : "支付完成时间",
+				width : "70px",
+				isSort:true,
+				renderData : function(rowindex,data, rowdata, column) {
+					return new Date(data).format("yyyy-MM-dd");
+				}
+			},{
+				colkey : "wx_order_id",
+				name : "微信订单号(流水号)",
+				width : "160px",
+				isSort:true,
+			},{
+				colkey : "card_code",
+				name : "卡号",
+				width : "160px",
+				isSort:true,
+			},  {
+				colkey : "total_price",
+				name : "收款金额",
+				width : "50px",
+			},  {
+				colkey : "pay_price",
+				name : "支付金额",
+				width : "50px",
+			}, {
+				colkey : "check_result",
+				name : "对账状态",
+				width : "80px",
+				renderData : function(rowindex, data, rowdata, column) {
+					if(data=="0"){
+						return "未对账";
+					}else if(data=="1"){
+						return "对账符合";
+					}else if(data=="2"){
+						return "稽查";
+					}
+				},
+			}],
+			jsonUrl :  rootPath +'/summary_report/weBankFindByPage.do',
+			checkbox : false,
+			serNumber : true,// 是否显示序号
+			data : {"weBankType":weBankType,
+					"check_result":check_result,
+					"fund_type":fund_type,
+		        	"startTime":startTime,
+		        	"endTime":endTime,
+		        	"check_order":check_order}
+		});
+	
+	}
+}

@@ -20,9 +20,13 @@ import com.citic.service.SummaryReportService;
 import com.citic.entity.AccountPaymentChkFormMap;
 import com.citic.entity.AccountReceiptChkFormMap;
 import com.citic.entity.ChannelManagementFormMap;
+import com.citic.entity.WxGigtCardBuyRecordFormMap;
+import com.citic.entity.WxWeBankFormMap;
 import com.citic.mapper.AccountPaymentChkMapper;
 import com.citic.mapper.AccountReceiptChkMapper;
 import com.citic.mapper.ChannelManagementMapper;
+import com.citic.mapper.WxGiftCardMapper;
+import com.citic.mapper.WxWebankMapper;
 import com.citic.plugin.PageView;
 import com.citic.util.Common;
 import com.citic.util.ExcelUtil1;
@@ -45,6 +49,12 @@ public class SummaryReportController extends BaseController {
 	
 	@Autowired
 	private ChannelManagementMapper channelManagementMapper;
+	
+	@Autowired
+	private WxWebankMapper wxWebankMapper;
+	
+	@Autowired
+	private WxGiftCardMapper wxGiftCardMapper;
 	
 	@RequestMapping("/cm_information")
 	public String cmInformation(Model model) throws Exception {
@@ -295,5 +305,74 @@ public class SummaryReportController extends BaseController {
 		}
 	}
 	
+	/**
+	 * 
+	 *条件查询
+	 */
+	@ResponseBody
+	@RequestMapping("/weBankFindByPage")
+	public PageView weBankFindByPage(String pageNow,String pageSize, String column,String sort
+			,@RequestParam(value ="startTime") String startTime
+			,@RequestParam(value ="endTime") String endTime
+			,@RequestParam(value ="fund_type") String fund_type
+			,@RequestParam(value ="weBankType") String weBankType
+			,@RequestParam(value ="check_order") String check_order
+			,@RequestParam(value ="check_result",defaultValue ="") String check_result) throws Exception {
+		startTime+=" 00:00:00";
+		endTime+=" 23:59:59";
+		if("微信支付".equals(weBankType)){
+			WxWeBankFormMap wxWeBankFormMap = getFormMap(WxWeBankFormMap.class);
+			
+			String sql="    fund_type in ( "+fund_type+")";
+			if(startTime.length()!=9&&endTime.length()!=9){
+				sql+=" AND pay_date >='"+startTime+"' AND pay_date <='"+endTime+"'";
+			}
+			if(!check_result.isEmpty()){
+				sql+=" AND check_result = "+check_result;
+			}
+			
+			if(!check_order.isEmpty()){
+				sql+=" AND check_order LIKE '%"+check_order+"%'";
+			}
+			wxWeBankFormMap.put("where", sql);
+			String order = "";
+			if(Common.isNotEmpty(column)){
+				order = " order by "+column+" "+sort;
+			}else{
+				order = " order by pay_date desc";
+			}
+			wxWeBankFormMap.put("orderby", order);
+			wxWeBankFormMap=toFormMap(wxWeBankFormMap, pageNow, pageSize,wxWeBankFormMap.getStr("orderby"));
+			pageView.setRecords(wxWebankMapper.findByPage(wxWeBankFormMap));
+			
+		}
+		if("平台收款".equals(weBankType)){
+			WxGigtCardBuyRecordFormMap wxGigtCardBuyRecordFormMap = getFormMap(WxGigtCardBuyRecordFormMap.class);
+			
+			String sql="   1=1";
+			if(startTime.length()!=9&&endTime.length()!=9){
+				sql+=" AND pay_finish_time >='"+startTime+"' AND pay_finish_time <='"+endTime+"'";
+			}
+			if(!check_result.isEmpty()){
+				sql+=" AND check_result = "+check_result;
+			}
+			
+			if(!check_order.isEmpty()){
+				sql+=" AND wx_order_id LIKE '%"+check_order+"%'";
+			}
+			wxGigtCardBuyRecordFormMap.put("where", sql);
+			String order = "";
+			if(Common.isNotEmpty(column)){
+				order = " order by "+column+" "+sort;
+			}else{
+				order = " order by pay_finish_time desc";
+			}
+			wxGigtCardBuyRecordFormMap.put("orderby", order);
+			wxGigtCardBuyRecordFormMap=toFormMap(wxGigtCardBuyRecordFormMap, pageNow, pageSize,wxGigtCardBuyRecordFormMap.getStr("orderby"));
+			pageView.setRecords(wxGiftCardMapper.findByPage(wxGigtCardBuyRecordFormMap));
+			
+		}
+		return pageView;
+	}
 	 
 }

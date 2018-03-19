@@ -20,6 +20,7 @@
 	           	<select class="form-control" id="chanelType" name="chanelType">
 	                <option value="支付渠道">支付渠道</option>
 	                <option value="收款渠道">收款渠道</option>
+	                <option value="weBank">微众银行</option>
 	            </select>
 				<label class="control-label">流水号</label> 
 				<input class="input-medium ui-autocomplete-input form-control" id="check_order" name="check_order">
@@ -59,6 +60,13 @@
 		                <option value="支付宝扫码">支付宝扫码</option>
 		                <option value="国安付/银行卡支付">国安付/银行卡支付</option>
 		                <option value="礼品卡">礼品卡</option>
+		           	</select>
+	           	</div>
+	           	<div id="weBankDIV"  style="display: none;">
+		           	<label>支付平台</label>
+		           	<select class="form-control" id="weBankType">
+		                <option value="微信支付">微信支付</option>
+		                <option value="平台收款">平台收款</option>
 		           	</select>
 	           	</div>
 	            <label>开始日期</label>

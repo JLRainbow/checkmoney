@@ -1,0 +1,1 @@
+ALTER TABLE t_wx_gift_card_buy_record ADD `fund_type` int(1) NOT NULL COMMENT '款单种类  1（收款）,2（退款）'
