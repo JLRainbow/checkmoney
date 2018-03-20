@@ -22,25 +22,7 @@
 	                <option value="收款渠道">收款渠道</option>
 	                <option value="weBank">微众银行</option>
 	            </select>
-				<label class="control-label">流水号</label> 
-				<input class="input-medium ui-autocomplete-input form-control" id="check_order" name="check_order">
-	            <label>对账状态</label>
-	           	<select class="form-control" id="check_result" name="check_result">
-	                <option value="">全选</option>
-	                <option value="0">未对账</option>
-	                <option value="1">对账符合</option>
-	                <option value="2">稽查</option>
-	           	</select>
-	           	<label>收款/退款</label>
-	           	<select class="form-control" id="fund_type" name="fund_type">
-	                <option value="1,2">全选</option>
-	                <option value="1">收款</option>
-	                <option value="2">退款</option>
-	           	</select>
-	           	
-	        </div>
-           	<div class="form-block">
-           		<div id="channel_nameDIV">
+	            <div id="channel_nameDIV">
 	           		<label>支付渠道</label>
 		           	<select class="form-control" id="channel_name" name="channel_name">
 		                <option value="">全选</option>
@@ -59,7 +41,7 @@
 		                <option value="支付宝">支付宝</option>
 		                <option value="支付宝扫码">支付宝扫码</option>
 		                <option value="国安付/银行卡支付">国安付/银行卡支付</option>
-		                <option value="礼品卡">礼品卡</option>
+		                <option value="礼品卡支付">礼品卡支付</option>
 		           	</select>
 	           	</div>
 	           	<div id="weBankDIV"  style="display: none;">
@@ -69,6 +51,25 @@
 		                <option value="平台收款">平台收款</option>
 		           	</select>
 	           	</div>
+				
+	            <label>对账状态</label>
+	           	<select class="form-control" id="check_result" name="check_result">
+	                <option value="">全选</option>
+	                <option value="0">未对账</option>
+	                <option value="1">对账符合</option>
+	                <option value="2">稽查</option>
+	           	</select>
+	           	<label>收款/退款</label>
+	           	<select class="form-control" id="fund_type" name="fund_type">
+	                <option value="1,2">全选</option>
+	                <option value="1">收款</option>
+	                <option value="2">退款</option>
+	           	</select>
+	           	
+	        </div>
+           	<div class="form-block">
+           		<label class="control-label">流水号</label> 
+				<input class="input-medium ui-autocomplete-input form-control" id="check_order" name="check_order">
 	            <label>开始日期</label>
 	            <div class="input-append date form_datetime" id="datetimepicker1" data-date="" data-date-format="yyyy-mm-dd">
 	                <input id="startTime" name="startTime" type="text" value="" readonly="" class="form-control">

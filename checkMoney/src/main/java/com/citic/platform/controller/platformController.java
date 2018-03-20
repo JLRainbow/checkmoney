@@ -76,7 +76,7 @@ public class platformController extends BaseController{
 			logger.info("get platfrom receipt data start =========>> ");
 			DataSourceContextHolder.setDbType(DataSourceType.SOURCE_PALTFORMDATASOURCE);  
 			OrderReceiptsList = orderReceiptsService.getPlatformPayData(map);
-			//从平台获取礼品卡数据
+			//从平台获取礼品卡支付数据
 			for(String str : DBpayPlatformArray){
 				if("gift_card".equals(str)){
 					giftCardList = orderReceiptsService.getGiftCardFromPlatform(map);
@@ -142,13 +142,13 @@ public class platformController extends BaseController{
 			list.add(orderReceipts.getOrderSn());
 			dataList.add(list);
 		}
-		//将礼品卡list添加到dataList
+		//将礼品卡支付list添加到dataList
 		if(giftCardList!=null&&giftCardList.size()>0){
 			for(OrderReceipts giftCard : giftCardList){
 				List<Object> list = new  ArrayList<Object>();
 				list.add(giftCard.getCardNo());
 				list.add(giftCard.getOrder_group_id());
-				list.add("礼品卡");
+				list.add("礼品卡支付");
 				list.add(giftCard.getPrice());
 				list.add(giftCard.getPay_status());
 				list.add(giftCard.getPay_time());

@@ -172,7 +172,7 @@
 								    <option value="alipay">支付宝</option>
 								    <option value="alipay_qr">支付宝扫码</option>
 									<option value="gapay,union_pay">国安付/银行卡支付</option>
-									<option value="gift_card">礼品卡</option>
+									<option value="gift_card">礼品卡支付</option>
 									<option value="pos">POS</option>
 									<option value="cash">现金</option>
 								  </select>
@@ -280,7 +280,7 @@
                                 <option value="微信">微信</option>
                                 <option value="国安付/银行卡支付">国安付/银行卡支付</option>
                                 <option value="weBank">微众银行</option>
-                                <option value="gift_card">礼品卡</option>
+                                <option value="gift_card">礼品卡支付</option>
                             </select>
                         </div>
                     </div>

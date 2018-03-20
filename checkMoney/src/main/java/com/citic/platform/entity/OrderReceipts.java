@@ -33,7 +33,7 @@ public class OrderReceipts {
 
 	private String orderSn;//订单编号
 	
-	private String cardNo;//礼品卡号
+	private String cardNo;//礼品卡支付号
 	
 	public String getId() {
 		return id;

@@ -387,17 +387,21 @@ function getWeBank(weBankType){
 			},{
 				colkey : "wx_order_id",
 				name : "微信订单号(流水号)",
-				width : "160px",
+				width : "170px",
 				isSort:true,
 			},{
 				colkey : "card_code",
 				name : "卡号",
-				width : "160px",
+				width : "100px",
 				isSort:true,
 			},  {
+				colkey : "price",
+				name : "收款明细金额",
+				width : "80px",
+			},  {
 				colkey : "total_price",
-				name : "收款金额",
-				width : "50px",
+				name : "收款合并金额",
+				width : "80px",
 			},  {
 				colkey : "pay_price",
 				name : "支付金额",

@@ -116,7 +116,7 @@
 		ELSE 0
 		END)
 		WHERE
-		t1.pay_platform = '礼品卡'
+		t1.pay_platform = '礼品卡支付'
 		AND t1.check_result = 0
 		AND t1.receipt_date &gt;= #{startTimeChkMoney} 
 		AND t1.receipt_date &lt;= #{endTimeChkMoney};
