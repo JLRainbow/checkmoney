@@ -26,9 +26,11 @@ import com.citic.controller.index.BaseController;
 import com.citic.entity.AccountPaymentChkFormMap;
 import com.citic.entity.AccountReceiptChkFormMap;
 import com.citic.entity.ChannelManagementFormMap;
+import com.citic.entity.WxGigtCardBuyRecordFormMap;
 import com.citic.mapper.AccountPaymentChkMapper;
 import com.citic.mapper.AccountReceiptChkMapper;
 import com.citic.mapper.ChannelManagementMapper;
+import com.citic.mapper.WxGiftCardMapper;
 import com.citic.plugin.PageView;
 import com.citic.service.CheckMoneyService;
 import com.citic.util.Common;
@@ -52,7 +54,9 @@ public class CheckMoneyController extends BaseController {
 	private AccountPaymentChkMapper accountPaymentChkMapper;
 	@Autowired
 	private AccountReceiptChkMapper accountReceiptChkMapper;
-
+	@Autowired
+	private WxGiftCardMapper wxGiftCardMapper;
+	
 	@RequestMapping("/channel_management")
 	public String payChannel(Model model) throws Exception {
 		model.addAttribute("res", findByRes());
@@ -522,5 +526,38 @@ public class CheckMoneyController extends BaseController {
 		checkMoneyService.chkMoneyByRelationId(relationId);
 		map.put("success", "对账结束");
 		return map;
+	}
+	
+	/**
+	 * 礼品卡支付通过某个流水号对账
+	 */
+	@ResponseBody
+	@RequestMapping("/chkMoneyForWxGiftCardByRelationId")
+	@SystemLog(module = "财务对账业务", methods = "财务对账处理（虚虚对账）-chkMoneyForWxGiftCardByRelationId") // 记录操作日志
+	public synchronized Map<String, Object> chkMoneyForWxGiftCardByRelationId(
+			@RequestParam(value = "relationId") String relationId
+			, @RequestParam(value = "fundType") String fundType) {
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		// 判断数据库有没有这条数据 有的话进行对账
+		WxGigtCardBuyRecordFormMap wxGigtCardBuyRecordFormMap = new WxGigtCardBuyRecordFormMap();
+		wxGigtCardBuyRecordFormMap.put("where", "where card_code = '"+relationId+"' AND fund_type = '"+fundType+"'");
+		List<WxGigtCardBuyRecordFormMap> list = wxGiftCardMapper.findByWhere(wxGigtCardBuyRecordFormMap);
+		if(list.size()==0){
+			resultMap.put("success", false);
+			resultMap.put("errMsg", "微众银行无该卡号交易记录");
+			return resultMap;
+		}
+		if(list.size()==1){
+			String checkResult = (String) list.get(0).get("check_result");
+			if("0".equals(checkResult)){
+				resultMap.put("success", false);
+				resultMap.put("errMsg", "请先对账该卡号在微众银行的交易记录");
+				return resultMap;
+			}else{
+				checkMoneyService.chkMoneyForWxGiftCardByRelationId(relationId);
+				resultMap.put("success", true);
+			}
+		}
+		return resultMap;
 	}
 }

@@ -121,4 +121,18 @@
 		AND t1.receipt_date &gt;= #{startTimeChkMoney} 
 		AND t1.receipt_date &lt;= #{endTimeChkMoney};
 	</update>
+	<update id="chkMoneyForWxGiftCardByRelationId" parameterType="java.lang.String">
+		UPDATE
+		t_account_receipt_chk t1
+		LEFT JOIN t_wx_gift_card_buy_record t2
+		ON t1.relation_id = t2.card_code
+		SET t1.check_result =
+		(CASE
+		WHEN t2.check_result = 1 THEN 1
+		WHEN t2.check_result = 2 THEN 2
+		ELSE 0
+		END)
+		WHERE
+		t1.relation_id = #{relationId}
+	</update>
 </mapper>

@@ -671,4 +671,10 @@ public class CheckMoneyServiceImpl implements CheckMoneyService {
 		
 		accountReceiptChkMapper.chkMoneyForGiftCard(parmsMap);
 	}
+
+	@Override
+	public void chkMoneyForWxGiftCardByRelationId(String relationId) {
+		
+		accountReceiptChkMapper.chkMoneyForWxGiftCardByRelationId(relationId);
+	}
 }

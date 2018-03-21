@@ -39,6 +39,8 @@ public interface CheckMoneyService {
 
 	void chkMoneyForGiftCard(Map<String, Object> parmsMap);
 
+	void chkMoneyForWxGiftCardByRelationId(String relationId);
+
 	
 
 }

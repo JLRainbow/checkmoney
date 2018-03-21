@@ -121,6 +121,38 @@ $(function() {
 							post_flag =false; //在提交成功之后将标志标记为可提交状态
 			},"json")
  }
+ function chkMoneyForWxGiftCardByRelationId(relationId,fundType){
+	 $("body").mLoading("show");
+	 if(post_flag) return; //如果正在提交则直接返回，停止执行
+	 post_flag = true;//标记当前状态为正在提交状态
+	 $.post(rootPath +'/check_money/chkMoneyForWxGiftCardByRelationId.do',
+				{'relationId':relationId,'fundType':fundType},
+				function(result){
+					var check_result = $("#check_result").val();
+				    var startTime=$("#startTime").val();
+					var endTime=$("#endTime").val();
+					var fund_type=$("#fund_type").val();
+					var channel_name=$("#channel_name").val();
+					var pay_platform=$("#pay_platform").val();
+					var check_order=$("#check_order").val();
+				    grid.setOptions({//设置参数，具体参数与表格参数一致
+				        data : {"check_result":check_result,
+					        	"startTime":startTime,
+					        	"fund_type":fund_type,
+					        	"endTime":endTime,
+					        	"channel_name":channel_name,
+					        	"pay_platform":pay_platform,
+					        	"check_order":check_order}//查询条件数据，必须是json格式
+				    });
+					$("body").mLoading("hide");//隐藏loading组件
+					if(result.success){
+						alert("对账完成")
+					}else{
+						alert(result.errMsg)
+					}
+					post_flag =false; //在提交成功之后将标志标记为可提交状态
+		},"json")
+ }
 function getGrid(chanelType){
 	var check_result = $("#check_result").val();
 	var startTime=$("#startTime").val();
@@ -202,9 +234,14 @@ function getGrid(chanelType){
 					var relationId=rowdata.relation_id;
 					var fundType=rowdata.fund_type;
 					var checkResult=rowdata.check_result;
+					var payPlatform=rowdata.pay_platform;
 					var str ="";
-					if(checkResult==0){
+					if(checkResult==0&&payPlatform!="礼品卡支付"){
 						str = "<a class='details' title='对账' onclick='chkMoneyByRelationId(\""+relationId+"\",\""+fundType+"\",\""+chanelType+"\")'>"
+                		+"<span class='glyphicon glyphicon-check'></span></a>"
+					}
+					if(checkResult==0&&payPlatform=="礼品卡支付"){
+						str = "<a class='details' title='对账' onclick='chkMoneyForWxGiftCardByRelationId(\""+relationId+"\",\""+fundType+"\",\""+payPlatform+"\")'>"
                 		+"<span class='glyphicon glyphicon-check'></span></a>"
 					}
 					return "<a class='details' title='查看详情' onclick='queryDetails("+id+")'>"
