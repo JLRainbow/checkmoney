@@ -7,6 +7,7 @@
 		UPDATE t_wx_webank t1
 		LEFT JOIN t_wx_gift_card_buy_record t2 ON
 		t1.check_order = t2.wx_order_id
+		AND t1.fund_type = t2.fund_type
 		SET
 		t1.recipt_amount = t2.total_price,
 		t1.check_time = NOW()

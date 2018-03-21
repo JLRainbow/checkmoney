@@ -146,7 +146,7 @@ function impPayData(){
 		$("#payGapayNum").text('0');
 		var payWay = $.trim($('#payWay').val());
 		var $btn = $("#payImpButton").button('loading');
-		if("alipay"==payWay||"wx_302"==payWay||"wx_401"==payWay||"wx_weBank"==payWay){
+		if("alipay"==payWay||"wx_302"==payWay||"wx_401"==payWay){
 			$.ajaxFileUpload({
 				url:rootPath +'/check_money/importFileLoadData.do?payWay='+payWay,
 				secureuri:false,
@@ -414,7 +414,7 @@ $("#platformWeBankImpBtn").click(function(){
 	
 	var startTime = $("#platformWeBankStartTime").val();
 	var endTime = $("#platformWeBankEndTime").val();
-	var DBpayOrReceipt = $("#DBpayOrReceipt").val();
+	var fund_type = $("#platformWeBankReceiptOrRefund").val();
 	
 	
 		if(startTime==""||endTime==""){
@@ -425,7 +425,8 @@ $("#platformWeBankImpBtn").click(function(){
 			
 				$.post(rootPath +'/platform/getWxGiftCardBuyRecordList.do',
 						{'startTime':startTime,
-						 'endTime':endTime},
+						 'endTime':endTime,
+						 'fund_type':fund_type},
 						function(data){
 							$btn.button('reset');
 							if(data.success){

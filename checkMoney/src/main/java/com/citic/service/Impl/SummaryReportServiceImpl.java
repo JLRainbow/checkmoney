@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import com.citic.entity.AccountPaymentChkFormMap;
 import com.citic.entity.AccountReceiptChkFormMap;
+import com.citic.entity.WxGigtCardBuyRecordFormMap;
+import com.citic.entity.WxWeBankFormMap;
 import com.citic.mapper.AccountPaymentChkMapper;
 import com.citic.mapper.AccountReceiptChkMapper;
 import com.citic.service.SummaryReportService;
@@ -225,4 +227,86 @@ public class SummaryReportServiceImpl implements SummaryReportService {
     	String str = sdf.format(date);
     	return str;
     }
+
+	@Override
+	public ArrayList<ArrayList<Object>> exportWxWeBankForExcel(List<WxWeBankFormMap> list) {
+		ArrayList<ArrayList<Object>> result =new ArrayList<ArrayList<Object>>();
+		//设置表头列
+		ArrayList<Object> list3=new ArrayList<Object>();
+		list3.add("时间");
+		list3.add("流水号");
+		list3.add("支付金额");
+		list3.add("收款金额");
+		list3.add("对账结果");
+		list3.add("款单种类");
+		result.add(list3);
+		for (WxWeBankFormMap arrayList : list) {
+			ArrayList<Object> list2=new ArrayList<Object>();
+			list2.add(arrayList.get("pay_date").toString().substring(0,10));
+			list2.add(arrayList.get("check_order"));
+			list2.add(arrayList.get("pay_amount"));
+			list2.add(arrayList.get("recipt_amount"));
+			String check_result = arrayList.get("check_result").toString();
+			if("0".equals(check_result)){
+				check_result="未对账";
+			}else if("1".equals(check_result)){
+				check_result="对账相符";
+			}else if("2".equals(check_result)){
+				check_result="稽查";
+			}
+			list2.add(check_result);
+			String fund_type1 = arrayList.get("fund_type").toString();
+			if("1".equals(fund_type1)){
+				fund_type1="收款";
+			}else if("2".equals(fund_type1)){
+				fund_type1="退款";
+			}
+			list2.add(fund_type1);
+			result.add(list2);
+		}
+		return result;
+	}
+
+	@Override
+	public ArrayList<ArrayList<Object>> exportWxGigtCardBuyRecordForExcel(List<WxGigtCardBuyRecordFormMap> list) {
+		ArrayList<ArrayList<Object>> result =new ArrayList<ArrayList<Object>>();
+		//设置表头列
+		ArrayList<Object> list3=new ArrayList<Object>();
+		list3.add("时间");
+		list3.add("流水号");
+		list3.add("卡号");
+		list3.add("收款合并金额");
+		list3.add("支付金额");
+		list3.add("对账结果");
+		list3.add("收款明细金额");
+		list3.add("款单种类");
+		result.add(list3);
+		for (WxGigtCardBuyRecordFormMap arrayList : list) {
+			ArrayList<Object> list2=new ArrayList<Object>();
+			list2.add(arrayList.get("pay_finish_time").toString().substring(0,10));
+			list2.add(arrayList.get("wx_order_id"));
+			list2.add(arrayList.get("card_code"));
+			list2.add(arrayList.get("total_price"));
+			list2.add(arrayList.get("pay_price"));
+			String check_result = arrayList.get("check_result").toString();
+			if("0".equals(check_result)){
+				check_result="未对账";
+			}else if("1".equals(check_result)){
+				check_result="对账相符";
+			}else if("2".equals(check_result)){
+				check_result="稽查";
+			}
+			list2.add(check_result);
+			list2.add(arrayList.get("price"));
+			String fund_type1 = arrayList.get("fund_type").toString();
+			if("1".equals(fund_type1)){
+				fund_type1="收款";
+			}else if("2".equals(fund_type1)){
+				fund_type1="退款";
+			}
+			list2.add(fund_type1);
+			result.add(list2);
+		}
+		return result;
+	}
 }

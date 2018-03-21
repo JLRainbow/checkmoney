@@ -231,6 +231,7 @@ public class SummaryReportController extends BaseController {
 			,@RequestParam(value ="channel_name",required=false) String channel_name
 			,@RequestParam(value ="pay_platform",required=false) String pay_platform
 			,@RequestParam(value ="check_order") String check_order
+			,@RequestParam(value ="weBankType") String weBankType
 			,@RequestParam(value ="check_result",defaultValue ="") String check_result)  {
 		startTime+=" 00:00:00";
 		endTime+=" 23:59:59";
@@ -296,6 +297,46 @@ public class SummaryReportController extends BaseController {
 			
 			List<AccountPaymentChkFormMap> list = accountPaymentChkMapper.findByWhere(accountPaymentChkFormMap);
 			result = summaryReportService.impPayForExcel(list);
+		}
+		if("weBank".equals(chanelType)){
+			if("微信支付".equals(weBankType)){
+				WxWeBankFormMap wxWeBankFormMap = new WxWeBankFormMap();
+				
+				String sql="   WHERE fund_type in ( "+fund_type+")";
+				if(startTime.length()!=9&&endTime.length()!=9){
+					sql+=" AND pay_date >='"+startTime+"' AND pay_date <='"+endTime+"'";
+				}
+				if(!check_result.isEmpty()){
+					sql+=" AND check_result = "+check_result;
+				}
+				if(!check_order.isEmpty()){
+					sql+=" AND check_order LIKE '%"+check_order+"%'";
+				}
+				sql+= " order by pay_date desc";
+				wxWeBankFormMap.put("where", sql);
+				
+				List<WxWeBankFormMap> list = wxWebankMapper.findByWhere(wxWeBankFormMap);
+				result = summaryReportService.exportWxWeBankForExcel(list);
+			}
+			if("平台收款".equals(weBankType)){
+				WxGigtCardBuyRecordFormMap wxGigtCardBuyRecordFormMap = getFormMap(WxGigtCardBuyRecordFormMap.class);
+				
+				String sql="   WHERE 1=1";
+				if(startTime.length()!=9&&endTime.length()!=9){
+					sql+=" AND pay_finish_time >='"+startTime+"' AND pay_finish_time <='"+endTime+"'";
+				}
+				if(!check_result.isEmpty()){
+					sql+=" AND check_result = "+check_result;
+				}
+				
+				if(!check_order.isEmpty()){
+					sql+=" AND wx_order_id LIKE '%"+check_order+"%'";
+				}
+				sql+= " order by pay_finish_time desc";
+				wxGigtCardBuyRecordFormMap.put("where", sql);
+				List<WxGigtCardBuyRecordFormMap> list = wxGiftCardMapper.findByWhere(wxGigtCardBuyRecordFormMap);
+				result = summaryReportService.exportWxGigtCardBuyRecordForExcel(list);
+			}
 		}
 		try {
 			ExcelUtil1.ExpExs(result, "查询导出", response);

@@ -46,7 +46,7 @@
 	           	</div>
 	           	<div id="weBankDIV"  style="display: none;">
 		           	<label>支付平台</label>
-		           	<select class="form-control" id="weBankType">
+		           	<select class="form-control" id="weBankType" name="weBankType">
 		                <option value="微信支付">微信支付</option>
 		                <option value="平台收款">平台收款</option>
 		           	</select>

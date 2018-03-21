@@ -351,7 +351,8 @@ public class platformController extends BaseController{
 	@RequestMapping(value="/getWxGiftCardBuyRecordList",method=RequestMethod.POST)
 	@SystemLog(module="财务对账业务",methods="platform-getWxGiftCardBuyRecordList")//记录操作日志
 	public Map<String,Object> getWxGiftCardBuyRecordList(@RequestParam(value ="startTime") String startTime
-			,@RequestParam(value ="endTime") String endTime) {
+			,@RequestParam(value ="endTime") String endTime
+			,@RequestParam(value ="fund_type") String fund_type) {
 		Map<String,Object> resultMap = new HashMap<String,Object>();
 		startTime+=" 00:00:00";
 		endTime+=" 23:59:59";
@@ -363,8 +364,14 @@ public class platformController extends BaseController{
 		try {
 			//手动切换为平台数据源
 			logger.info("getWxGiftCardBuyRecordList start =========>> ");
-			DataSourceContextHolder.setDbType(DataSourceType.SOURCE_PALTFORMDATASOURCE);  
-			wxGiftCardBuyRecordList = wxGiftCardBuyRecordService.queryWxGiftCardBuyRecord(params);
+			DataSourceContextHolder.setDbType(DataSourceType.SOURCE_PALTFORMDATASOURCE); 
+			if("1".equals(fund_type)){
+				wxGiftCardBuyRecordList = wxGiftCardBuyRecordService.queryWxGiftCardBuyRecord(params);
+			}else{
+				resultMap.put("success", false);
+				resultMap.put("errMsg", "目前不支持获取平台微众银行退款数据");
+				return resultMap;
+			}
 			logger.info("getWxGiftCardBuyRecordList end =========>> ");
 			resultMap.put("success", true);
 		} catch (Exception e) {
@@ -388,6 +395,7 @@ public class platformController extends BaseController{
 			list.add(wxGiftCardBuyRecord.getCardCode());
 			list.add(Common.fromDateH());
 			list.add(0);
+			list.add(fund_type);
 			dataList.add(list);
 		}
 			
@@ -398,7 +406,7 @@ public class platformController extends BaseController{
 					"FIELDS TERMINATED by ',' "+
 					"LINES TERMINATED by '\r\n' "+
 					"(id,wx_order_id,pay_finish_time,total_price,price,card_id,"
-					+ "card_code,create_time,check_result)";	
+					+ "card_code,create_time,check_result,fund_type)";	
 		int x = 0;//load数量
 		try {
 			x = DataLoadDB.load(new CsvUtil(), dataList, "/wx_gift_card_buy_record.csv", sql);
